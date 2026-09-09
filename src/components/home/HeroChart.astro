@@ -1,0 +1,167 @@
+---
+// Editorial hero visualization: a quiet savings-growth line chart.
+// Uses only 1.5 px strokes, one subtle fill, and typography for the annotation.
+// No decorative flourishes — reads as an information graphic, not a widget.
+---
+
+<figure class="not-prose w-full">
+  <svg
+    viewBox="0 0 520 340"
+    xmlns="http://www.w3.org/2000/svg"
+    class="block h-auto w-full text-[color:var(--color-forest-700)]"
+    role="img"
+    aria-labelledby="hero-chart-title hero-chart-desc"
+  >
+    <title id="hero-chart-title">
+      Simulation d'épargne mensuelle sur 5 ans
+    </title>
+    <desc id="hero-chart-desc">
+      Illustration d'un versement mensuel de 500 dirhams pendant 5 ans, à un
+      rendement annuel hypothétique de 3 %.
+    </desc>
+
+    <!-- Y-axis reference lines -->
+    <g stroke="var(--color-border)" stroke-width="1">
+      <line x1="70" y1="60" x2="500" y2="60" stroke-dasharray="1 4" />
+      <line x1="70" y1="130" x2="500" y2="130" stroke-dasharray="1 4" />
+      <line x1="70" y1="200" x2="500" y2="200" stroke-dasharray="1 4" />
+      <line x1="70" y1="270" x2="500" y2="270" />
+    </g>
+
+    <!-- Y-axis labels -->
+    <g
+      fill="var(--color-charcoal-400)"
+      font-family="var(--font-sans)"
+      font-size="10"
+      text-anchor="end"
+    >
+      <text x="60" y="64" class="num">30k</text>
+      <text x="60" y="134" class="num">20k</text>
+      <text x="60" y="204" class="num">10k</text>
+      <text x="60" y="274" class="num">0</text>
+    </g>
+
+    <!-- X-axis labels: years -->
+    <g
+      fill="var(--color-charcoal-500)"
+      font-family="var(--font-sans)"
+      font-size="11"
+      text-anchor="middle"
+    >
+      <text x="70" y="292">0</text>
+      <text x="156" y="292">1</text>
+      <text x="242" y="292">2</text>
+      <text x="328" y="292">3</text>
+      <text x="414" y="292">4</text>
+      <text x="500" y="292">5 ans</text>
+    </g>
+
+    <!-- Area under curve (subtle fill) -->
+    <path
+      d="M 70 270 L 156 227 L 242 187 L 328 143 L 414 100 L 500 60 L 500 270 Z"
+      fill="var(--color-sage-100)"
+      fill-opacity="0.7"
+    />
+
+    <!-- Baseline: linear contributions (dashed, muted) -->
+    <line
+      x1="70"
+      y1="270"
+      x2="500"
+      y2="80"
+      stroke="var(--color-sage-500)"
+      stroke-width="1"
+      stroke-dasharray="4 4"
+    />
+
+    <!-- Main curve: savings growth -->
+    <polyline
+      points="70,270 156,227 242,187 328,143 414,100 500,60"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.75"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Data points -->
+    <g fill="var(--color-background)" stroke="currentColor" stroke-width="1.5">
+      <circle cx="70" cy="270" r="3.5" />
+      <circle cx="156" cy="227" r="3.5" />
+      <circle cx="242" cy="187" r="3.5" />
+      <circle cx="328" cy="143" r="3.5" />
+      <circle cx="414" cy="100" r="3.5" />
+    </g>
+
+    <!-- Endpoint marker (accented) -->
+    <circle cx="500" cy="60" r="5.5" fill="currentColor" />
+
+    <!-- Endpoint annotation line -->
+    <line
+      x1="500"
+      y1="60"
+      x2="500"
+      y2="30"
+      stroke="var(--color-border-strong)"
+      stroke-width="1"
+    />
+
+    <!-- Endpoint value -->
+    <g text-anchor="end" fill="var(--color-charcoal-950)">
+      <text
+        x="500"
+        y="24"
+        font-family="var(--font-display)"
+        font-size="22"
+        font-weight="500"
+        class="num"
+      >
+        ≈ 32 300
+      </text>
+      <text
+        x="500"
+        y="40"
+        font-family="var(--font-sans)"
+        font-size="10"
+        fill="var(--color-charcoal-500)"
+        letter-spacing="1.6"
+      >
+        MAD
+      </text>
+    </g>
+
+    <!-- Legend -->
+    <g font-family="var(--font-sans)" font-size="10.5">
+      <line
+        x1="76"
+        y1="315"
+        x2="96"
+        y2="315"
+        stroke="var(--color-forest-700)"
+        stroke-width="1.75"
+      />
+      <text x="102" y="318" fill="var(--color-charcoal-700)">
+        Épargne cumulée
+      </text>
+      <line
+        x1="230"
+        y1="315"
+        x2="250"
+        y2="315"
+        stroke="var(--color-sage-500)"
+        stroke-width="1"
+        stroke-dasharray="4 4"
+      />
+      <text x="256" y="318" fill="var(--color-charcoal-500)">
+        Versements
+      </text>
+    </g>
+  </svg>
+
+  <figcaption
+    class="mt-4 flex flex-col gap-1 text-[0.75rem] text-[color:var(--color-foreground-subtle)] sm:flex-row sm:items-center sm:justify-between"
+  >
+    <span class="overline">Simulation</span>
+    <span>500 MAD / mois · 5 ans · rendement annuel hypothétique 3 %</span>
+  </figcaption>
+</figure>

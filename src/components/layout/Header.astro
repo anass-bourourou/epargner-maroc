@@ -1,0 +1,122 @@
+---
+import Wordmark from '../ui/Wordmark.astro';
+import Icon from '../ui/Icon.astro';
+import { PRIMARY_NAV } from '../../lib/navigation';
+
+const pathname = Astro.url.pathname;
+
+function isActive(href: string) {
+  if (href === '/') return pathname === '/';
+  return pathname.startsWith(href);
+}
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-[color:var(--color-border)] bg-[color:var(--color-background)]/95 backdrop-blur-sm"
+>
+  <div class="container-wide flex items-center justify-between gap-6 py-4 lg:py-5">
+    <Wordmark size="md" />
+
+    <!-- Desktop navigation -->
+    <nav aria-label="Navigation principale" class="hidden lg:block">
+      <ul class="flex items-center gap-7 text-[0.9375rem]">
+        {PRIMARY_NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'no-underline text-[color:var(--color-foreground)] hover:text-[color:var(--color-primary)] transition-colors',
+                'aria-[current=page]:text-[color:var(--color-primary)] aria-[current=page]:font-medium',
+                'relative pb-1',
+                {
+                  "after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-[1px] after:h-[1.5px] after:bg-[color:var(--color-primary)]":
+                    isActive(item.href),
+                },
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href="/recherche/"
+        aria-label="Rechercher"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-[var(--radius-sm)] text-[color:var(--color-foreground)] hover:bg-[color:var(--color-surface-muted)]"
+      >
+        <Icon name="search" size={20} />
+      </a>
+      <button
+        type="button"
+        data-mobile-menu-toggle
+        aria-label="Ouvrir le menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-[var(--radius-sm)] text-[color:var(--color-foreground)] hover:bg-[color:var(--color-surface-muted)] lg:hidden"
+      >
+        <Icon name="menu" size={22} />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile navigation drawer -->
+  <div
+    id="mobile-nav"
+    data-mobile-menu
+    hidden
+    class="border-t border-[color:var(--color-border)] bg-[color:var(--color-background)] lg:hidden"
+  >
+    <nav aria-label="Navigation mobile" class="container-wide py-4">
+      <ul class="flex flex-col divide-y divide-[color:var(--color-border)]">
+        {PRIMARY_NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class="block py-3 text-[1.0625rem] font-[var(--font-display)] no-underline text-[color:var(--color-foreground-strong)] aria-[current=page]:text-[color:var(--color-primary)]"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Minimal vanilla toggle — no React island required for the mobile drawer.
+  const toggle = document.querySelector<HTMLButtonElement>(
+    '[data-mobile-menu-toggle]',
+  );
+  const drawer = document.querySelector<HTMLElement>('[data-mobile-menu]');
+
+  if (toggle && drawer) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+      drawer.hidden = !open;
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    // Close after navigating (in-page anchor or link click)
+    drawer.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('a')) setOpen(false);
+    });
+  }
+</script>

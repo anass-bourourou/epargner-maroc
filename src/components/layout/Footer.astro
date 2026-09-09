@@ -1,0 +1,76 @@
+---
+import Wordmark from '../ui/Wordmark.astro';
+import Button from '../ui/Button.astro';
+import { FOOTER_GROUPS, LEGAL_NAV } from '../../lib/navigation';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)]/60">
+  <div class="container-wide py-16">
+    <div class="grid gap-12 md:grid-cols-[1.3fr_2fr] md:gap-16">
+      <!-- Brand + newsletter entry -->
+      <div>
+        <Wordmark size="md" />
+        <p class="mt-4 max-w-sm text-[0.9375rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+          Publication indépendante de finance personnelle au Maroc.
+          Conseils, outils et comparatifs pour prendre de meilleures décisions.
+        </p>
+        <div class="mt-6">
+          <p class="text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-primary)]">
+            Newsletter
+          </p>
+          <p class="mt-2 text-[0.9375rem] text-[color:var(--color-foreground)]">
+            Un e-mail par semaine, rien de plus.
+          </p>
+          <div class="mt-4">
+            <Button as="a" href="/newsletter/" variant="secondary" size="sm" iconRight="arrow-right">
+              S'abonner
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nav groups -->
+      <div class="grid grid-cols-2 gap-8 sm:grid-cols-4">
+        {FOOTER_GROUPS.map((group) => (
+          <div>
+            <h3 class="text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-foreground-strong)] font-[var(--font-sans)]">
+              {group.title}
+            </h3>
+            <ul class="mt-4 space-y-2.5">
+              {group.items.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="text-[0.9375rem] no-underline text-[color:var(--color-foreground-muted)] hover:text-[color:var(--color-primary)] transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <hr class="my-10 border-0 border-t border-[color:var(--color-border)]" />
+
+    <div class="flex flex-col gap-4 text-[0.8125rem] text-[color:var(--color-foreground-muted)] sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} Épargner Maroc · Publication indépendante</p>
+      <ul class="flex flex-wrap items-center gap-x-6 gap-y-2">
+        {LEGAL_NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="no-underline text-[color:var(--color-foreground-muted)] hover:text-[color:var(--color-primary)] transition-colors"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</footer>

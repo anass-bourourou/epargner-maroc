@@ -1,0 +1,18 @@
+/* TEAM */
+Publication : Épargner Maroc
+Rôle        : Rédaction, produit, design, ingénierie
+Site        : https://epargnermaroc.ma
+Contact     : hello [at] epargnermaroc.ma
+
+/* SITE */
+Langue          : Français (fr-MA), arabe prévu
+Cadre           : Astro 5, TypeScript, Tailwind CSS 4, MDX, React (îlots)
+Contenu         : MDX + Content Collections
+Confidentialité : Aucun traqueur tiers. Les calculateurs s'exécutent
+                  entièrement dans le navigateur, aucune donnée saisie
+                  n'est envoyée sur nos serveurs.
+Statut          : Publication indépendante — non affiliée à un
+                  établissement bancaire, un assureur, ou un courtier.
+
+/* MERCI */
+Aux polices : Playfair Display (Claus Eggers Sørensen), Public Sans (USWDS).

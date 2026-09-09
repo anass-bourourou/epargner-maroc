@@ -1,0 +1,23 @@
+---
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props as Props;
+---
+
+<aside
+  role="note"
+  aria-label="Avertissement"
+  class={`mt-10 border-l-2 border-[color:var(--color-terracotta-500)] bg-[color:var(--color-surface-muted)]/60 pl-5 pr-5 py-4 rounded-[var(--radius-xs)] ${className}`}
+>
+  <div class="flex items-start gap-3">
+    <span class="mt-0.5 shrink-0 text-[color:var(--color-terracotta-800)]">
+      <Icon name="info" size={18} />
+    </span>
+    <div class="text-[0.875rem] leading-relaxed text-[color:var(--color-foreground)]">
+      <slot />
+    </div>
+  </div>
+</aside>

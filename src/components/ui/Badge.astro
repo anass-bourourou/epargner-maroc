@@ -1,0 +1,43 @@
+---
+type Tone = 'neutral' | 'forest' | 'sage' | 'terracotta';
+
+interface Props {
+  tone?: Tone;
+  as?: 'span' | 'a';
+  href?: string;
+  class?: string;
+}
+
+const {
+  tone = 'neutral' as Tone,
+  as = 'span',
+  href,
+  class: className = '',
+} = Astro.props as Props;
+
+const tones: Record<Tone, string> = {
+  neutral:
+    'bg-[color:var(--color-surface-muted)] text-[color:var(--color-foreground-strong)] border-[color:var(--color-border)]',
+  forest:
+    'bg-[color:var(--color-sage-50)] text-[color:var(--color-forest-800)] border-[color:var(--color-sage-300)]',
+  sage:
+    'bg-[color:var(--color-sage-100)] text-[color:var(--color-forest-700)] border-[color:var(--color-sage-300)]',
+  terracotta:
+    'bg-[color:var(--color-terracotta-100)] text-[color:var(--color-terracotta-800)] border-[color:var(--color-terracotta-300)]',
+};
+
+const classes = `inline-flex items-center h-6 px-2 text-[0.75rem] font-medium border rounded-[var(--radius-xs)] ${tones[tone]} ${className}`;
+const Tag = as;
+---
+
+{
+  as === 'a' ? (
+    <a href={href} class={`${classes} no-underline hover:opacity-80`}>
+      <slot />
+    </a>
+  ) : (
+    <Tag class={classes}>
+      <slot />
+    </Tag>
+  )
+}

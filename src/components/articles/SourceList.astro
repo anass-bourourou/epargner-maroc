@@ -1,0 +1,66 @@
+---
+import Icon from '../ui/Icon.astro';
+import { formatDateLong } from '../../lib/formatters/date';
+
+interface Source {
+  label: string;
+  url?: string;
+  publisher?: string;
+  accessedAt?: Date;
+}
+
+interface Props {
+  sources: Source[];
+  class?: string;
+}
+
+const { sources, class: className = '' } = Astro.props as Props;
+if (!sources || sources.length === 0) return null;
+---
+
+<section
+  aria-labelledby="article-sources"
+  class={`border-t border-[color:var(--color-border)] pt-8 ${className}`}
+>
+  <h2
+    id="article-sources"
+    class="text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-[color:var(--color-primary)] font-[var(--font-sans)]"
+  >
+    Sources
+  </h2>
+  <ol class="mt-4 flex flex-col divide-y divide-[color:var(--color-border)]">
+    {sources.map((s, i) => (
+      <li class="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-3 text-[0.9375rem]">
+        <span class="num text-[color:var(--color-foreground-subtle)] w-6 shrink-0">
+          {String(i + 1).padStart(2, '0')}
+        </span>
+        <div class="min-w-0 flex-1">
+          {s.url ? (
+            <a
+              href={s.url}
+              rel="noopener"
+              target="_blank"
+              class="inline-flex items-baseline gap-1.5 text-[color:var(--color-foreground-strong)] decoration-[color:var(--color-border-strong)] hover:text-[color:var(--color-primary)]"
+            >
+              {s.label}
+              <span aria-hidden="true" class="translate-y-[2px]"><Icon name="external-link" size={12} /></span>
+            </a>
+          ) : (
+            <span class="text-[color:var(--color-foreground-strong)]">{s.label}</span>
+          )}
+          {(s.publisher || s.accessedAt) && (
+            <p class="mt-0.5 text-[0.8125rem] text-[color:var(--color-foreground-muted)]">
+              {s.publisher}
+              {s.publisher && s.accessedAt && ' · '}
+              {s.accessedAt && (
+                <span>
+                  Consulté le <time datetime={s.accessedAt.toISOString()}>{formatDateLong(s.accessedAt)}</time>
+                </span>
+              )}
+            </p>
+          )}
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>

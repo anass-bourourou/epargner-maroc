@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <style>
+      .serif { font-family: 'Playfair Display', Georgia, serif; }
+      .sans  { font-family: 'Public Sans', system-ui, sans-serif; }
+    </style>
+  </defs>
+  <!-- Background: warm ivory -->
+  <rect width="1200" height="630" fill="#fbf8f2"/>
+  <!-- Editorial rule -->
+  <line x1="80" y1="120" x2="1120" y2="120" stroke="#e5ded0" stroke-width="1"/>
+  <line x1="80" y1="510" x2="1120" y2="510" stroke="#e5ded0" stroke-width="1"/>
+
+  <!-- Wordmark -->
+  <text x="80" y="95" class="serif" font-size="34" fill="#14161a">Épargner</text>
+  <text x="272" y="95" class="sans" font-size="14" font-weight="700"
+        fill="#1c4b3d" letter-spacing="4">MAROC</text>
+
+  <!-- Overline -->
+  <text x="80" y="180" class="sans" font-size="18" font-weight="600"
+        fill="#1c4b3d" letter-spacing="3.5">FINANCE PERSONNELLE</text>
+
+  <!-- Editorial headline -->
+  <text x="80" y="290" class="serif" font-size="86" fill="#14161a">Mieux gérer</text>
+  <text x="80" y="380" class="serif" font-size="86" fill="#14161a">son argent au Maroc.</text>
+
+  <!-- Description -->
+  <text x="80" y="450" class="sans" font-size="22" fill="#4b5158">
+    Conseils, outils et comparatifs pour prendre de meilleures décisions financières.
+  </text>
+
+  <!-- Footer domain -->
+  <text x="80" y="560" class="sans" font-size="16" fill="#8a8f97" letter-spacing="1">epargnermaroc.ma</text>
+
+  <!-- Subtle savings-curve motif on right -->
+  <g stroke="#1c4b3d" stroke-width="2" fill="none" opacity="0.55">
+    <polyline points="810,470 870,455 930,432 990,398 1050,352 1110,290"/>
+    <circle cx="1110" cy="290" r="6" fill="#1c4b3d"/>
+  </g>
+  <g stroke="#93a99a" stroke-width="1" stroke-dasharray="4 4" fill="none" opacity="0.6">
+    <line x1="810" y1="470" x2="1110" y2="330"/>
+  </g>
+</svg>

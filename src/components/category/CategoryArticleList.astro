@@ -1,0 +1,86 @@
+---
+import ArticleCard from '../articles/ArticleCard.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import type { Article } from '../../lib/articles';
+import { articleHref } from '../../lib/articles';
+import { formatDateLong, formatDateShort } from '../../lib/formatters/date';
+import { categoryMeta } from '../../lib/categories';
+
+interface Props {
+  articles: Article[];
+  eyebrow?: string;
+  heading: string;
+  description?: string;
+  leadFirst?: boolean;
+  categoryHref?: string;
+}
+
+const {
+  articles,
+  eyebrow,
+  heading,
+  description,
+  leadFirst = true,
+  categoryHref,
+} = Astro.props as Props;
+
+if (articles.length === 0) return null;
+
+const [lead, ...rest] = leadFirst ? articles : [null, ...articles];
+const remainder = leadFirst ? rest : articles;
+---
+
+<section class="border-b border-[color:var(--color-border)]">
+  <div class="container-wide section-py">
+    <SectionHeading eyebrow={eyebrow} title={heading} description={description} />
+
+    {leadFirst && lead && (
+      <div class="mt-12 grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-7">
+          <ArticleCard
+            variant="featured"
+            href={articleHref(lead)}
+            category={categoryMeta(lead.data.category).label}
+            categoryHref={categoryHref}
+            title={lead.data.title}
+            description={lead.data.description}
+            date={formatDateLong(lead.data.publishedAt)}
+          />
+        </div>
+        {remainder.length > 0 && (
+          <aside class="lg:col-span-5 lg:border-l lg:border-[color:var(--color-border)] lg:pl-10">
+            <p class="overline mb-4">Autres articles</p>
+            <ul class="flex flex-col">
+              {remainder.slice(0, 5).map((a) => (
+                <li>
+                  <ArticleCard
+                    variant="compact"
+                    href={articleHref(a)}
+                    title={a.data.title}
+                    date={formatDateShort(a.data.publishedAt)}
+                  />
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
+      </div>
+    )}
+
+    {!leadFirst && (
+      <div class="mt-12 grid gap-10 md:grid-cols-3">
+        {remainder.map((a) => (
+          <ArticleCard
+            variant="standard"
+            href={articleHref(a)}
+            category={categoryMeta(a.data.category).label}
+            categoryHref={categoryHref}
+            title={a.data.title}
+            description={a.data.description}
+            date={formatDateLong(a.data.publishedAt)}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+</section>

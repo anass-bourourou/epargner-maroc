@@ -1,0 +1,80 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+
+interface Family {
+  name: string;
+  href: string;
+  description: string;
+}
+
+const families: Family[] = [
+  {
+    name: 'Auto',
+    href: '/assurances/auto/',
+    description: 'Tiers, tous risques, vol, bris de glace : ce que couvrent vraiment les formules.',
+  },
+  {
+    name: 'Habitation',
+    href: '/assurances/habitation/',
+    description: 'Multirisque, responsabilité civile, dégâts des eaux, catastrophes naturelles.',
+  },
+  {
+    name: 'Santé',
+    href: '/assurances/sante/',
+    description: 'Complémentaire, plafonds, tickets modérateurs, réseau de soins.',
+  },
+  {
+    name: 'Voyage',
+    href: '/assurances/voyage/',
+    description: 'Assistance, rapatriement, annulation, bagages — pour un séjour serein.',
+  },
+  {
+    name: 'Vie',
+    href: '/assurances/vie/',
+    description: "Épargne, prévoyance, bénéficiaires : ce que couvre un contrat d'assurance vie.",
+  },
+];
+---
+
+<section class="border-b border-[color:var(--color-border)]">
+  <div class="container-wide section-py">
+    <SectionHeading
+      eyebrow="Assurances"
+      eyebrowHref="/assurances/"
+      title="Lire un contrat avant de le signer."
+      description="Cinq grandes familles, une même méthode : identifier ce qui est couvert, ce qui ne l'est pas, et ce qui coûte réellement à la fin de l'année."
+    >
+      <Button slot="action" as="a" href="/assurances/" variant="text" iconRight="arrow-right">
+        Explorer les assurances
+      </Button>
+    </SectionHeading>
+
+    <ul class="mt-12 flex flex-col divide-y divide-[color:var(--color-border)] border-y border-[color:var(--color-border)]">
+      {families.map((f, i) => (
+        <li>
+          <a
+            href={f.href}
+            class="group grid grid-cols-[auto_1fr_auto] items-center gap-4 py-5 no-underline sm:gap-8 sm:py-6"
+          >
+            <span class="font-[var(--font-display)] text-[color:var(--color-foreground-subtle)] text-[1.125rem] num w-8">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div>
+              <p class="font-[var(--font-display)] text-[1.375rem] leading-tight text-[color:var(--color-foreground-strong)] transition-colors group-hover:text-[color:var(--color-primary)] sm:text-[1.75rem]">
+                Assurance {f.name}
+              </p>
+              <p class="mt-1.5 text-[0.9375rem] leading-relaxed text-[color:var(--color-foreground-muted)] max-w-[64ch]">
+                {f.description}
+              </p>
+            </div>
+            <span class="text-[color:var(--color-foreground-subtle)] transition-colors group-hover:text-[color:var(--color-primary)]">
+              <Icon name="arrow-right" size={18} />
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../components/ui/EditorialLabel.astro';
+import Icon from '../../components/ui/Icon.astro';
+import Divider from '../../components/ui/Divider.astro';
+import NewsletterSection from '../../components/home/NewsletterSection.astro';
+
+const tools = [
+  {
+    label: 'Épargne',
+    title: "Calculateur d'épargne",
+    description:
+      "Estimer un capital final à partir d'un versement mensuel, d'une durée et d'un taux estimé.",
+    href: '/outils/calculateur-epargne/',
+  },
+  {
+    label: 'Budget',
+    title: 'Budget mensuel',
+    description:
+      "Répartir revenus et dépenses, mesurer un reste à vivre et un taux d'épargne.",
+    href: '/outils/budget/',
+  },
+  {
+    label: 'Crédit',
+    title: 'Calculateur de crédit',
+    description:
+      "Simuler une mensualité, un coût total et la part des intérêts d'un crédit à mensualités constantes.",
+    href: '/outils/calculateur-credit/',
+  },
+];
+---
+
+<BaseLayout
+  title="Outils et calculateurs financiers"
+  description="Calculateurs financiers pour le Maroc — épargne, budget, crédit. Vos données restent locales à votre navigateur."
+>
+  <div class="container-wide py-10 md:py-14">
+    <Breadcrumbs items={[{ name: 'Outils', href: '/outils/' }]} class="mb-8" />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Outils</EditorialLabel>
+      <h1>Des calculateurs simples pour décider plus clairement.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Trois calculateurs, chacun transparent sur ses hypothèses et sur ce
+        qu'il ne prend pas en compte. Aucune donnée n'est envoyée : les
+        calculs se font intégralement dans votre navigateur.
+      </p>
+    </header>
+
+    <Divider class="mt-10" />
+
+    <div class="mt-10 grid gap-px border border-[color:var(--color-border)] bg-[color:var(--color-border)] sm:grid-cols-3">
+      {tools.map((t, i) => (
+        <a
+          href={t.href}
+          class="group flex flex-col bg-[color:var(--color-surface)] p-6 sm:p-8 no-underline transition-colors hover:bg-[color:var(--color-surface-muted)]/70"
+        >
+          <div class="flex items-center justify-between">
+            <span class="font-[var(--font-display)] text-[color:var(--color-foreground-subtle)] text-[1.375rem] num">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span class="text-[color:var(--color-primary)] transition-transform group-hover:translate-x-1">
+              <Icon name="arrow-up-right" size={18} />
+            </span>
+          </div>
+          <p class="overline mt-6">{t.label}</p>
+          <h3 class="mt-3 text-[1.375rem] leading-[1.2]">{t.title}</h3>
+          <p class="mt-4 grow text-[0.9375rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+            {t.description}
+          </p>
+          <span class="mt-6 inline-flex items-center gap-2 text-[0.875rem] font-medium text-[color:var(--color-primary)]">
+            Ouvrir le calculateur
+            <Icon name="arrow-right" size={14} />
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <NewsletterSection />
+</BaseLayout>

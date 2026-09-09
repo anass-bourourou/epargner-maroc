@@ -1,0 +1,77 @@
+---
+import EditorialLabel from '../ui/EditorialLabel.astro';
+import Icon from '../ui/Icon.astro';
+import { formatDateLong } from '../../lib/formatters/date';
+
+interface Props {
+  updatedAt: Date;
+  criteriaCount: number;
+  offerCount: number;
+  illustrative?: boolean;
+  class?: string;
+}
+
+const {
+  updatedAt,
+  criteriaCount,
+  offerCount,
+  illustrative = false,
+  class: className = '',
+} = Astro.props as Props;
+---
+
+<section
+  aria-labelledby="method-heading"
+  class={`border-y border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)]/40 ${className}`}
+>
+  <div class="container-wide py-10 md:py-12">
+    <div class="grid gap-8 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-4">
+        <EditorialLabel class="mb-3">Méthodologie</EditorialLabel>
+        <h2 id="method-heading" class="text-[1.5rem] leading-snug">
+          Comment nous comparons.
+        </h2>
+      </div>
+      <div class="lg:col-span-8">
+        <ul class="grid gap-x-8 gap-y-6 sm:grid-cols-2 text-[0.9375rem] leading-relaxed">
+          <li>
+            <span class="overline mb-1 block">Critères</span>
+            Une grille identique pour chaque famille : {criteriaCount} critères
+            comparables ligne à ligne, sans classement pondéré caché.
+          </li>
+          <li>
+            <span class="overline mb-1 block">Sources</span>
+            Chaque offre est reliée à une source publique vérifiable
+            (conditions générales, grille tarifaire officielle) —
+            l'absence de source est explicite.
+          </li>
+          <li>
+            <span class="overline mb-1 block">Mise à jour</span>
+            <time datetime={updatedAt.toISOString()}>
+              {formatDateLong(updatedAt)}
+            </time> · {offerCount} formules dans ce tableau.
+          </li>
+          <li>
+            <span class="overline mb-1 block">Indépendance</span>
+            Épargner Maroc n'est pas courtier. Aucune commission n'oriente
+            les positions dans le tableau — l'ordre suit une logique
+            éditoriale, pas commerciale.
+          </li>
+        </ul>
+        {illustrative && (
+          <p
+            class="mt-6 inline-flex items-center gap-2 rounded-[var(--radius-xs)] border border-[color:var(--color-terracotta-300)] bg-[color:var(--color-terracotta-100)] px-3 py-2 text-[0.8125rem] text-[color:var(--color-terracotta-800)]"
+          >
+            <Icon name="info" size={14} />
+            <span>
+              <strong>Exemple pédagogique.</strong> Les lignes ci-dessous
+              illustrent la structure du comparateur — elles ne représentent
+              pas d'offres commerciales réelles. À remplacer par des données
+              vérifiées.
+            </span>
+          </p>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,47 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  /** Title displayed above the list */
+  label?: string;
+  /** Include H3 as well as H2 */
+  includeH3?: boolean;
+  class?: string;
+}
+
+const {
+  headings,
+  label = 'Dans cet article',
+  includeH3 = true,
+  class: className = '',
+} = Astro.props as Props;
+
+const items = headings.filter((h) =>
+  includeH3 ? h.depth === 2 || h.depth === 3 : h.depth === 2,
+);
+if (items.length < 2) return null;
+---
+
+<nav
+  aria-label="Table des matières"
+  class={`border-t border-b border-[color:var(--color-border)] py-6 ${className}`}
+>
+  <p class="overline mb-4">{label}</p>
+  <ol class="flex flex-col gap-2 text-[0.9375rem]">
+    {items.map((h) => (
+      <li class:list={[{ 'pl-4': h.depth === 3 }]}>
+        <a
+          href={`#${h.slug}`}
+          class="no-underline text-[color:var(--color-foreground)] hover:text-[color:var(--color-primary)] transition-colors"
+        >
+          {h.text}
+        </a>
+      </li>
+    ))}
+  </ol>
+</nav>

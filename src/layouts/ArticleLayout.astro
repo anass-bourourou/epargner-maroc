@@ -1,0 +1,141 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/articles/Breadcrumbs.astro';
+import ArticleHeader from '../components/articles/ArticleHeader.astro';
+import TableOfContents from '../components/articles/TableOfContents.astro';
+import SourceList from '../components/articles/SourceList.astro';
+import AuthorBox from '../components/articles/AuthorBox.astro';
+import RelatedArticles from '../components/articles/RelatedArticles.astro';
+import RelatedGuides from '../components/guides/RelatedGuides.astro';
+import ArticleFooterCTA from '../components/articles/ArticleFooterCTA.astro';
+import AiDisclosure from '../components/articles/AiDisclosure.astro';
+import NewsletterSection from '../components/home/NewsletterSection.astro';
+import { categoryMeta } from '../lib/categories';
+import { articleSchema } from '../lib/seo';
+import type { Article, Author, Guide } from '../lib/articles';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  article: Article;
+  author?: Author;
+  headings: Heading[];
+  related: Article[];
+  relatedGuides?: Guide[];
+  readingMinutes?: number;
+}
+
+const {
+  article,
+  author,
+  headings,
+  related,
+  relatedGuides = [],
+  readingMinutes,
+} = Astro.props as Props;
+
+const cat = categoryMeta(article.data.category);
+const site = Astro.site?.toString() ?? 'https://epargnermaroc.ma';
+const canonicalUrl =
+  article.data.seo?.canonical ?? new URL(Astro.url.pathname, site).toString();
+
+const seoTitle = article.data.seo?.title ?? article.data.title;
+const seoDescription = article.data.seo?.description ?? article.data.description;
+
+const jsonLd = articleSchema(site, article, author?.data.name);
+const toolCta = cat.toolCta;
+---
+
+<BaseLayout
+  title={seoTitle}
+  description={seoDescription}
+  canonical={canonicalUrl}
+  ogType="article"
+  publishedTime={article.data.publishedAt}
+  modifiedTime={article.data.updatedAt}
+  articleTags={article.data.tags as string[]}
+  noindex={article.data.seo?.noindex}
+>
+  <article class="container-wide py-10 md:py-16">
+    <Breadcrumbs
+      items={[
+        { name: cat.label, href: cat.href },
+        { name: article.data.title, href: Astro.url.pathname },
+      ]}
+      class="mb-10"
+    />
+
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,240px)] lg:gap-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,280px)]">
+      <div class="max-w-[72ch]">
+        <ArticleHeader
+          eyebrow={cat.label}
+          eyebrowHref={cat.href}
+          title={article.data.title}
+          standfirst={article.data.description}
+          publishedAt={article.data.publishedAt}
+          updatedAt={article.data.updatedAt}
+          readingMinutes={readingMinutes}
+          author={author}
+        />
+
+        {article.data.aiGenerated && (
+          <AiDisclosure score={article.data.aiReview?.score} />
+        )}
+
+        <div class="article-prose">
+          <slot />
+        </div>
+
+        {toolCta && (
+          <div class="mt-12">
+            <ArticleFooterCTA
+              title={toolCta.label.replace(/^Ouvrir /, '')}
+              description="Testez le calcul avec vos propres chiffres."
+              ctaLabel={toolCta.label}
+              ctaHref={toolCta.href}
+            />
+          </div>
+        )}
+
+        {article.data.sources.length > 0 && (
+          <div class="mt-14">
+            <SourceList sources={article.data.sources} />
+          </div>
+        )}
+
+        {author && (
+          <div class="mt-14">
+            <AuthorBox author={author} />
+          </div>
+        )}
+
+        {related.length > 0 && (
+          <div class="mt-16">
+            <RelatedArticles articles={related} />
+          </div>
+        )}
+
+        {relatedGuides.length > 0 && (
+          <div class="mt-14">
+            <RelatedGuides guides={relatedGuides} />
+          </div>
+        )}
+      </div>
+
+      <!-- Sidebar: TOC (sticky on desktop) -->
+      <aside class="order-first lg:order-last">
+        <div class="lg:sticky lg:top-24">
+          <TableOfContents headings={headings} />
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  <NewsletterSection />
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</BaseLayout>

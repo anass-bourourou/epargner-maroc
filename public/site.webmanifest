@@ -1,0 +1,16 @@
+{
+  "name": "Épargner Maroc",
+  "short_name": "Épargner Maroc",
+  "description": "Publication de finance personnelle au Maroc — conseils, outils et comparatifs.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fbf8f2",
+  "theme_color": "#fbf8f2",
+  "lang": "fr-MA",
+  "dir": "ltr",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any" }
+  ]
+}

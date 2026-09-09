@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../components/ui/EditorialLabel.astro';
+import ArticleCard from '../../components/articles/ArticleCard.astro';
+import Divider from '../../components/ui/Divider.astro';
+import NewsletterSection from '../../components/home/NewsletterSection.astro';
+import { getPublishedArticles, articleHref } from '../../lib/articles';
+import { CATEGORY_META, ARTICLE_ONLY_CATEGORIES, categoryMeta } from '../../lib/categories';
+import { formatDateLong } from '../../lib/formatters/date';
+
+const articles = await getPublishedArticles();
+const [lead, ...rest] = articles;
+---
+
+<BaseLayout
+  title="Tous les articles"
+  description="Tous les articles d'Épargner Maroc — épargne, banques, assurances, crédit, investissement."
+>
+  <div class="container-wide py-10 md:py-14">
+    <Breadcrumbs items={[{ name: 'Articles', href: '/articles/' }]} class="mb-8" />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Archive</EditorialLabel>
+      <h1>Tous les articles.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Notre archive éditoriale, par ordre de publication. Filtrez par
+        catégorie pour explorer un sujet en particulier.
+      </p>
+    </header>
+
+    <nav aria-label="Filtrer par catégorie" class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[0.9375rem]">
+      <span class="text-[color:var(--color-foreground)] font-medium">
+        Toutes
+      </span>
+      {ARTICLE_ONLY_CATEGORIES.map((c) => (
+        <a
+          href={CATEGORY_META[c].href}
+          class="no-underline text-[color:var(--color-foreground-muted)] hover:text-[color:var(--color-primary)]"
+        >
+          {CATEGORY_META[c].label}
+        </a>
+      ))}
+    </nav>
+
+    <Divider class="mt-10" />
+
+    {lead && (
+      <div class="mt-10">
+        <ArticleCard
+          variant="featured"
+          href={articleHref(lead)}
+          category={categoryMeta(lead.data.category).label}
+          categoryHref={categoryMeta(lead.data.category).href}
+          title={lead.data.title}
+          description={lead.data.description}
+          date={formatDateLong(lead.data.publishedAt)}
+        />
+      </div>
+    )}
+
+    {rest.length > 0 && (
+      <div class="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+        {rest.map((a) => (
+          <ArticleCard
+            variant="standard"
+            href={articleHref(a)}
+            category={categoryMeta(a.data.category).label}
+            categoryHref={categoryMeta(a.data.category).href}
+            title={a.data.title}
+            description={a.data.description}
+            date={formatDateLong(a.data.publishedAt)}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+
+  <NewsletterSection />
+</BaseLayout>

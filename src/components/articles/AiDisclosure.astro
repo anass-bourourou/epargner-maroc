@@ -1,0 +1,37 @@
+---
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  score?: number;
+  class?: string;
+}
+const { score, class: className = '' } = Astro.props as Props;
+---
+
+<aside
+  role="note"
+  aria-label="Divulgation IA"
+  class={`my-8 border border-[color:var(--color-border-strong)] bg-[color:var(--color-surface-muted)]/60 rounded-[var(--radius-sm)] p-4 sm:p-5 text-[0.875rem] leading-relaxed ${className}`}
+>
+  <div class="flex items-start gap-3">
+    <span aria-hidden="true" class="mt-0.5 shrink-0 text-[color:var(--color-forest-700)]">
+      <Icon name="info" size={16} />
+    </span>
+    <div>
+      <p class="font-semibold text-[color:var(--color-foreground-strong)]">
+        Article rédigé avec assistance IA, relu automatiquement.
+      </p>
+      <p class="mt-1 text-[color:var(--color-foreground-muted)]">
+        Ce contenu a été rédigé par un assistant IA puis passé par une revue
+        automatique. {score !== undefined && (
+          <>Score de revue : <span class="num font-medium">{score}/100</span>. </>
+        )}Nous recommandons de vérifier les données spécifiques auprès de
+        sources officielles avant toute décision financière. Signaler une
+        erreur : <a
+          href="mailto:hello@epargnermaroc.ma"
+          class="text-[color:var(--color-primary)]"
+        >hello@epargnermaroc.ma</a>.
+      </p>
+    </div>
+  </div>
+</aside>

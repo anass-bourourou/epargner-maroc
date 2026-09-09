@@ -1,0 +1,40 @@
+---
+import { getEntry, render } from 'astro:content';
+import GuideLayout from '../../layouts/GuideLayout.astro';
+import {
+  getPublishedGuides,
+  getArticlesByCategory,
+  estimateReadingMinutes,
+  type Guide,
+} from '../../lib/articles';
+import { mdxComponents } from '../../components/editorial/mdx-components';
+
+export async function getStaticPaths() {
+  const guides = await getPublishedGuides();
+  return guides.map((guide) => ({
+    params: { slug: guide.id },
+    props: { guide },
+  }));
+}
+
+interface Props {
+  guide: Guide;
+}
+
+const { guide } = Astro.props as Props;
+const { Content, headings } = await render(guide);
+
+const author = guide.data.author ? await getEntry(guide.data.author) : undefined;
+const relatedArticles = (await getArticlesByCategory(guide.data.category)).slice(0, 3);
+const readingMinutes = estimateReadingMinutes(guide.body);
+---
+
+<GuideLayout
+  guide={guide}
+  author={author}
+  headings={headings}
+  relatedArticles={relatedArticles}
+  readingMinutes={readingMinutes}
+>
+  <Content components={mdxComponents} />
+</GuideLayout>

@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../../components/ui/EditorialLabel.astro';
+import Divider from '../../../components/ui/Divider.astro';
+import Button from '../../../components/ui/Button.astro';
+import CalculatorDisclaimer from '../../../components/calculators/CalculatorDisclaimer.astro';
+import NewsletterSection from '../../../components/home/NewsletterSection.astro';
+import { BudgetCalculator } from '../../../components/calculators/BudgetCalculator';
+---
+
+<BaseLayout
+  title="Calculateur de budget — Comprendre ses dépenses"
+  description="Calculateur de budget mensuel — répartir revenus et dépenses, mesurer un reste à vivre et un taux d'épargne."
+>
+  <div class="container-wide py-10 md:py-14">
+    <Breadcrumbs
+      items={[
+        { name: 'Outils', href: '/outils/' },
+        { name: 'Budget mensuel', href: '/outils/budget/' },
+      ]}
+      class="mb-8"
+    />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Outil · Budget</EditorialLabel>
+      <h1>Budget mensuel.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Répartir revenus et dépenses par grand poste, visualiser un reste à
+        vivre et un taux d'épargne. Toutes vos valeurs restent locales à
+        votre navigateur — rien n'est envoyé ni conservé.
+      </p>
+    </header>
+
+    <Divider class="mt-10" />
+
+    <div class="mt-10">
+      <BudgetCalculator client:load />
+    </div>
+
+    <CalculatorDisclaimer>
+      Les valeurs par défaut sont des <strong>exemples</strong> destinés à
+      illustrer l'outil — elles ne reflètent aucune moyenne marocaine.
+      Remplacez-les par vos propres chiffres pour obtenir un résultat
+      pertinent.
+    </CalculatorDisclaimer>
+  </div>
+
+  <section class="border-t border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)]/40">
+    <div class="container-wide section-py">
+      <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-4">
+          <EditorialLabel class="mb-4">Comprendre</EditorialLabel>
+          <h2 class="max-w-[16ch]">Pourquoi suivre son budget.</h2>
+        </div>
+        <div class="lg:col-span-8 article-prose">
+          <h3 id="revenus-depenses">Revenus vs dépenses</h3>
+          <p>
+            Un budget mensuel oppose deux quantités simples : ce qui entre
+            et ce qui sort chaque mois. La difficulté n'est pas dans le
+            calcul, elle est dans le recensement fidèle des dépenses,
+            surtout les petites et les récurrentes (abonnements,
+            transports, dépenses de bouche du quotidien).
+          </p>
+
+          <h3 id="reste-a-vivre">Le reste à vivre</h3>
+          <p>
+            Le solde entre revenus et dépenses — appelé ici <strong>reste
+            mensuel</strong> — est le montant théoriquement disponible
+            pour épargner, investir, ou absorber un imprévu. Un reste
+            positif ne signifie pas automatiquement « je peux tout
+            dépenser » : il est aussi la marge qui protège du prochain
+            mois compliqué.
+          </p>
+
+          <h3 id="taux-epargne">Le taux d'épargne</h3>
+          <p>
+            Le taux d'épargne exprime le reste mensuel <em>en pourcentage
+            du revenu</em>. Il permet de comparer sa situation mois après
+            mois indépendamment de son niveau de revenu.
+          </p>
+          <p>
+            Certaines approches populaires — comme la règle 50/30/20 —
+            proposent des répartitions cibles. Ce sont des <em>repères
+            possibles</em>, pas des vérités universelles : la bonne
+            répartition dépend du contexte familial, du logement, de
+            l'endettement, et des objectifs.
+          </p>
+
+          <h3 id="deficit">En cas de déficit</h3>
+          <p>
+            Si les dépenses dépassent les revenus, l'outil affiche un
+            <strong>déficit mensuel</strong> — jamais une « épargne
+            négative ». Un déficit récurrent mérite d'identifier les
+            postes ajustables, puis d'agir sur ceux qui pèsent le plus
+            (souvent le logement, les crédits, les abonnements).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-[color:var(--color-border)]">
+    <div class="container-wide py-16">
+      <div class="max-w-2xl">
+        <EditorialLabel class="mb-4">Pour aller plus loin</EditorialLabel>
+        <h2 class="text-[1.5rem]">Guide et articles Épargne.</h2>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <Button as="a" href="/guides/debuter-epargne/" variant="secondary" iconRight="arrow-right">
+            Guide — débuter l'épargne
+          </Button>
+          <Button as="a" href="/epargne/" variant="text" iconRight="arrow-right">
+            Articles Épargne
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NewsletterSection />
+</BaseLayout>

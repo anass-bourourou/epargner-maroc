@@ -1,0 +1,82 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+
+interface Guide {
+  label: string;
+  title: string;
+  href: string;
+  description: string;
+}
+
+// Editorial guide entries — mirror the seeded content collection.
+const guides: Guide[] = [
+  {
+    label: 'Épargne',
+    title: "Débuter l'épargne",
+    href: '/guides/debuter-epargne/',
+    description: 'Poser les bases, choisir un support, automatiser un virement mensuel.',
+  },
+  {
+    label: 'Banques',
+    title: 'Comprendre la banque au Maroc',
+    href: '/guides/comprendre-banques/',
+    description: 'Comptes, cartes, frais, applications — les rouages d’une relation bancaire.',
+  },
+  {
+    label: 'Crédit',
+    title: 'Comprendre le crédit',
+    href: '/guides/comprendre-credit/',
+    description: 'Consommation, auto, immobilier : la mécanique commune à tous les crédits.',
+  },
+  {
+    label: 'Assurances',
+    title: 'Choisir son assurance',
+    href: '/guides/choisir-assurance/',
+    description: "Auto, habitation, santé, voyage, vie : la logique de chaque contrat.",
+  },
+  {
+    label: 'Investissement',
+    title: "Commencer à investir",
+    href: '/guides/commencer-investir/',
+    description: 'Les prérequis, les grandes familles, la différence entre épargner et investir.',
+  },
+];
+---
+
+<section class="border-b border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)]/40">
+  <div class="container-wide section-py">
+    <SectionHeading
+      eyebrow="Guides"
+      eyebrowHref="/guides/"
+      title="Les guides pour commencer."
+      description="Des guides denses et sans jargon, pensés pour être lus une fois et consultés plusieurs."
+    >
+      <Button slot="action" as="a" href="/guides/" variant="text" iconRight="arrow-right">
+        Tous les guides
+      </Button>
+    </SectionHeading>
+
+    <div class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {guides.map((g) => (
+        <a
+          href={g.href}
+          class="group block border-t border-[color:var(--color-border-strong)] pt-5 no-underline"
+        >
+          <p class="overline mb-3">{g.label}</p>
+          <h3 class="text-[1.25rem] leading-snug transition-colors group-hover:text-[color:var(--color-primary)]">
+            {g.title}
+          </h3>
+          <p class="mt-3 text-[0.9375rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+            {g.description}
+          </p>
+          <span class="mt-5 inline-flex items-center gap-2 text-[0.875rem] font-medium text-[color:var(--color-primary)]">
+            Lire le guide
+            <Icon name="arrow-right" size={14} />
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

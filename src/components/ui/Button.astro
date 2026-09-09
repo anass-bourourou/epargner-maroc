@@ -1,0 +1,106 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../../lib/icons';
+
+type Variant = 'primary' | 'secondary' | 'text';
+type Size = 'sm' | 'md' | 'lg';
+type Tag = 'a' | 'button';
+
+interface Props {
+  as?: Tag;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: Variant;
+  size?: Size;
+  fullWidth?: boolean;
+  disabled?: boolean;
+  iconLeft?: IconName;
+  iconRight?: IconName;
+  ariaLabel?: string;
+  class?: string;
+}
+
+const {
+  as = 'button' as Tag,
+  href,
+  type = 'button',
+  variant = 'primary' as Variant,
+  size = 'md' as Size,
+  fullWidth = false,
+  disabled = false,
+  iconLeft,
+  iconRight,
+  ariaLabel,
+  class: className = '',
+} = Astro.props as Props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 font-[var(--font-sans)] font-medium ' +
+  'transition-colors duration-[var(--duration-fast)] ease-[var(--ease-standard)] ' +
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-focus-ring)] ' +
+  'focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-background)] ' +
+  'disabled:opacity-50 disabled:pointer-events-none no-underline';
+
+const variants: Record<Variant, string> = {
+  primary:
+    'bg-[color:var(--color-primary)] text-[color:var(--color-primary-foreground)] ' +
+    'hover:bg-[color:var(--color-primary-hover)] active:bg-[color:var(--color-primary-pressed)] ' +
+    'rounded-[var(--radius-sm)]',
+  secondary:
+    'bg-transparent text-[color:var(--color-foreground-strong)] ' +
+    'border border-[color:var(--color-border-strong)] ' +
+    'hover:border-[color:var(--color-charcoal-800)] hover:bg-[color:var(--color-surface-muted)] ' +
+    'rounded-[var(--radius-sm)]',
+  text:
+    'bg-transparent text-[color:var(--color-primary)] ' +
+    'hover:text-[color:var(--color-primary-hover)] px-0 ' +
+    'underline decoration-[color:var(--color-border-strong)] underline-offset-4 hover:decoration-current',
+};
+
+const sizes: Record<Size, string> = {
+  sm: 'text-[0.8125rem] h-8 px-3',
+  md: 'text-[0.9375rem] h-10 px-5',
+  lg: 'text-base h-12 px-6',
+};
+
+// text variant strips horizontal padding
+const sized =
+  variant === 'text'
+    ? sizes[size].replace(/px-\d+/, '')
+    : sizes[size];
+
+const classes = [
+  base,
+  variants[variant],
+  sized,
+  fullWidth ? 'w-full' : '',
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
+
+const Element = as;
+const commonProps = { class: classes, 'aria-label': ariaLabel };
+const iconSize = size === 'sm' ? 15 : size === 'lg' ? 20 : 17;
+---
+
+{
+  as === 'a' ? (
+    <a
+      {...commonProps}
+      href={href}
+      aria-disabled={disabled ? 'true' : undefined}
+      tabindex={disabled ? -1 : undefined}
+    >
+      {iconLeft && <Icon name={iconLeft} size={iconSize} />}
+      <slot />
+      {iconRight && <Icon name={iconRight} size={iconSize} />}
+    </a>
+  ) : (
+    <Element {...commonProps} type={type} disabled={disabled}>
+      {iconLeft && <Icon name={iconLeft} size={iconSize} />}
+      <slot />
+      {iconRight && <Icon name={iconRight} size={iconSize} />}
+    </Element>
+  )
+}

@@ -1,0 +1,27 @@
+---
+import GuideCard from './GuideCard.astro';
+import type { Guide } from '../../lib/articles';
+
+interface Props {
+  guides: Guide[];
+  heading?: string;
+  class?: string;
+}
+
+const {
+  guides,
+  heading = 'Guides associés',
+  class: className = '',
+} = Astro.props as Props;
+if (!guides || guides.length === 0) return null;
+---
+
+<section
+  aria-labelledby="related-guides"
+  class={`border-t border-[color:var(--color-border)] pt-10 ${className}`}
+>
+  <h2 id="related-guides" class="overline mb-6">{heading}</h2>
+  <div class="grid gap-8 sm:grid-cols-2">
+    {guides.map((g) => <GuideCard guide={g} variant="default" />)}
+  </div>
+</section>

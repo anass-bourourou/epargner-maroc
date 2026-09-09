@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../articles/Breadcrumbs.astro';
+import CategoryHero from './CategoryHero.astro';
+import CategoryArticleList from './CategoryArticleList.astro';
+import CategoryGuides from './CategoryGuides.astro';
+import CategoryToolCta from './CategoryToolCta.astro';
+import NewsletterSection from '../home/NewsletterSection.astro';
+import {
+  getArticlesByCategory,
+  getGuidesByCategory,
+} from '../../lib/articles';
+import { CATEGORY_META } from '../../lib/categories';
+import type { ArticleCategory } from '../../content.config';
+
+interface Props {
+  category: ArticleCategory;
+  heroVariant?: 'default' | 'muted';
+  latestHeading?: string;
+  latestDescription?: string;
+}
+
+const {
+  category,
+  heroVariant = 'default',
+  latestHeading = 'Derniers articles',
+  latestDescription,
+} = Astro.props as Props;
+
+const meta = CATEGORY_META[category];
+const articles = await getArticlesByCategory(category);
+const guides = await getGuidesByCategory(category);
+
+// Split: first article is the "à la une" via CategoryArticleList's leadFirst=true,
+// but we also expose the raw list to consumer via slot if needed.
+---
+
+<BaseLayout title={meta.title} description={meta.seoDescription}>
+  <div class="container-wide pt-6 md:pt-8">
+    <Breadcrumbs items={[{ name: meta.label, href: meta.href }]} />
+  </div>
+
+  <CategoryHero
+    eyebrow={meta.eyebrow}
+    title={meta.title}
+    intro={meta.intro}
+    variant={heroVariant}
+  />
+
+  <!-- Optional custom lead content (e.g. Assurances family list) -->
+  <slot name="lead" />
+
+  {articles.length > 0 && (
+    <CategoryArticleList
+      articles={articles}
+      eyebrow="À la une"
+      heading={latestHeading}
+      description={latestDescription}
+      categoryHref={meta.href}
+    />
+  )}
+
+  <slot name="extra" />
+
+  {meta.toolCta && <CategoryToolCta category={meta} />}
+
+  {guides.length > 0 && (
+    <CategoryGuides
+      guides={guides}
+      heading={`Guides ${meta.label.toLowerCase()}`}
+    />
+  )}
+
+  <NewsletterSection />
+</BaseLayout>

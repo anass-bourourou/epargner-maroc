@@ -1,0 +1,45 @@
+---
+import ArticleFooterCTA from '../articles/ArticleFooterCTA.astro';
+
+interface Props {
+  tool: 'epargne' | 'budget' | 'credit';
+  class?: string;
+}
+
+const { tool, class: className = '' } = Astro.props as Props;
+
+const CTAS = {
+  epargne: {
+    title: "Simuler votre propre épargne",
+    description:
+      "Testez le calcul avec vos chiffres : versement initial, mensualité, durée, rendement.",
+    ctaLabel: "Ouvrir le calculateur d'épargne",
+    ctaHref: '/outils/calculateur-epargne/',
+  },
+  budget: {
+    title: 'Estimer votre budget mensuel',
+    description:
+      "Répartir revenus et dépenses, mesurer un reste à vivre et un taux d'épargne.",
+    ctaLabel: 'Ouvrir le budget mensuel',
+    ctaHref: '/outils/budget/',
+  },
+  credit: {
+    title: 'Simuler un crédit',
+    description:
+      'Mensualité, coût total, part des intérêts — à partir de vos propres paramètres.',
+    ctaLabel: 'Ouvrir le calculateur de crédit',
+    ctaHref: '/outils/calculateur-credit/',
+  },
+} as const;
+const cta = CTAS[tool];
+---
+
+<div class={`not-prose my-8 ${className}`}>
+  <ArticleFooterCTA
+    eyebrow="Outil"
+    title={cta.title}
+    description={cta.description}
+    ctaLabel={cta.ctaLabel}
+    ctaHref={cta.ctaHref}
+  />
+</div>

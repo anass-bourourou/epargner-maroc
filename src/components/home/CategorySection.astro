@@ -1,0 +1,119 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import ArticleCard from '../articles/ArticleCard.astro';
+import Button from '../ui/Button.astro';
+import { getArticlesByCategory, articleHref } from '../../lib/articles';
+import type { ArticleCategory } from '../../content.config';
+import { formatDateLong, formatDateShort } from '../../lib/formatters/date';
+
+interface Props {
+  category: ArticleCategory;
+  eyebrow: string;
+  title: string;
+  description?: string;
+  ctaLabel: string;
+  ctaHref: string;
+  categoryLabel: string;
+  categoryHref: string;
+  /** Optional extra content rendered above the article list (e.g. an editorial numbers strip) */
+  variant?: 'lead-side' | 'lead-top';
+  bordered?: boolean;
+  muted?: boolean;
+}
+
+const {
+  category,
+  eyebrow,
+  title,
+  description,
+  ctaLabel,
+  ctaHref,
+  categoryLabel,
+  categoryHref,
+  variant = 'lead-side',
+  bordered = true,
+  muted = false,
+} = Astro.props as Props;
+
+const articles = (await getArticlesByCategory(category)).slice(0, 3);
+const [lead, ...rest] = articles;
+---
+
+<section
+  class:list={[
+    bordered && 'border-b border-[color:var(--color-border)]',
+    muted && 'bg-[color:var(--color-surface-muted)]/40',
+  ]}
+>
+  <div class="container-wide section-py">
+    <SectionHeading
+      eyebrow={eyebrow}
+      eyebrowHref={categoryHref}
+      title={title}
+      description={description}
+    >
+      <Button slot="action" as="a" href={ctaHref} variant="text" iconRight="arrow-right">
+        {ctaLabel}
+      </Button>
+    </SectionHeading>
+
+    <slot name="lead" />
+
+    {
+      variant === 'lead-side' && lead && (
+        <div class="mt-12 grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <div class="lg:col-span-7">
+            <ArticleCard
+              variant="standard"
+              href={articleHref(lead)}
+              category={categoryLabel}
+              categoryHref={categoryHref}
+              title={lead.data.title}
+              description={lead.data.description}
+              date={formatDateLong(lead.data.publishedAt)}
+              readingMinutes={lead.data.readingTime}
+            />
+          </div>
+          {rest.length > 0 && (
+            <aside class="lg:col-span-5 lg:border-l lg:border-[color:var(--color-border)] lg:pl-10">
+              <ul class="flex flex-col">
+                {rest.map((a) => (
+                  <li>
+                    <ArticleCard
+                      variant="compact"
+                      href={articleHref(a)}
+                      title={a.data.title}
+                      date={formatDateShort(a.data.publishedAt)}
+                      readingMinutes={a.data.readingTime}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          )}
+        </div>
+      )
+    }
+
+    {
+      variant === 'lead-top' && articles.length > 0 && (
+        <div class="mt-12 grid gap-10 md:grid-cols-3">
+          {articles.map((a) => (
+            <ArticleCard
+              variant="standard"
+              href={articleHref(a)}
+              category={categoryLabel}
+              categoryHref={categoryHref}
+              title={a.data.title}
+              description={a.data.description}
+              date={formatDateLong(a.data.publishedAt)}
+              readingMinutes={a.data.readingTime}
+            />
+          ))}
+        </div>
+      )
+    }
+
+    <slot name="after" />
+  </div>
+</section>

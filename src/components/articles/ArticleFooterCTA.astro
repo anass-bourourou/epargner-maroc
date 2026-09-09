@@ -1,0 +1,52 @@
+---
+import Button from '../ui/Button.astro';
+import type { IconName } from '../../lib/icons';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description: string;
+  ctaLabel: string;
+  ctaHref: string;
+  icon?: IconName;
+  class?: string;
+}
+
+const {
+  eyebrow = 'Outil associé',
+  title,
+  description,
+  ctaLabel,
+  ctaHref,
+  icon = 'calculator',
+  class: className = '',
+} = Astro.props as Props;
+---
+
+<aside
+  class={`border border-[color:var(--color-border-strong)] bg-[color:var(--color-surface-muted)]/60 p-6 sm:p-8 rounded-[var(--radius-md)] ${className}`}
+>
+  <div class="flex items-start gap-5">
+    <span
+      aria-hidden="true"
+      class="grid h-11 w-11 shrink-0 place-items-center rounded-[var(--radius-sm)] bg-[color:var(--color-sage-100)] text-[color:var(--color-forest-800)]"
+    >
+      <Icon name={icon} size={22} />
+    </span>
+    <div class="min-w-0">
+      <p class="overline mb-2">{eyebrow}</p>
+      <p class="font-[var(--font-display)] text-[1.25rem] leading-snug text-[color:var(--color-foreground-strong)]">
+        {title}
+      </p>
+      <p class="mt-2 text-[0.9375rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        {description}
+      </p>
+      <div class="mt-5">
+        <Button as="a" href={ctaHref} variant="secondary" size="sm" iconRight="arrow-right">
+          {ctaLabel}
+        </Button>
+      </div>
+    </div>
+  </div>
+</aside>

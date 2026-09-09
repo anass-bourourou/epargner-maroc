@@ -1,0 +1,20 @@
+---
+// Editorial "à retenir" — a summary block for the top or end of an article.
+
+interface Props {
+  title?: string;
+  class?: string;
+}
+const { title = 'À retenir', class: className = '' } = Astro.props as Props;
+---
+
+<aside
+  role="note"
+  aria-label={title}
+  class={`border border-[color:var(--color-border-strong)] bg-[color:var(--color-sage-50)] p-6 sm:p-7 rounded-[var(--radius-sm)] my-8 ${className}`}
+>
+  <p class="overline mb-3">{title}</p>
+  <div class="text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-strong)]">
+    <slot />
+  </div>
+</aside>

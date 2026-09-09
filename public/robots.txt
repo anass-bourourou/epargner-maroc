@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /design-system/
+
+# Politesse crawl
+User-agent: *
+Crawl-delay: 1
+
+Sitemap: https://epargnermaroc.ma/sitemap-index.xml

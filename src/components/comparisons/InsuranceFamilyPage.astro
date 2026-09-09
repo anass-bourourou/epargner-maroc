@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../articles/Breadcrumbs.astro';
+import CategoryHero from '../category/CategoryHero.astro';
+import FamilyBriefing from './FamilyBriefing.astro';
+import MethodologyBlock from './MethodologyBlock.astro';
+import OfferComparisonTable from './OfferComparisonTable.astro';
+import NewsletterSection from '../home/NewsletterSection.astro';
+import RelatedArticles from '../articles/RelatedArticles.astro';
+import { INSURANCE_FAMILIES, type InsuranceFamilyKey } from '../../data/insurance/families';
+import { EXAMPLE_OFFERS } from '../../data/insurance/example-offers';
+import { getArticlesByCategory } from '../../lib/articles';
+
+interface Props {
+  familyKey: InsuranceFamilyKey;
+}
+
+const { familyKey } = Astro.props as Props;
+const family = INSURANCE_FAMILIES[familyKey];
+const offers = EXAMPLE_OFFERS[familyKey];
+const relatedArticles = (await getArticlesByCategory('assurances')).slice(0, 3);
+const updatedAt = offers[0]?.updatedAt ?? new Date();
+---
+
+<BaseLayout title={family.title} description={family.seoDescription}>
+  <div class="container-wide pt-6 md:pt-8">
+    <Breadcrumbs
+      items={[
+        { name: 'Assurances', href: '/assurances/' },
+        { name: family.label, href: family.href },
+      ]}
+    />
+  </div>
+
+  <CategoryHero
+    eyebrow={`Assurance ${family.label}`}
+    title={family.title}
+    intro={family.intro}
+  />
+
+  <FamilyBriefing family={family} />
+
+  <MethodologyBlock
+    updatedAt={updatedAt}
+    criteriaCount={family.criteria.length}
+    offerCount={offers.length}
+    illustrative
+  />
+
+  <OfferComparisonTable family={family} offers={offers} />
+
+  {relatedArticles.length > 0 && (
+    <section class="border-t border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)]/40">
+      <div class="container-wide section-py">
+        <RelatedArticles articles={relatedArticles} heading="Articles associés" />
+      </div>
+    </section>
+  )}
+
+  <NewsletterSection />
+</BaseLayout>

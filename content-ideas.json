@@ -1,0 +1,62 @@
+[
+  {
+    "topic": "Comment automatiser son épargne mensuelle au Maroc",
+    "category": "epargne",
+    "angle": "Un plan concret : virement automatique dès la paie, choix du support, ajustement progressif.",
+    "used": false
+  },
+  {
+    "topic": "Épargne de précaution : combien mettre de côté",
+    "category": "epargne",
+    "angle": "Le raisonnement pour dimensionner un fonds d'urgence adapté à sa situation familiale.",
+    "used": false
+  },
+  {
+    "topic": "Comprendre le taux effectif global (TAEG) d'un crédit",
+    "category": "credit",
+    "angle": "Ce que recouvre vraiment le TAEG et pourquoi il est plus fiable que le taux nominal pour comparer.",
+    "used": false
+  },
+  {
+    "topic": "Faut-il rembourser son crédit par anticipation",
+    "category": "credit",
+    "angle": "Les critères pour arbitrer entre remboursement anticipé et placement de la trésorerie.",
+    "used": false
+  },
+  {
+    "topic": "Comment lire son relevé de compte bancaire",
+    "category": "banques",
+    "angle": "Décrypter les libellés obscurs et repérer les frais silencieux ligne par ligne.",
+    "used": false
+  },
+  {
+    "topic": "Assurance santé complémentaire : les questions à poser avant de souscrire",
+    "category": "assurances",
+    "angle": "Plafonds, taux de remboursement, carence, réseau : la grille de lecture d'un contrat santé.",
+    "used": false
+  },
+  {
+    "topic": "Investissement long terme : la puissance des intérêts composés",
+    "category": "investissement",
+    "angle": "Illustrer avec une simulation, sans promettre un rendement.",
+    "used": false
+  },
+  {
+    "topic": "Bien lire une police d'assurance habitation",
+    "category": "assurances",
+    "angle": "Les six clauses qui font la différence entre couverture réelle et couverture théorique.",
+    "used": false
+  },
+  {
+    "topic": "Compte à terme : à qui ça s'adresse vraiment",
+    "category": "epargne",
+    "angle": "Les avantages et les contraintes d'un CAT — et comment il se compare à un livret classique.",
+    "used": false
+  },
+  {
+    "topic": "Négocier son taux de crédit immobilier au Maroc",
+    "category": "credit",
+    "angle": "Les leviers concrets — apport, ancienneté, domiciliation, stabilité — qui font bouger le taux.",
+    "used": false
+  }
+]

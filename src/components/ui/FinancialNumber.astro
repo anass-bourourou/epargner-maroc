@@ -1,0 +1,74 @@
+---
+// Signature editorial number. Uses typography, not chrome, to carry weight.
+
+type Size = 'sm' | 'md' | 'lg' | 'xl';
+type Trend = 'up' | 'down' | 'flat';
+
+interface Props {
+  label?: string;
+  value: string; // pre-formatted; use lib/formatters/currency.ts
+  suffix?: string; // e.g. "DH", "MAD", "%"
+  description?: string;
+  trend?: Trend;
+  trendLabel?: string;
+  size?: Size;
+  align?: 'start' | 'end' | 'center';
+  class?: string;
+}
+
+const {
+  label,
+  value,
+  suffix,
+  description,
+  trend,
+  trendLabel,
+  size = 'lg' as Size,
+  align = 'start',
+  class: className = '',
+} = Astro.props as Props;
+
+const sizes: Record<Size, string> = {
+  sm: 'text-[1.5rem]',
+  md: 'text-[2rem]',
+  lg: 'text-[2.75rem]',
+  xl: 'text-[clamp(3rem,5vw,4.5rem)]',
+};
+
+const alignment =
+  align === 'end'
+    ? 'items-end text-right'
+    : align === 'center'
+      ? 'items-center text-center'
+      : 'items-start text-left';
+
+const trendColor =
+  trend === 'up'
+    ? 'text-[color:var(--color-forest-700)]'
+    : trend === 'down'
+      ? 'text-[color:var(--color-terracotta-700)]'
+      : 'text-[color:var(--color-foreground-muted)]';
+const trendGlyph = trend === 'up' ? '↑' : trend === 'down' ? '↓' : '→';
+---
+
+<div class={`flex flex-col ${alignment} ${className}`}>
+  {label && (
+    <span class="overline mb-2">{label}</span>
+  )}
+  <span class="font-[var(--font-display)] font-medium leading-[1.02] tracking-tight text-[color:var(--color-foreground-strong)] num">
+    <span class={sizes[size]}>{value}</span>{suffix && (
+      <span class="ml-1 align-baseline text-[0.5em] font-[var(--font-sans)] font-medium uppercase tracking-[0.12em] text-[color:var(--color-foreground-muted)]">{suffix}</span>
+    )}
+  </span>
+  {(description || trend) && (
+    <div class="mt-2 flex items-center gap-2 text-[0.8125rem] text-[color:var(--color-foreground-muted)]">
+      {trend && (
+        <span class={`inline-flex items-center gap-1 font-medium ${trendColor}`}>
+          <span aria-hidden="true">{trendGlyph}</span>
+          {trendLabel && <span>{trendLabel}</span>}
+        </span>
+      )}
+      {description && <span>{description}</span>}
+    </div>
+  )}
+</div>

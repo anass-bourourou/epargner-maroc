@@ -1,0 +1,27 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import GuideCard from '../guides/GuideCard.astro';
+import Button from '../ui/Button.astro';
+import type { Guide } from '../../lib/articles';
+
+interface Props {
+  guides: Guide[];
+  eyebrow?: string;
+  heading: string;
+}
+const { guides, eyebrow = 'Guides', heading } = Astro.props as Props;
+if (guides.length === 0) return null;
+---
+
+<section class="border-b border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)]/40">
+  <div class="container-wide section-py">
+    <SectionHeading eyebrow={eyebrow} title={heading}>
+      <Button slot="action" as="a" href="/guides/" variant="text" iconRight="arrow-right">
+        Tous les guides
+      </Button>
+    </SectionHeading>
+    <div class="mt-10 grid gap-8 sm:grid-cols-2">
+      {guides.map((g) => <GuideCard guide={g} variant="default" />)}
+    </div>
+  </div>
+</section>

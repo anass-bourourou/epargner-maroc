@@ -1,0 +1,44 @@
+---
+import CategorySection from './CategorySection.astro';
+import FinancialNumber from '../ui/FinancialNumber.astro';
+---
+
+<CategorySection
+  category="epargne"
+  eyebrow="Épargne"
+  title="Mieux épargner, simplement."
+  description="Quelques principes pour construire une épargne régulière au Maroc — à partir de très peu."
+  ctaLabel="Tous les articles"
+  ctaHref="/epargne/"
+  categoryLabel="Épargne"
+  categoryHref="/epargne/"
+>
+  <div
+    slot="after"
+    class="mt-16 grid gap-8 border-t border-[color:var(--color-border)] pt-10 sm:grid-cols-3"
+  >
+    <FinancialNumber
+      label="Simulation"
+      value="500"
+      suffix="MAD / mois"
+      size="md"
+      description="Versement mensuel"
+    />
+    <FinancialNumber
+      label="Simulation"
+      value="60"
+      suffix="mois"
+      size="md"
+      description="Horizon 5 ans"
+    />
+    <FinancialNumber
+      label="Simulation"
+      value="≈ 32 300"
+      suffix="MAD"
+      size="md"
+      trend="up"
+      trendLabel="+8 %"
+      description="Rendement hypothétique 3 %"
+    />
+  </div>
+</CategorySection>

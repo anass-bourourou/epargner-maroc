@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import EditorialLabel from '../components/ui/EditorialLabel.astro';
+---
+
+<BaseLayout
+  title="Page introuvable"
+  description="La page que vous cherchez n'existe pas — ou plus."
+  noindex
+>
+  <section class="container-wide py-24 md:py-32">
+    <div class="max-w-2xl">
+      <EditorialLabel class="mb-6">Erreur 404</EditorialLabel>
+      <h1 class="text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.02] tracking-[-0.02em]">
+        Cette page n'existe pas —<br />ou plus.
+      </h1>
+      <p class="mt-6 max-w-[54ch] text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Le lien que vous avez suivi est peut-être obsolète, ou la page a été
+        déplacée. Voici quelques points de départ utiles.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <Button as="a" href="/" variant="primary" iconRight="arrow-right">
+          Accueil
+        </Button>
+        <Button as="a" href="/guides/" variant="secondary">Guides</Button>
+        <Button as="a" href="/outils/" variant="secondary">Outils</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

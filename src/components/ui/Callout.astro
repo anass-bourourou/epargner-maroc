@@ -1,0 +1,66 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../../lib/icons';
+
+type Variant = 'info' | 'important' | 'takeaway';
+
+interface Props {
+  variant?: Variant;
+  title?: string;
+  icon?: IconName;
+  class?: string;
+}
+
+const {
+  variant = 'info' as Variant,
+  title,
+  icon,
+  class: className = '',
+} = Astro.props as Props;
+
+// Restrained visuals: thin left rule, neutral surface, no bright alert boxes.
+const variants: Record<Variant, { rule: string; label: string; defaultIcon: IconName; ariaLabel: string }> = {
+  info: {
+    rule: 'border-l-[color:var(--color-sage-500)]',
+    label: 'text-[color:var(--color-sage-900)]',
+    defaultIcon: 'info',
+    ariaLabel: 'Information',
+  },
+  important: {
+    rule: 'border-l-[color:var(--color-terracotta-500)]',
+    label: 'text-[color:var(--color-terracotta-800)]',
+    defaultIcon: 'info',
+    ariaLabel: 'À noter',
+  },
+  takeaway: {
+    rule: 'border-l-[color:var(--color-forest-500)]',
+    label: 'text-[color:var(--color-forest-800)]',
+    defaultIcon: 'check',
+    ariaLabel: 'À retenir',
+  },
+};
+const v = variants[variant];
+const resolvedIcon: IconName = icon ?? v.defaultIcon;
+---
+
+<aside
+  role="note"
+  aria-label={title ?? v.ariaLabel}
+  class={`border-l-2 ${v.rule} bg-[color:var(--color-surface-muted)]/60 pl-5 pr-5 py-4 my-6 rounded-[var(--radius-xs)] ${className}`}
+>
+  <div class="flex items-start gap-3">
+    <span class={`mt-0.5 shrink-0 ${v.label}`}>
+      <Icon name={resolvedIcon} size={18} />
+    </span>
+    <div class="min-w-0">
+      {title && (
+        <p class={`text-[0.8125rem] font-semibold uppercase tracking-[0.15em] mb-1 ${v.label}`}>
+          {title}
+        </p>
+      )}
+      <div class="text-[0.9375rem] leading-relaxed text-[color:var(--color-foreground)]">
+        <slot />
+      </div>
+    </div>
+  </div>
+</aside>

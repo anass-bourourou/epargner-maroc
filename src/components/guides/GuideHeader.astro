@@ -1,0 +1,67 @@
+---
+import { formatDateLong } from '../../lib/formatters/date';
+import AuthorByline from '../articles/AuthorByline.astro';
+import type { Author } from '../../lib/articles';
+
+interface Props {
+  eyebrow: string;
+  eyebrowHref?: string;
+  title: string;
+  description: string;
+  publishedAt: Date;
+  updatedAt?: Date;
+  author?: Author;
+  readingMinutes?: number;
+}
+
+const {
+  eyebrow,
+  eyebrowHref,
+  title,
+  description,
+  publishedAt,
+  updatedAt,
+  author,
+  readingMinutes,
+} = Astro.props as Props;
+
+const showUpdated =
+  updatedAt && updatedAt.getTime() - publishedAt.getTime() > 24 * 60 * 60 * 1000;
+---
+
+<header class="mb-12">
+  <div class="flex items-center gap-3">
+    {eyebrowHref ? (
+      <a href={eyebrowHref} class="overline no-underline hover:text-[color:var(--color-primary-hover)]">
+        {eyebrow}
+      </a>
+    ) : (
+      <span class="overline">{eyebrow}</span>
+    )}
+    <span aria-hidden="true" class="h-px w-8 bg-[color:var(--color-border-strong)]"></span>
+    <span class="overline !text-[color:var(--color-foreground-muted)]">Guide</span>
+  </div>
+
+  <h1 class="mt-5 max-w-[22ch] text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.05] tracking-[-0.01em]">
+    {title}
+  </h1>
+
+  <p class="mt-6 max-w-[62ch] text-[1.125rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+    {description}
+  </p>
+
+  <div class="mt-8 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[color:var(--color-border)] pt-6 text-[0.8125rem] text-[color:var(--color-foreground-muted)]">
+    {author ? <AuthorByline author={author} /> : <span></span>}
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+      <time datetime={publishedAt.toISOString()}>
+        Publié le {formatDateLong(publishedAt)}
+      </time>
+      {showUpdated && (
+        <span>· Mis à jour le <time datetime={updatedAt.toISOString()}>{formatDateLong(updatedAt)}</time></span>
+      )}
+      {readingMinutes && readingMinutes > 0 && (
+        <span>· {readingMinutes} min de lecture</span>
+      )}
+    </div>
+  </div>
+</header>

@@ -1,0 +1,44 @@
+---
+import { breadcrumbListSchema, type BreadcrumbItem } from '../../lib/seo';
+
+interface Props {
+  items: BreadcrumbItem[];
+  class?: string;
+}
+
+const { items, class: className = '' } = Astro.props as Props;
+
+const site = Astro.site?.toString() ?? 'https://epargnermaroc.ma';
+const schema = breadcrumbListSchema(site, [
+  { name: 'Accueil', href: '/' },
+  ...items,
+]);
+---
+
+<nav aria-label="Fil d'ariane" class={`text-[0.8125rem] ${className}`}>
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[color:var(--color-foreground-muted)]">
+    <li>
+      <a href="/" class="no-underline hover:text-[color:var(--color-primary)]">Accueil</a>
+    </li>
+    {items.map((item, i) => (
+      <>
+        <li aria-hidden="true" class="text-[color:var(--color-foreground-subtle)]">/</li>
+        <li class:list={[{ 'text-[color:var(--color-foreground)]': i === items.length - 1 }]}>
+          {i === items.length - 1 ? (
+            <span aria-current="page">{item.name}</span>
+          ) : (
+            <a href={item.href} class="no-underline hover:text-[color:var(--color-primary)]">
+              {item.name}
+            </a>
+          )}
+        </li>
+      </>
+    ))}
+  </ol>
+</nav>
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+/>

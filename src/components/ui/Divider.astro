@@ -1,0 +1,14 @@
+---
+interface Props {
+  variant?: 'default' | 'strong' | 'inset';
+  class?: string;
+}
+const { variant = 'default', class: className = '' } = Astro.props as Props;
+const color =
+  variant === 'strong'
+    ? 'border-[color:var(--color-border-strong)]'
+    : 'border-[color:var(--color-border)]';
+const inset = variant === 'inset' ? 'mx-4 sm:mx-8' : '';
+---
+
+<hr class={`border-0 border-t ${color} ${inset} ${className}`} role="separator" />

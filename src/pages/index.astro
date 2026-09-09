@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import ValueSection from '../components/home/ValueSection.astro';
+import ToolsSection from '../components/home/ToolsSection.astro';
+import FeaturedArticles from '../components/home/FeaturedArticles.astro';
+import EpargneSection from '../components/home/EpargneSection.astro';
+import CategorySection from '../components/home/CategorySection.astro';
+import AssurancesSection from '../components/home/AssurancesSection.astro';
+import GuidesSection from '../components/home/GuidesSection.astro';
+import NewsletterSection from '../components/home/NewsletterSection.astro';
+---
+
+<BaseLayout
+  title="Épargner Maroc — Mieux gérer son argent au Maroc"
+  description="Épargne, banques, assurances, crédit, investissement : articles, guides, outils et comparatifs pour prendre de meilleures décisions financières au Maroc."
+>
+  <Hero />
+  <ValueSection />
+  <ToolsSection />
+  <FeaturedArticles />
+
+  <EpargneSection />
+
+  <CategorySection
+    category="banques"
+    eyebrow="Banques"
+    title="Comprendre sa banque."
+    description="Frais de tenue de compte, cartes, découvert, services : ce qui pèse vraiment dans une année bancaire au Maroc."
+    ctaLabel="Tous les articles"
+    ctaHref="/banques/"
+    categoryLabel="Banques"
+    categoryHref="/banques/"
+    variant="lead-top"
+    muted
+  />
+
+  <AssurancesSection />
+
+  <CategorySection
+    category="credit"
+    eyebrow="Crédit"
+    title="Emprunter sans se tromper."
+    description="Coût réel, mensualité, taux effectif, apport : les repères indispensables avant de signer un crédit."
+    ctaLabel="Comprendre le crédit"
+    ctaHref="/credit/"
+    categoryLabel="Crédit"
+    categoryHref="/credit/"
+    variant="lead-side"
+  />
+
+  <CategorySection
+    category="investissement"
+    eyebrow="Investissement"
+    title="Investir, une fois les bases posées."
+    description="L'investissement n'est ni magique ni interdit. Il commence après l'épargne de précaution, avec des attentes réalistes."
+    ctaLabel="Tous les articles"
+    ctaHref="/investissement/"
+    categoryLabel="Investissement"
+    categoryHref="/investissement/"
+    variant="lead-top"
+    muted
+  />
+
+  <GuidesSection />
+  <NewsletterSection />
+</BaseLayout>

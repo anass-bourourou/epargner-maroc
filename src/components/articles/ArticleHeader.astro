@@ -1,0 +1,70 @@
+---
+import ArticleMeta from './ArticleMeta.astro';
+import AuthorByline from './AuthorByline.astro';
+import type { Author } from '../../lib/articles';
+
+interface Props {
+  eyebrow: string;
+  eyebrowHref?: string;
+  title: string;
+  standfirst: string;
+  publishedAt: Date;
+  updatedAt?: Date;
+  readingMinutes?: number;
+  author?: Author;
+  heroImage?: string;
+  heroImageAlt?: string;
+}
+
+const {
+  eyebrow,
+  eyebrowHref,
+  title,
+  standfirst,
+  publishedAt,
+  updatedAt,
+  readingMinutes,
+  author,
+  heroImage,
+  heroImageAlt = '',
+} = Astro.props as Props;
+---
+
+<header class="mb-12">
+  {eyebrowHref ? (
+    <a href={eyebrowHref} class="overline no-underline hover:text-[color:var(--color-primary-hover)]">
+      {eyebrow}
+    </a>
+  ) : (
+    <span class="overline">{eyebrow}</span>
+  )}
+
+  <h1 class="mt-5 max-w-[22ch] text-[clamp(2rem,4.5vw,3.5rem)] leading-[1.05] tracking-[-0.01em]">
+    {title}
+  </h1>
+
+  <p class="mt-6 max-w-[62ch] text-[1.125rem] leading-relaxed text-[color:var(--color-foreground-muted)] font-[var(--font-display)] italic">
+    {standfirst}
+  </p>
+
+  <div class="mt-8 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-t border-[color:var(--color-border)] pt-6">
+    {author ? <AuthorByline author={author} /> : <span></span>}
+    <ArticleMeta
+      publishedAt={publishedAt}
+      updatedAt={updatedAt}
+      readingMinutes={readingMinutes}
+    />
+  </div>
+
+  {heroImage && (
+    <figure class="mt-10">
+      <img
+        src={heroImage}
+        alt={heroImageAlt}
+        loading="eager"
+        decoding="async"
+        class="w-full"
+      />
+    </figure>
+  )}
+</header>

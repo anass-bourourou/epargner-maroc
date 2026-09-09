@@ -1,0 +1,11 @@
+Contact: mailto:security@epargnermaroc.ma
+Expires: 2027-12-31T23:59:59Z
+Preferred-Languages: fr, en
+Canonical: https://epargnermaroc.ma/.well-known/security.txt
+
+# Épargner Maroc — Divulgation responsable
+# ------------------------------------------------------
+# Merci de nous signaler toute vulnérabilité de sécurité
+# à l'adresse ci-dessus. Merci de fournir des étapes
+# reproductibles et de nous laisser un délai raisonnable
+# pour corriger avant toute divulgation publique.

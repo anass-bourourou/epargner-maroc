@@ -1,0 +1,372 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/ui/Button.astro';
+import Input from '../../components/ui/Input.astro';
+import Select from '../../components/ui/Select.astro';
+import Badge from '../../components/ui/Badge.astro';
+import EditorialLabel from '../../components/ui/EditorialLabel.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Card from '../../components/ui/Card.astro';
+import Divider from '../../components/ui/Divider.astro';
+import Callout from '../../components/ui/Callout.astro';
+import FinancialNumber from '../../components/ui/FinancialNumber.astro';
+import Icon from '../../components/ui/Icon.astro';
+import ArticleCard from '../../components/articles/ArticleCard.astro';
+import { ICONS } from '../../lib/icons';
+import { formatMAD, formatPercent } from '../../lib/formatters/currency';
+
+const colors = [
+  ['Ivory 50 · background', 'var(--color-ivory-50)', '#fbf8f2'],
+  ['Ivory 100 · surface muted', 'var(--color-ivory-100)', '#f6f1e6'],
+  ['Ivory 200', 'var(--color-ivory-200)', '#ede4cf'],
+  ['Charcoal 950 · foreground strong', 'var(--color-charcoal-950)', '#14161a'],
+  ['Charcoal 900 · foreground', 'var(--color-charcoal-900)', '#1c1f24'],
+  ['Charcoal 500 · muted', 'var(--color-charcoal-500)', '#6b7280'],
+  ['Forest 700 · primary', 'var(--color-forest-700)', '#1c4b3d'],
+  ['Forest 800 · primary hover', 'var(--color-forest-800)', '#143a2f'],
+  ['Forest 500', 'var(--color-forest-500)', '#2f7360'],
+  ['Sage 700 · secondary', 'var(--color-sage-700)', '#6f8778'],
+  ['Sage 300', 'var(--color-sage-300)', '#c1cfc4'],
+  ['Terracotta 500 · accent', 'var(--color-terracotta-500)', '#c26744'],
+  ['Terracotta 700', 'var(--color-terracotta-700)', '#a24a2b'],
+  ['Border', 'var(--color-border)', '#e5ded0'],
+  ['Border strong', 'var(--color-border-strong)', '#cfc6b3'],
+];
+
+const spacing = [
+  ['1', 4], ['2', 8], ['3', 12], ['4', 16], ['6', 24],
+  ['8', 32], ['10', 40], ['12', 48], ['16', 64], ['20', 80],
+  ['24', 96], ['32', 128],
+];
+
+const iconNames = Object.keys(ICONS) as (keyof typeof ICONS)[];
+
+const categoryOptions = [
+  { value: 'epargne', label: 'Épargne' },
+  { value: 'banques', label: 'Banques' },
+  { value: 'assurances', label: 'Assurances' },
+  { value: 'credit', label: 'Crédit' },
+  { value: 'investissement', label: 'Investissement' },
+];
+---
+
+<BaseLayout
+  title="Design system"
+  description="Système de design Épargner Maroc — page de validation interne."
+  noindex
+>
+  <div class="container-wide section-py space-y-24">
+    <!-- Intro -->
+    <header>
+      <EditorialLabel class="mb-4">Page interne · noindex</EditorialLabel>
+      <h1>Design system</h1>
+      <p class="mt-6 max-w-[62ch] text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Système visuel Épargner Maroc — tokens, typographie, composants réutilisables.
+        Cette page sert de validation interne pour la Phase 2 ; elle sera exclue de l'index.
+      </p>
+    </header>
+
+    <!-- Colors -->
+    <section>
+      <SectionHeading eyebrow="Tokens" title="Couleurs" description="Palette V3 restreinte. Éviter d'introduire de nouvelles teintes sans passer par ces tokens." />
+      <div class="mt-10 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-5">
+        {colors.map(([name, cssVar, hex]) => (
+          <div>
+            <div
+              class="mb-2 h-20 border border-[color:var(--color-border)]"
+              style={`background:${cssVar}`}
+            ></div>
+            <p class="text-[0.8125rem] font-medium text-[color:var(--color-foreground-strong)]">{name}</p>
+            <p class="text-[0.75rem] text-[color:var(--color-foreground-muted)] num">{hex}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Typography -->
+    <section>
+      <SectionHeading eyebrow="Fondations" title="Typographie" description="Playfair Display pour les titres éditoriaux, Public Sans pour l'UI et le corps." />
+      <div class="mt-10 space-y-8">
+        <div class="border-t border-[color:var(--color-border)] pt-6">
+          <p class="overline mb-2">Display XL</p>
+          <p class="font-[var(--font-display)]" style="font-size:var(--text-display-xl); line-height:1.02; letter-spacing:-0.02em;">Mieux gérer son argent.</p>
+        </div>
+        <div class="border-t border-[color:var(--color-border)] pt-6">
+          <p class="overline mb-2">Display L</p>
+          <p class="font-[var(--font-display)]" style="font-size:var(--text-display-l); line-height:1.05; letter-spacing:-0.015em;">Épargne, banque, assurance.</p>
+        </div>
+        <div class="border-t border-[color:var(--color-border)] pt-6">
+          <p class="overline mb-2">Display M</p>
+          <p class="font-[var(--font-display)]" style="font-size:var(--text-display-m); line-height:1.1;">Comprendre le crédit au Maroc.</p>
+        </div>
+        <div class="border-t border-[color:var(--color-border)] pt-6">
+          <p class="overline mb-2">H1</p><h1>Une nouvelle publication</h1>
+        </div>
+        <div class="border-t border-[color:var(--color-border)] pt-6">
+          <p class="overline mb-2">H2</p><h2>Comment épargner régulièrement</h2>
+        </div>
+        <div class="border-t border-[color:var(--color-border)] pt-6">
+          <p class="overline mb-2">H3</p><h3>Choisir son livret</h3>
+        </div>
+        <div class="border-t border-[color:var(--color-border)] pt-6">
+          <p class="overline mb-2">H4</p><h4>Fonctionnement du taux annuel</h4>
+        </div>
+        <div class="grid gap-6 border-t border-[color:var(--color-border)] pt-6 md:grid-cols-3">
+          <div>
+            <p class="overline mb-2">Body L · 18</p>
+            <p style="font-size:var(--text-body-l); line-height:1.65;">Un épargnant régulier gagne autant par la constance que par le rendement. La discipline mensuelle prime.</p>
+          </div>
+          <div>
+            <p class="overline mb-2">Body M · 16</p>
+            <p style="font-size:var(--text-body-m); line-height:1.65;">Les frais bancaires réduisent silencieusement le rendement d'un placement sur dix ans.</p>
+          </div>
+          <div>
+            <p class="overline mb-2">Body S · 15</p>
+            <p style="font-size:var(--text-body-s); line-height:1.6;">Vérifiez la date de mise à jour des taux avant de comparer deux offres.</p>
+          </div>
+        </div>
+        <div class="grid gap-6 border-t border-[color:var(--color-border)] pt-6 md:grid-cols-3">
+          <div>
+            <p class="overline mb-2">Label · 14</p>
+            <p class="text-[0.875rem] font-medium">Montant initial</p>
+          </div>
+          <div>
+            <p class="overline mb-2">Caption · 13</p>
+            <p class="text-[0.8125rem] text-[color:var(--color-foreground-muted)]">Mis à jour le 18 août 2026</p>
+          </div>
+          <div>
+            <p class="overline mb-2">Overline · 12</p>
+            <p class="overline">Guide pratique</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Spacing -->
+    <section>
+      <SectionHeading eyebrow="Tokens" title="Espacement" description="Échelle de base 4 px. Ne pas choisir une marge arbitraire hors de cette grille." />
+      <div class="mt-10 space-y-3">
+        {spacing.map(([name, px]) => (
+          <div class="flex items-center gap-4">
+            <span class="w-14 text-[0.8125rem] text-[color:var(--color-foreground-muted)] num">{name} · {px}</span>
+            <span class="block h-3 bg-[color:var(--color-forest-700)]" style={`width:${px}px`}></span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Buttons -->
+    <section>
+      <SectionHeading eyebrow="Composants" title="Boutons" description="Trois variantes : primary (forest), secondary (contour), text (éditorial). Pas de pill buttons." />
+      <div class="mt-10 space-y-8">
+        <div>
+          <p class="overline mb-3">Variants · tailles</p>
+          <div class="flex flex-wrap items-end gap-3">
+            <Button size="sm">Small</Button>
+            <Button size="md">Medium</Button>
+            <Button size="lg">Large</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="text">Lien texte</Button>
+          </div>
+        </div>
+        <div>
+          <p class="overline mb-3">Avec icônes</p>
+          <div class="flex flex-wrap gap-3">
+            <Button iconRight="arrow-right">Explorer les outils</Button>
+            <Button variant="secondary" iconLeft="calculator">Calculateur d'épargne</Button>
+            <Button variant="text" iconRight="arrow-up-right">Lire l'article</Button>
+          </div>
+        </div>
+        <div>
+          <p class="overline mb-3">États</p>
+          <div class="flex flex-wrap gap-3">
+            <Button>Default</Button>
+            <Button disabled>Disabled</Button>
+            <Button as="a" href="#">As anchor</Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Inputs / Select -->
+    <section>
+      <SectionHeading eyebrow="Composants" title="Champs de formulaire" description="Cohérents entre input et select. États : default, focus, error, disabled." />
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        <Input id="ds-amount" label="Montant initial" type="number" placeholder="10 000" suffix="MAD" inputmode="numeric" helper="Somme placée au démarrage." />
+        <Input id="ds-monthly" label="Versement mensuel" type="number" placeholder="500" suffix="MAD" inputmode="numeric" required />
+        <Input id="ds-email" label="E-mail" type="email" placeholder="vous@exemple.ma" autocomplete="email" />
+        <Input id="ds-err" label="Taux annuel" type="number" value={-1} suffix="%" error="Le taux ne peut pas être négatif." />
+        <Select id="ds-cat" label="Catégorie" options={categoryOptions} placeholder="Choisir une catégorie" helper="Utilisé pour classer l'article." />
+        <Input id="ds-disabled" label="Champ désactivé" placeholder="—" disabled />
+      </div>
+    </section>
+
+    <!-- Badges / labels -->
+    <section>
+      <SectionHeading eyebrow="Composants" title="Étiquettes éditoriales" description="Utiliser avec parcimonie. La typographie fait le travail." />
+      <div class="mt-10 space-y-6">
+        <div class="flex flex-wrap gap-2">
+          <Badge tone="forest">Épargne</Badge>
+          <Badge tone="sage">Banques</Badge>
+          <Badge tone="terracotta">Guide</Badge>
+          <Badge tone="neutral">Outil</Badge>
+          <Badge tone="forest">Assurances</Badge>
+        </div>
+        <div class="flex flex-wrap gap-6">
+          <EditorialLabel>Épargne</EditorialLabel>
+          <EditorialLabel tone="accent">Sponsorisé</EditorialLabel>
+          <EditorialLabel tone="muted">Mis à jour aujourd'hui</EditorialLabel>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section heading -->
+    <section>
+      <SectionHeading eyebrow="Composants" title="Section heading" description="Bloc titre + eyebrow + description + action optionnelle." />
+      <div class="mt-10 space-y-12">
+        <div class="border-t border-[color:var(--color-border)] pt-8">
+          <SectionHeading
+            eyebrow="Épargne"
+            title="Mieux épargner, simplement."
+            description="Quelques principes pour construire une épargne régulière au Maroc, à partir de très peu."
+          >
+            <Button slot="action" as="a" href="#" variant="text" iconRight="arrow-right">Tous les articles</Button>
+          </SectionHeading>
+        </div>
+        <div class="border-t border-[color:var(--color-border)] pt-8">
+          <SectionHeading eyebrow="Assurances" title="Comparer avant de signer." align="center" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Financial numbers -->
+    <section>
+      <SectionHeading eyebrow="Signature" title="Nombres financiers" description="Élément visuel signature : la typographie porte la valeur, pas les graphiques." />
+      <div class="mt-10 grid gap-10 md:grid-cols-3">
+        <FinancialNumber label="Capital final" value={formatMAD(73245).replace(' MAD', '')} suffix="MAD" size="xl" description="Après 5 ans" />
+        <FinancialNumber label="Total versé" value={formatMAD(36000).replace(' MAD', '')} suffix="MAD" size="lg" trend="flat" trendLabel="Constant" />
+        <FinancialNumber label="Intérêts cumulés" value={formatMAD(3245).replace(' MAD', '')} suffix="MAD" size="lg" trend="up" trendLabel="+9 %" description="vs. livret classique" />
+      </div>
+      <div class="mt-8 grid gap-6 sm:grid-cols-4">
+        <FinancialNumber label="Rendement" value={formatPercent(0.036).replace(' %', '')} suffix="%" size="md" />
+        <FinancialNumber label="Durée" value="60" suffix="mois" size="md" />
+        <FinancialNumber label="Frais annuels" value="0" suffix="MAD" size="md" />
+        <FinancialNumber label="Taux d'épargne" value="24" suffix="%" size="md" trend="up" trendLabel="+3 pts" />
+      </div>
+    </section>
+
+    <!-- Callouts -->
+    <section>
+      <SectionHeading eyebrow="Éditorial" title="Callouts" description="Trois variantes discrètes : info, important, à retenir. Aucune boîte d'alerte tapageuse." />
+      <div class="mt-10 space-y-4 max-w-[68ch]">
+        <Callout variant="info" title="Bon à savoir">
+          Les taux affichés par les banques marocaines sont bruts. Le rendement réel dépend
+          de l'inflation et des retenues à la source.
+        </Callout>
+        <Callout variant="important" title="À vérifier">
+          Les frais de tenue de compte varient selon le profil. Demandez la grille tarifaire
+          officielle avant d'ouvrir un compte.
+        </Callout>
+        <Callout variant="takeaway" title="À retenir">
+          Épargner 500 DH par mois pendant 10 ans à 3 % annuel produit environ
+          {' '}<strong class="font-medium num">70 000 DH</strong>.
+        </Callout>
+      </div>
+    </section>
+
+    <!-- Cards -->
+    <section>
+      <SectionHeading eyebrow="Composants" title="Cards" description="Utilisées uniquement lorsqu'elles servent la compréhension. Sinon : typographie et blancs." />
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        <Card>
+          <h4 class="mb-2">Livret d'épargne</h4>
+          <p class="text-[0.9375rem] text-[color:var(--color-foreground-muted)]">
+            Placement liquide, capital garanti, rendement modéré.
+          </p>
+        </Card>
+        <Card muted>
+          <h4 class="mb-2">Compte à terme</h4>
+          <p class="text-[0.9375rem] text-[color:var(--color-foreground-muted)]">
+            Immobilise le capital sur une durée fixée, taux plus élevé.
+          </p>
+        </Card>
+        <Card href="#" padding="md">
+          <h4 class="mb-2">OPCVM monétaire</h4>
+          <p class="text-[0.9375rem] text-[color:var(--color-foreground-muted)]">
+            Fonds à courte échéance, rendement dépendant du marché.
+          </p>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Article cards -->
+    <section>
+      <SectionHeading eyebrow="Éditorial" title="Article cards" description="Trois variantes : featured, standard, compact. Hiérarchie différente selon le contexte." />
+
+      <div class="mt-10">
+        <p class="overline mb-4">Featured</p>
+        <ArticleCard
+          variant="featured"
+          href="#"
+          category="Épargne"
+          categoryHref="/epargne/"
+          title="Comment épargner 500 DH par mois même avec un salaire moyen"
+          description="Un plan simple, testable dès le mois prochain : automatisation, virement anticipé, poste par poste. Ce que les livrets marocains permettent réellement."
+          date="18 août 2026"
+          readingMinutes={8}
+        />
+      </div>
+
+      <div class="mt-16">
+        <p class="overline mb-4">Standard · grille</p>
+        <div class="grid gap-10 md:grid-cols-3">
+          <ArticleCard variant="standard" href="#" category="Banques" title="Comparatif des frais de tenue de compte au Maroc" description="Grille par banque, mise à jour trimestrielle." date="12 août 2026" readingMinutes={6} />
+          <ArticleCard variant="standard" href="#" category="Crédit" title="Négocier son taux immobilier en 2026" description="Ce que les banques regardent vraiment." date="10 août 2026" readingMinutes={9} />
+          <ArticleCard variant="standard" href="#" category="Assurances" title="Assurance habitation : lire une police en 10 minutes" description="Les 6 clauses qui font la différence." date="5 août 2026" readingMinutes={7} />
+        </div>
+      </div>
+
+      <div class="mt-16 max-w-[42rem]">
+        <p class="overline mb-4">Compact · liste</p>
+        <div>
+          <ArticleCard variant="compact" href="#" category="Épargne" title="Livret A vs livret bleu : lequel choisir ?" date="18 août" readingMinutes={5} />
+          <ArticleCard variant="compact" href="#" category="Investissement" title="Bourse de Casablanca : 5 idées reçues" date="14 août" readingMinutes={11} />
+          <ArticleCard variant="compact" href="#" category="Crédit" title="Simuler son crédit auto au dirham près" date="9 août" readingMinutes={4} />
+        </div>
+      </div>
+    </section>
+
+    <!-- Icons -->
+    <section>
+      <SectionHeading eyebrow="Système" title="Icônes" description="Trait fin 1,5 px, currentColor, 24×24. Pas de Material Symbols." />
+      <div class="mt-10 grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6">
+        {iconNames.map((n) => (
+          <div class="flex flex-col items-center gap-2 border border-[color:var(--color-border)] py-4">
+            <Icon name={n} size={22} />
+            <span class="text-[0.75rem] text-[color:var(--color-foreground-muted)] num">{n}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Dividers -->
+    <section>
+      <SectionHeading eyebrow="Composants" title="Séparateurs" description="Filets fins, jamais décoratifs." />
+      <div class="mt-10 space-y-8 max-w-[42rem]">
+        <div>
+          <p class="overline mb-3">Default</p>
+          <Divider />
+        </div>
+        <div>
+          <p class="overline mb-3">Strong</p>
+          <Divider variant="strong" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Chrome preview -->
+    <section>
+      <SectionHeading eyebrow="Layout" title="Header & Footer" description="Le header et le footer présents sur cette page utilisent les composants finaux. Redimensionner la fenêtre pour vérifier le comportement mobile." />
+    </section>
+  </div>
+</BaseLayout>

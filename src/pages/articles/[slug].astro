@@ -1,0 +1,50 @@
+---
+import { getEntry, render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import {
+  getPublishedArticles,
+  getRelatedArticles,
+  getGuidesByCategory,
+  estimateReadingMinutes,
+  type Article,
+} from '../../lib/articles';
+import { mdxComponents } from '../../components/editorial/mdx-components';
+
+export async function getStaticPaths() {
+  const articles = await getPublishedArticles();
+  return articles.map((article) => ({
+    params: { slug: article.id },
+    props: { article },
+  }));
+}
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props as Props;
+const { Content, headings } = await render(article);
+
+const author = article.data.author
+  ? await getEntry(article.data.author)
+  : undefined;
+
+const related = await getRelatedArticles(article, 3);
+const relatedGuides = (await getGuidesByCategory(article.data.category)).slice(0, 2);
+
+const readingMinutes = estimateReadingMinutes(
+  article.body,
+  article.data.readingTime,
+);
+---
+
+<ArticleLayout
+  article={article}
+  author={author}
+  headings={headings}
+  related={related}
+  relatedGuides={relatedGuides}
+  readingMinutes={readingMinutes}
+>
+  <Content components={mdxComponents} />
+</ArticleLayout>

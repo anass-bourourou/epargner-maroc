@@ -1,0 +1,53 @@
+---
+interface Props {
+  eyebrow?: string;
+  eyebrowHref?: string;
+  title: string;
+  description?: string;
+  align?: 'start' | 'center';
+  as?: 'h2' | 'h3';
+  class?: string;
+}
+
+const {
+  eyebrow,
+  eyebrowHref,
+  title,
+  description,
+  align = 'start',
+  as = 'h2',
+  class: className = '',
+} = Astro.props as Props;
+
+const alignment =
+  align === 'center' ? 'text-center items-center' : 'text-left items-start';
+const Heading = as;
+---
+
+<div class={`flex flex-col ${alignment} ${className}`}>
+  {eyebrow && (
+    eyebrowHref ? (
+      <a
+        href={eyebrowHref}
+        class="overline mb-3 no-underline hover:text-[color:var(--color-primary-hover)]"
+      >
+        {eyebrow}
+      </a>
+    ) : (
+      <span class="overline mb-3">{eyebrow}</span>
+    )
+  )}
+  <Heading class="max-w-[36ch]">
+    {title}
+  </Heading>
+  {description && (
+    <p class="mt-4 max-w-[60ch] text-[color:var(--color-foreground-muted)] text-[1.0625rem] leading-relaxed">
+      {description}
+    </p>
+  )}
+  {Astro.slots.has('action') && (
+    <div class="mt-6">
+      <slot name="action" />
+    </div>
+  )}
+</div>

@@ -1,0 +1,39 @@
+---
+// Editorial "overline" label — uppercase, letter-spaced, refined.
+// Use sparingly to name a section, category, or eyebrow above a heading.
+
+interface Props {
+  as?: 'span' | 'p' | 'div';
+  href?: string;
+  tone?: 'primary' | 'accent' | 'muted';
+  class?: string;
+}
+
+const {
+  as = 'span',
+  href,
+  tone = 'primary',
+  class: className = '',
+} = Astro.props as Props;
+
+const tones = {
+  primary: 'text-[color:var(--color-primary)]',
+  accent: 'text-[color:var(--color-accent-strong)]',
+  muted: 'text-[color:var(--color-foreground-muted)]',
+} as const;
+
+const classes = `inline-block text-[0.75rem] font-semibold uppercase tracking-[0.22em] ${tones[tone]} ${className}`;
+const Tag = as;
+---
+
+{
+  href ? (
+    <a href={href} class={`${classes} no-underline hover:opacity-80`}>
+      <slot />
+    </a>
+  ) : (
+    <Tag class={classes}>
+      <slot />
+    </Tag>
+  )
+}

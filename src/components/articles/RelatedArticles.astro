@@ -1,0 +1,45 @@
+---
+import ArticleCard from './ArticleCard.astro';
+import type { Article } from '../../lib/articles';
+import { articleHref } from '../../lib/articles';
+import { categoryMeta } from '../../lib/categories';
+import { formatDateShort } from '../../lib/formatters/date';
+
+interface Props {
+  articles: Article[];
+  heading?: string;
+  class?: string;
+}
+
+const {
+  articles,
+  heading = 'À lire aussi',
+  class: className = '',
+} = Astro.props as Props;
+if (!articles || articles.length === 0) return null;
+---
+
+<section
+  aria-labelledby="related-articles"
+  class={`border-t border-[color:var(--color-border)] pt-10 ${className}`}
+>
+  <h2
+    id="related-articles"
+    class="overline mb-6"
+  >
+    {heading}
+  </h2>
+  <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    {articles.map((a) => (
+      <ArticleCard
+        variant="standard"
+        href={articleHref(a)}
+        category={categoryMeta(a.data.category).label}
+        categoryHref={categoryMeta(a.data.category).href}
+        title={a.data.title}
+        description={a.data.description}
+        date={formatDateShort(a.data.publishedAt)}
+      />
+    ))}
+  </div>
+</section>

@@ -1,0 +1,24 @@
+---
+import ArticleFooterCTA from '../articles/ArticleFooterCTA.astro';
+import type { CategoryMeta } from '../../lib/categories';
+
+interface Props {
+  category: CategoryMeta;
+}
+const { category } = Astro.props as Props;
+if (!category.toolCta) return null;
+---
+
+<section class="border-b border-[color:var(--color-border)]">
+  <div class="container-wide py-16">
+    <div class="max-w-3xl">
+      <ArticleFooterCTA
+        eyebrow="Outil associé"
+        title={category.toolCta.label.replace(/^Ouvrir /, '')}
+        description="Passer d'une intuition à un chiffre — à partir de vos propres paramètres."
+        ctaLabel={category.toolCta.label}
+        ctaHref={category.toolCta.href}
+      />
+    </div>
+  </div>
+</section>

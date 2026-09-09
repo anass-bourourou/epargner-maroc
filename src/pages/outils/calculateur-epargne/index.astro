@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../../components/ui/EditorialLabel.astro';
+import Divider from '../../../components/ui/Divider.astro';
+import Button from '../../../components/ui/Button.astro';
+import CalculatorDisclaimer from '../../../components/calculators/CalculatorDisclaimer.astro';
+import NewsletterSection from '../../../components/home/NewsletterSection.astro';
+import { SavingsCalculator } from '../../../components/calculators/SavingsCalculator';
+---
+
+<BaseLayout
+  title="Calculateur d'épargne — Simuler son épargne"
+  description="Simulateur d'épargne pour le Maroc — estimer un capital final à partir d'un versement mensuel, d'une durée et d'un taux annuel."
+>
+  <div class="container-wide py-10 md:py-14">
+    <Breadcrumbs
+      items={[
+        { name: 'Outils', href: '/outils/' },
+        { name: "Calculateur d'épargne", href: '/outils/calculateur-epargne/' },
+      ]}
+      class="mb-8"
+    />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Outil · Épargne</EditorialLabel>
+      <h1>Calculateur d'épargne.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Estimer combien peut peser une épargne mensuelle après quelques
+        années. Vos valeurs restent dans votre navigateur — rien n'est envoyé.
+      </p>
+    </header>
+
+    <Divider class="mt-10" />
+
+    <div class="mt-10">
+      <SavingsCalculator client:load />
+    </div>
+
+    <CalculatorDisclaimer>
+      Le résultat est une <strong>estimation</strong>. Le taux saisi est
+      hypothétique — il ne constitue pas une garantie de rendement. Le
+      capital final réel dépend du produit d'épargne choisi, des frais,
+      de la fiscalité et des conditions du contrat.
+    </CalculatorDisclaimer>
+  </div>
+
+  <!-- Editorial content -->
+  <section class="border-t border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)]/40">
+    <div class="container-wide section-py">
+      <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-4">
+          <EditorialLabel class="mb-4">Comprendre</EditorialLabel>
+          <h2 class="max-w-[16ch]">Comment fonctionne ce calculateur.</h2>
+        </div>
+        <div class="lg:col-span-8 article-prose">
+          <h3 id="formule">La formule utilisée</h3>
+          <p>
+            Le calculateur applique la formule classique de valeur future d'une
+            épargne composée mensuellement. Chaque mois, le capital est
+            multiplié par un facteur <em>(1 + taux mensuel)</em>, puis le
+            versement mensuel est ajouté.
+          </p>
+          <p>
+            Formellement, si <code>r</code> est le taux mensuel
+            (taux annuel ÷ 12) et <code>n</code> le nombre de mois :
+          </p>
+          <p>
+            <code>FV = initial × (1 + r)^n + versement × ((1 + r)^n − 1) / r</code>
+          </p>
+          <p>
+            Lorsque le taux est nul, la seconde partie se simplifie à
+            <code>versement × n</code> — aucune division par zéro.
+          </p>
+
+          <h3 id="capital-vs-interets">Capital versé, intérêts estimés</h3>
+          <p>
+            Deux composantes distinctes apparaissent dans le résultat : le
+            <strong>total versé</strong> (initial + versements mensuels
+            cumulés) et les <strong>intérêts estimés</strong>. Avec des
+            durées courtes, les versements dominent largement. Plus la
+            durée s'allonge, plus la part des intérêts augmente
+            — c'est l'effet de la composition dans le temps.
+          </p>
+
+          <h3 id="taux-estimation">Pourquoi le taux est une estimation</h3>
+          <p>
+            Aucun produit d'épargne ne garantit un rendement futur exact.
+            Les livrets classiques peuvent voir leur taux évoluer ; les
+            comptes à terme fixent le taux mais imposent des contraintes ;
+            les OPCVM dépendent des marchés. Ce calculateur ne prétend
+            <em>pas</em> anticiper un rendement — il illustre l'effet
+            d'un taux donné, sur une durée donnée.
+          </p>
+
+          <h3 id="habitude">Construire une habitude d'épargne</h3>
+          <p>
+            L'automatisation est souvent plus déterminante que le rendement.
+            Un virement mensuel programmé, calé sur la date du salaire,
+            transforme l'épargne en charge fixe plutôt qu'en effort mental
+            récurrent.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-[color:var(--color-border)]">
+    <div class="container-wide py-16">
+      <div class="max-w-2xl">
+        <EditorialLabel class="mb-4">Pour aller plus loin</EditorialLabel>
+        <h2 class="text-[1.5rem]">Articles et guide associés.</h2>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <Button as="a" href="/guides/debuter-epargne/" variant="secondary" iconRight="arrow-right">
+            Guide — débuter l'épargne
+          </Button>
+          <Button as="a" href="/epargne/" variant="text" iconRight="arrow-right">
+            Articles Épargne
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NewsletterSection />
+</BaseLayout>

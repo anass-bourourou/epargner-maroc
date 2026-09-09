@@ -1,0 +1,38 @@
+---
+import Icon from '../ui/Icon.astro';
+import { formatDateLong } from '../../lib/formatters/date';
+
+interface Props {
+  publishedAt: Date;
+  updatedAt?: Date;
+  readingMinutes?: number;
+  class?: string;
+}
+
+const { publishedAt, updatedAt, readingMinutes, class: className = '' } = Astro.props as Props;
+
+const showUpdated =
+  updatedAt && updatedAt.getTime() - publishedAt.getTime() > 24 * 60 * 60 * 1000;
+---
+
+<div
+  class={`flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.8125rem] text-[color:var(--color-foreground-muted)] ${className}`}
+>
+  <span class="inline-flex items-center gap-1.5">
+    <Icon name="calendar" size={13} />
+    <span>Publié le </span>
+    <time datetime={publishedAt.toISOString()}>{formatDateLong(publishedAt)}</time>
+  </span>
+  {showUpdated && (
+    <span class="inline-flex items-center gap-1.5">
+      <span>· Mis à jour le </span>
+      <time datetime={updatedAt.toISOString()}>{formatDateLong(updatedAt)}</time>
+    </span>
+  )}
+  {readingMinutes && readingMinutes > 0 && (
+    <span class="inline-flex items-center gap-1.5">
+      <Icon name="clock" size={13} />
+      <span>{readingMinutes} min de lecture</span>
+    </span>
+  )}
+</div>

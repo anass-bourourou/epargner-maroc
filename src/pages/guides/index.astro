@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../components/ui/EditorialLabel.astro';
+import GuideCard from '../../components/guides/GuideCard.astro';
+import Divider from '../../components/ui/Divider.astro';
+import NewsletterSection from '../../components/home/NewsletterSection.astro';
+import { getPublishedGuides } from '../../lib/articles';
+
+const guides = await getPublishedGuides();
+---
+
+<BaseLayout
+  title="Guides pratiques"
+  description="Guides pratiques de finance personnelle au Maroc : épargne, banques, crédit, assurances, investissement."
+>
+  <div class="container-wide py-10 md:py-14">
+    <Breadcrumbs items={[{ name: 'Guides', href: '/guides/' }]} class="mb-8" />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Guides</EditorialLabel>
+      <h1>Les guides pour commencer.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Des guides denses et sans jargon, pensés pour être lus une fois et
+        consultés plusieurs. Chaque guide couvre un sujet en profondeur.
+      </p>
+    </header>
+
+    <Divider class="mt-10" />
+
+    <div class="mt-12 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+      {guides.map((g) => <GuideCard guide={g} variant="default" />)}
+    </div>
+  </div>
+
+  <NewsletterSection />
+</BaseLayout>

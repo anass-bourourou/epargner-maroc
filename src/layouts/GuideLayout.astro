@@ -1,0 +1,122 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/articles/Breadcrumbs.astro';
+import GuideHeader from '../components/guides/GuideHeader.astro';
+import TableOfContents from '../components/articles/TableOfContents.astro';
+import RelatedArticles from '../components/articles/RelatedArticles.astro';
+import ArticleFooterCTA from '../components/articles/ArticleFooterCTA.astro';
+import AuthorBox from '../components/articles/AuthorBox.astro';
+import NewsletterSection from '../components/home/NewsletterSection.astro';
+import { categoryMeta } from '../lib/categories';
+import type { Guide, Author, Article } from '../lib/articles';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  guide: Guide;
+  author?: Author;
+  headings: Heading[];
+  relatedArticles?: Article[];
+  readingMinutes?: number;
+}
+
+const {
+  guide,
+  author,
+  headings,
+  relatedArticles = [],
+  readingMinutes,
+} = Astro.props as Props;
+
+const cat = categoryMeta(guide.data.category);
+---
+
+<BaseLayout
+  title={guide.data.title}
+  description={guide.data.description}
+>
+  <article class="container-wide py-10 md:py-16">
+    <Breadcrumbs
+      items={[
+        { name: 'Guides', href: '/guides/' },
+        { name: guide.data.title, href: Astro.url.pathname },
+      ]}
+      class="mb-10"
+    />
+
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,240px)] lg:gap-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,280px)]">
+      <div class="max-w-[72ch]">
+        <GuideHeader
+          eyebrow={cat.label}
+          eyebrowHref={cat.href}
+          title={guide.data.title}
+          description={guide.data.description}
+          publishedAt={guide.data.publishedAt}
+          updatedAt={guide.data.updatedAt}
+          author={author}
+          readingMinutes={readingMinutes}
+        />
+
+        {guide.data.chapters && (guide.data.chapters as { title: string; anchor: string }[]).length > 0 && (
+          <section class="mb-10 border border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)]/60 p-6 rounded-[var(--radius-sm)]">
+            <p class="overline mb-3">Ce que vous allez apprendre</p>
+            <ol class="flex flex-col gap-2 text-[0.9375rem]">
+              {(guide.data.chapters as { title: string; anchor: string }[]).map((ch, i: number) => (
+                <li class="flex gap-3">
+                  <span class="num text-[color:var(--color-foreground-subtle)] w-6">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <a
+                    href={`#${ch.anchor}`}
+                    class="no-underline text-[color:var(--color-foreground-strong)] hover:text-[color:var(--color-primary)]"
+                  >
+                    {ch.title}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        <div class="article-prose">
+          <slot />
+        </div>
+
+        {cat.toolCta && (
+          <div class="mt-12">
+            <ArticleFooterCTA
+              title={cat.toolCta.label.replace(/^Ouvrir /, '')}
+              description="Passer de la théorie aux chiffres."
+              ctaLabel={cat.toolCta.label}
+              ctaHref={cat.toolCta.href}
+            />
+          </div>
+        )}
+
+        {author && (
+          <div class="mt-14">
+            <AuthorBox author={author} />
+          </div>
+        )}
+
+        {relatedArticles.length > 0 && (
+          <div class="mt-16">
+            <RelatedArticles articles={relatedArticles} heading="Articles associés" />
+          </div>
+        )}
+      </div>
+
+      <aside class="order-first lg:order-last">
+        <div class="lg:sticky lg:top-24">
+          <TableOfContents headings={headings} label="Sommaire" />
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  <NewsletterSection />
+</BaseLayout>

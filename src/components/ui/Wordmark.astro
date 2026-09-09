@@ -1,0 +1,65 @@
+---
+// Épargner MAROC — brand wordmark.
+// "Épargner" — editorial serif. "MAROC" — small refined sans label.
+// Responsive: sm for compact headers/footer, md default, lg hero footer.
+
+type Size = 'sm' | 'md' | 'lg';
+
+interface Props {
+  as?: 'a' | 'span' | 'div';
+  href?: string;
+  size?: Size;
+  ariaLabel?: string;
+  tone?: 'default' | 'inverse';
+}
+
+const {
+  as = 'a',
+  href = '/',
+  size = 'md' as Size,
+  ariaLabel = 'Épargner Maroc — accueil',
+  tone = 'default',
+} = Astro.props as Props;
+
+const sizes: Record<Size, { serif: string; label: string; gap: string }> = {
+  sm: { serif: 'text-[1.125rem]', label: 'text-[10px]', gap: 'gap-1.5' },
+  md: {
+    serif: 'text-[1.5rem] sm:text-[1.75rem]',
+    label: 'text-[11px]',
+    gap: 'gap-2',
+  },
+  lg: {
+    serif: 'text-[2rem] sm:text-[2.5rem]',
+    label: 'text-xs',
+    gap: 'gap-2.5',
+  },
+};
+const s = sizes[size];
+
+const serifColor =
+  tone === 'inverse'
+    ? 'text-[color:var(--color-ivory-50)]'
+    : 'text-[color:var(--color-charcoal-950)]';
+const labelColor =
+  tone === 'inverse'
+    ? 'text-[color:var(--color-sage-300)]'
+    : 'text-[color:var(--color-forest-700)]';
+
+const Tag = as;
+const anchorProps =
+  as === 'a' ? { href, 'aria-label': ariaLabel, rel: 'home' } : {};
+---
+
+<Tag
+  {...anchorProps}
+  class={`group inline-flex items-baseline ${s.gap} no-underline`}
+>
+  <span
+    class={`font-[var(--font-display)] font-medium leading-none tracking-tight ${serifColor} ${s.serif}`}
+    >Épargner</span
+  >
+  <span
+    class={`font-[var(--font-sans)] font-semibold uppercase leading-none tracking-[0.22em] ${labelColor} ${s.label}`}
+    >Maroc</span
+  >
+</Tag>

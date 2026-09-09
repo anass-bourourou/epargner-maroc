@@ -1,0 +1,50 @@
+---
+import EditorialLabel from '../ui/EditorialLabel.astro';
+
+const pillars = [
+  {
+    label: 'Comprendre',
+    title: 'Savoir avant d’agir.',
+    body:
+      "Des articles clairs sur l'épargne, la banque, le crédit, l'assurance et l'investissement — sans jargon inutile.",
+  },
+  {
+    label: 'Calculer',
+    title: 'Chiffrer avant de choisir.',
+    body:
+      "Des calculateurs simples pour estimer une épargne, un crédit, un budget — à partir de vos propres chiffres.",
+  },
+  {
+    label: 'Comparer',
+    title: 'Voir sans se perdre.',
+    body:
+      "Des comparatifs transparents, sources et dates de mise à jour visibles, mis à jour régulièrement.",
+  },
+];
+---
+
+<section class="border-b border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)]/40">
+  <div class="container-wide section-py">
+    <div class="grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <EditorialLabel class="mb-4">Notre approche</EditorialLabel>
+        <h2 class="max-w-[16ch]">
+          Comprendre son argent.<br />Mieux décider.
+        </h2>
+      </div>
+      <div class="lg:col-span-8">
+        <div class="grid gap-x-10 gap-y-10 sm:grid-cols-3">
+          {pillars.map((p) => (
+            <div class="border-t border-[color:var(--color-border-strong)] pt-5">
+              <p class="overline mb-3">{p.label}</p>
+              <h3 class="text-[1.25rem] leading-snug">{p.title}</h3>
+              <p class="mt-3 text-[0.9375rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+                {p.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

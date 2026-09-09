@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../../components/ui/EditorialLabel.astro';
+import Divider from '../../../components/ui/Divider.astro';
+import Button from '../../../components/ui/Button.astro';
+import CalculatorDisclaimer from '../../../components/calculators/CalculatorDisclaimer.astro';
+import NewsletterSection from '../../../components/home/NewsletterSection.astro';
+import { CreditCalculator } from '../../../components/calculators/CreditCalculator';
+---
+
+<BaseLayout
+  title="Calculateur de crédit — Estimer une mensualité"
+  description="Simulateur de crédit pour le Maroc — estimer une mensualité, un coût total et une part d'intérêts à partir d'un montant, d'un taux et d'une durée."
+>
+  <div class="container-wide py-10 md:py-14">
+    <Breadcrumbs
+      items={[
+        { name: 'Outils', href: '/outils/' },
+        { name: 'Calculateur de crédit', href: '/outils/calculateur-credit/' },
+      ]}
+      class="mb-8"
+    />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Outil · Crédit</EditorialLabel>
+      <h1>Calculateur de crédit.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Estimer la mensualité et le coût total d'un crédit à mensualités
+        constantes — crédit consommation, auto ou immobilier — à partir
+        du montant, du taux et de la durée.
+      </p>
+    </header>
+
+    <Divider class="mt-10" />
+
+    <div class="mt-10">
+      <CreditCalculator client:load />
+    </div>
+
+    <CalculatorDisclaimer>
+      L'estimation ne prend pas en compte les <strong>frais annexes</strong>
+      qui peuvent exister selon le contrat : frais de dossier, assurance
+      emprunteur, services optionnels, ou autres coûts contractuels. Ce
+      calculateur n'est pas une offre de crédit.
+    </CalculatorDisclaimer>
+  </div>
+
+  <section class="border-t border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)]/40">
+    <div class="container-wide section-py">
+      <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-4">
+          <EditorialLabel class="mb-4">Comprendre</EditorialLabel>
+          <h2 class="max-w-[16ch]">Comment fonctionne ce simulateur.</h2>
+        </div>
+        <div class="lg:col-span-8 article-prose">
+          <h3 id="mensualite">Comment est calculée la mensualité</h3>
+          <p>
+            La formule utilisée est celle des annuités constantes — la
+            mensualité reste la même du premier au dernier mois.
+            Formellement, si <code>P</code> est le capital emprunté,
+            <code>r</code> le taux mensuel (taux annuel ÷ 12) et
+            <code>n</code> le nombre de mensualités :
+          </p>
+          <p>
+            <code>mensualité = P × r × (1 + r)^n / ((1 + r)^n − 1)</code>
+          </p>
+          <p>
+            Si le taux est nul, la mensualité se réduit simplement à
+            <code>P ÷ n</code>.
+          </p>
+
+          <h3 id="duree-coût">Pourquoi la durée change le coût total</h3>
+          <p>
+            À taux égal, allonger la durée baisse la mensualité mais
+            <strong>augmente le coût total</strong> : plus le capital
+            reste à rembourser longtemps, plus il génère d'intérêts. Une
+            durée plus courte réduit le coût total, mais impose une
+            mensualité plus élevée — un arbitrage entre confort mensuel
+            et coût cumulé.
+          </p>
+
+          <h3 id="taux-vs-cout">Le taux affiché ≠ le coût réel</h3>
+          <p>
+            Le taux nominal ne dit pas tout. Le coût réel d'un crédit
+            inclut également les frais de dossier, l'assurance emprunteur
+            (souvent obligatoire), et d'éventuels services associés.
+            Certains indicateurs, comme le <em>taux effectif global</em>,
+            visent à réunir ces coûts. Demander le TEG puis comparer les
+            offres sur cette base est plus fiable que comparer des
+            annonces publicitaires.
+          </p>
+
+          <h3 id="limites">Ce que ce simulateur ne prend pas en compte</h3>
+          <p>
+            Il ne prend en compte ni les frais de dossier, ni l'assurance
+            emprunteur, ni les éventuels services optionnels — qui
+            varient d'une banque à l'autre et selon le profil de
+            l'emprunteur. Il ne simule pas non plus les taux variables,
+            les remboursements anticipés, ou les modulations de
+            mensualité prévues par certains contrats.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-[color:var(--color-border)]">
+    <div class="container-wide py-16">
+      <div class="max-w-2xl">
+        <EditorialLabel class="mb-4">Pour aller plus loin</EditorialLabel>
+        <h2 class="text-[1.5rem]">Guide et articles Crédit.</h2>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <Button as="a" href="/guides/comprendre-credit/" variant="secondary" iconRight="arrow-right">
+            Guide — comprendre le crédit
+          </Button>
+          <Button as="a" href="/credit/" variant="text" iconRight="arrow-right">
+            Articles Crédit
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NewsletterSection />
+</BaseLayout>

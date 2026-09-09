@@ -1,0 +1,30 @@
+---
+import type { Author } from '../../lib/articles';
+
+interface Props {
+  author?: Author;
+  class?: string;
+}
+
+const { author, class: className = '' } = Astro.props as Props;
+if (!author) return null;
+---
+
+<div class={`inline-flex items-center gap-3 ${className}`}>
+  <div
+    aria-hidden="true"
+    class="grid h-9 w-9 place-items-center rounded-full bg-[color:var(--color-sage-100)] text-[color:var(--color-forest-800)] font-[var(--font-display)] text-[0.9375rem]"
+  >
+    {author.data.name.charAt(0)}
+  </div>
+  <div class="text-[0.875rem]">
+    <span class="block font-medium text-[color:var(--color-foreground-strong)]">
+      {author.data.name}
+    </span>
+    {author.data.role && (
+      <span class="block text-[0.75rem] text-[color:var(--color-foreground-muted)]">
+        {author.data.role}
+      </span>
+    )}
+  </div>
+</div>

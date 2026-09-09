@@ -1,0 +1,130 @@
+---
+import Icon from '../ui/Icon.astro';
+import type { InsuranceFamily } from '../../data/insurance/families';
+import type { InsuranceOffer, OfferCell } from '../../data/insurance/example-offers';
+
+interface Props {
+  family: InsuranceFamily;
+  offers: InsuranceOffer[];
+  class?: string;
+}
+
+const { family, offers, class: className = '' } = Astro.props as Props;
+
+function renderCell(v: OfferCell | undefined) {
+  if (v === undefined || v === '' || v === '—') return { text: '—', variant: 'muted' as const };
+  if (v === 'yes') return { text: 'Inclus', variant: 'yes' as const };
+  if (v === 'no') return { text: 'Non inclus', variant: 'no' as const };
+  if (v === 'option') return { text: 'En option', variant: 'option' as const };
+  return { text: v, variant: 'value' as const };
+}
+---
+
+<section
+  aria-labelledby="comparator-heading"
+  class={`container-wide section-py ${className}`}
+>
+  <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="overline mb-2">Comparateur · {family.label}</p>
+      <h2 id="comparator-heading" class="text-[1.75rem] leading-snug">
+        Ce que couvre chaque formule.
+      </h2>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto border border-[color:var(--color-border)] rounded-[var(--radius-sm)]">
+    <table class="w-full min-w-[720px] border-collapse text-[0.9375rem]">
+      <thead>
+        <tr class="border-b border-[color:var(--color-border-strong)] bg-[color:var(--color-surface-muted)]">
+          <th
+            scope="col"
+            class="px-4 py-3 text-left text-[0.75rem] font-semibold uppercase tracking-[0.15em] text-[color:var(--color-foreground-strong)]"
+          >
+            Critère
+          </th>
+          {offers.map((o) => (
+            <th
+              scope="col"
+              class="px-4 py-3 text-left text-[0.75rem] font-semibold uppercase tracking-[0.15em] text-[color:var(--color-foreground-strong)]"
+            >
+              <span class="block font-[var(--font-display)] text-[1rem] normal-case tracking-normal">
+                {o.brand}
+              </span>
+              <span class="text-[0.7rem] font-medium text-[color:var(--color-foreground-muted)]">
+                {o.formulaLabel}
+              </span>
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {family.criteria.map((c) => (
+          <tr class="border-b border-[color:var(--color-border)] last:border-b-0">
+            <th
+              scope="row"
+              class="px-4 py-3 text-left align-top font-medium text-[color:var(--color-foreground-strong)]"
+            >
+              <span>{c.label}</span>
+              {c.hint && (
+                <span class="mt-0.5 block text-[0.75rem] font-normal text-[color:var(--color-foreground-muted)]">
+                  {c.hint}
+                </span>
+              )}
+            </th>
+            {offers.map((o) => {
+              const cell = renderCell(o.cells[c.key]);
+              return (
+                <td class="px-4 py-3 align-top">
+                  {cell.variant === 'yes' && (
+                    <span class="inline-flex items-center gap-1.5 text-[color:var(--color-forest-800)]">
+                      <Icon name="check" size={14} />
+                      <span>{cell.text}</span>
+                    </span>
+                  )}
+                  {cell.variant === 'no' && (
+                    <span class="inline-flex items-center gap-1.5 text-[color:var(--color-foreground-muted)]">
+                      <Icon name="close" size={14} />
+                      <span>{cell.text}</span>
+                    </span>
+                  )}
+                  {cell.variant === 'option' && (
+                    <span class="inline-flex items-center gap-1.5 text-[color:var(--color-terracotta-800)]">
+                      <span class="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--color-terracotta-500)]"></span>
+                      <span>{cell.text}</span>
+                    </span>
+                  )}
+                  {cell.variant === 'value' && (
+                    <span class="num text-[color:var(--color-foreground-strong)]">{cell.text}</span>
+                  )}
+                  {cell.variant === 'muted' && (
+                    <span class="text-[color:var(--color-foreground-subtle)]">—</span>
+                  )}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Legend -->
+  <ul class="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-[0.8125rem] text-[color:var(--color-foreground-muted)]">
+    <li class="inline-flex items-center gap-2">
+      <span class="inline-flex text-[color:var(--color-forest-800)]"><Icon name="check" size={13} /></span>
+      Inclus
+    </li>
+    <li class="inline-flex items-center gap-2">
+      <span class="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--color-terracotta-500)]"></span>
+      En option
+    </li>
+    <li class="inline-flex items-center gap-2">
+      <span class="inline-flex text-[color:var(--color-foreground-muted)]"><Icon name="close" size={13} /></span>
+      Non inclus
+    </li>
+    <li class="inline-flex items-center gap-2 text-[color:var(--color-foreground-subtle)]">
+      — Donnée non renseignée
+    </li>
+  </ul>
+</section>

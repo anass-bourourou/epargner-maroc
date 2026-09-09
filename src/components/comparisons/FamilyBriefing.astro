@@ -1,0 +1,54 @@
+---
+import EditorialLabel from '../ui/EditorialLabel.astro';
+import Icon from '../ui/Icon.astro';
+import type { InsuranceFamily } from '../../data/insurance/families';
+
+interface Props {
+  family: InsuranceFamily;
+}
+const { family } = Astro.props as Props;
+---
+
+<section class="container-wide section-py border-b border-[color:var(--color-border)]">
+  <div class="grid gap-12 lg:grid-cols-3 lg:gap-16">
+    <div>
+      <EditorialLabel tone="primary" class="mb-3">Ce qui est couvert</EditorialLabel>
+      <ul class="mt-4 flex flex-col gap-3 text-[0.9375rem] leading-relaxed">
+        {family.covered.map((c) => (
+          <li class="flex gap-2">
+            <span class="mt-1 shrink-0 text-[color:var(--color-forest-700)]">
+              <Icon name="check" size={14} />
+            </span>
+            <span>{c}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <EditorialLabel tone="accent" class="mb-3">Ce qui est souvent exclu</EditorialLabel>
+      <ul class="mt-4 flex flex-col gap-3 text-[0.9375rem] leading-relaxed">
+        {family.notCovered.map((c) => (
+          <li class="flex gap-2">
+            <span class="mt-1 shrink-0 text-[color:var(--color-terracotta-700)]">
+              <Icon name="close" size={14} />
+            </span>
+            <span>{c}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <EditorialLabel tone="muted" class="mb-3">Questions à poser</EditorialLabel>
+      <ul class="mt-4 flex flex-col gap-3 text-[0.9375rem] leading-relaxed">
+        {family.keyQuestions.map((q, i) => (
+          <li class="flex gap-3">
+            <span class="num shrink-0 w-6 text-[color:var(--color-foreground-subtle)]">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span>{q}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

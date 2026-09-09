@@ -1,0 +1,80 @@
+---
+import Input from '../ui/Input.astro';
+import Button from '../ui/Button.astro';
+import EditorialLabel from '../ui/EditorialLabel.astro';
+
+// -----------------------------------------------------------------------------
+// TODO(phase-later): connect this form to a real newsletter provider.
+// Integration boundary: POST { email } to /api/newsletter/subscribe.
+// The form currently has no `action` / `method` so the browser will not attempt
+// a submission — the button is presentational until the backend exists.
+// -----------------------------------------------------------------------------
+---
+
+<section class="border-b border-[color:var(--color-border)] bg-[color:var(--color-forest-900)] text-[color:var(--color-ivory-50)]">
+  <div class="container-wide py-20 md:py-24">
+    <div class="grid gap-12 lg:grid-cols-12 lg:items-end lg:gap-16">
+      <div class="lg:col-span-7">
+        <EditorialLabel tone="muted" class="mb-5 !text-[color:var(--color-sage-300)]">
+          Newsletter
+        </EditorialLabel>
+        <h2 class="max-w-[18ch] text-[color:var(--color-ivory-50)] text-[clamp(2rem,3.5vw,3rem)] leading-[1.08]">
+          Les bonnes informations financières,<br />sans le bruit.
+        </h2>
+        <p class="mt-5 max-w-[56ch] text-[1.0625rem] leading-relaxed text-[color:var(--color-sage-300)]">
+          Un e-mail par semaine — une lecture recommandée, un outil utile,
+          un chiffre à retenir. Rien de plus. Désinscription en un clic.
+        </p>
+      </div>
+
+      <div class="lg:col-span-5">
+        <form
+          novalidate
+          class="flex flex-col gap-4 sm:flex-row sm:items-end"
+          aria-describedby="newsletter-note"
+        >
+          <div class="flex-1">
+            <Input
+              id="newsletter-email"
+              name="email"
+              label="Votre e-mail"
+              type="email"
+              placeholder="vous@exemple.ma"
+              autocomplete="email"
+              required
+            />
+          </div>
+          <Button type="submit" size="lg" iconRight="arrow-right">
+            Je m'inscris
+          </Button>
+        </form>
+        <p
+          id="newsletter-note"
+          class="mt-4 text-[0.75rem] leading-relaxed text-[color:var(--color-sage-500)]"
+        >
+          En vous inscrivant, vous acceptez de recevoir la newsletter d'Épargner
+          Maroc. Vos données ne sont ni revendues ni partagées.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Override input surface colors so the field reads correctly on the dark band. */
+  section :global(label) {
+    color: var(--color-ivory-50) !important;
+  }
+  section :global(input) {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    color: var(--color-ivory-50) !important;
+  }
+  section :global(input::placeholder) {
+    color: var(--color-sage-500) !important;
+  }
+  section :global(input:focus) {
+    border-color: var(--color-sage-300) !important;
+    box-shadow: 0 0 0 3px rgba(193, 207, 196, 0.18) !important;
+  }
+</style>

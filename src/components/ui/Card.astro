@@ -1,0 +1,56 @@
+---
+// Generic Card — used SPARINGLY. Cards are not the primary visual language
+// of Épargner Maroc; prefer typography, whitespace, and rules.
+
+type Padding = 'none' | 'sm' | 'md' | 'lg';
+
+interface Props {
+  as?: 'div' | 'article' | 'section' | 'a';
+  href?: string;
+  padding?: Padding;
+  bordered?: boolean;
+  muted?: boolean;
+  class?: string;
+}
+
+const {
+  as = 'div',
+  href,
+  padding = 'md' as Padding,
+  bordered = true,
+  muted = false,
+  class: className = '',
+} = Astro.props as Props;
+
+const pads: Record<Padding, string> = {
+  none: '',
+  sm: 'p-4',
+  md: 'p-5 sm:p-6',
+  lg: 'p-6 sm:p-8',
+};
+
+const bg = muted
+  ? 'bg-[color:var(--color-surface-muted)]'
+  : 'bg-[color:var(--color-surface)]';
+const border = bordered ? 'border border-[color:var(--color-border)]' : '';
+const hover =
+  as === 'a' || href
+    ? 'transition-colors hover:border-[color:var(--color-border-strong)]'
+    : '';
+
+const classes = `${bg} ${border} ${pads[padding]} rounded-[var(--radius-md)] ${hover} ${className}`;
+
+const Tag = href ? 'a' : as;
+---
+
+{
+  href ? (
+    <a href={href} class={`${classes} no-underline block`}>
+      <slot />
+    </a>
+  ) : (
+    <Tag class={classes}>
+      <slot />
+    </Tag>
+  )
+}

@@ -1,0 +1,13 @@
+---
+import CategoryPage from '../../components/category/CategoryPage.astro';
+import AssurancesSection from '../../components/home/AssurancesSection.astro';
+---
+
+<CategoryPage
+  category="assurances"
+  latestHeading="Articles récents sur les assurances"
+  latestDescription="Comment lire un contrat, comparer, éviter les mauvaises surprises."
+>
+  <!-- Reuse the homepage 5-families list as the category lead -->
+  <AssurancesSection slot="lead" />
+</CategoryPage>
