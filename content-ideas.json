@@ -3,7 +3,11 @@
     "topic": "Comment automatiser son épargne mensuelle au Maroc",
     "category": "epargne",
     "angle": "Un plan concret : virement automatique dès la paie, choix du support, ajustement progressif.",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-09-09T14:53:56.333Z",
+    "slug": "comment-automatiser-son-epargne-mensuelle-au-maroc",
+    "verdict": "auto_publish",
+    "score": 95
   },
   {
     "topic": "Épargne de précaution : combien mettre de côté",
