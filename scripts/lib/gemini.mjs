@@ -1,7 +1,7 @@
 // Minimal Gemini API client — native fetch, zero npm dependencies.
 // Uses structured output (responseSchema) to guarantee valid JSON.
 
-const MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+const MODEL = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 export async function generateStructured({ systemPrompt, userPrompt, schema, temperature = 0.7 }) {
