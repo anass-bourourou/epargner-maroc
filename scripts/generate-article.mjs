@@ -1,20 +1,4 @@
 #!/usr/bin/env node
-// -----------------------------------------------------------------------------
-// generate-article.mjs — Épargner Maroc content pipeline (auto-publish mode)
-//
-// Pipeline en deux passes IA + sanitizer + garde-fous :
-//   1. Génération de l'article (Gemini pass 1, prompt éditorial)
-//   2. Sanitizer : retire les patterns dangereux (stats fabriquées, articles de loi)
-//   3. Critic (Gemini pass 2, prompt adversarial) → score + verdict
-//   4. Décision :
-//        - verdict = auto_publish  → écrit draft: false, aiGenerated: true → publie
-//        - verdict = needs_review  → écrit draft: true → PR de revue
-//        - verdict = reject        → n'écrit rien
-//
-// Sorties utilisées par le workflow GitHub Actions (via GITHUB_OUTPUT) :
-//   slug, path, title, verdict, score
-// -----------------------------------------------------------------------------
-
 import { readFile, writeFile, access, appendFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -29,6 +13,13 @@ const ROOT = path.resolve(fileURLToPath(import.meta.url), '../..');
 const IDEAS_PATH = path.join(ROOT, 'content-ideas.json');
 const CONTENT_DIR = path.join(ROOT, 'src/content/articles');
 
+async function fileExists(p) { try { await access(p); return true; } catch { return false; } }
+
+async function ghOutput(k, v) {
+  if (!process.env.GITHUB_OUTPUT) return;
+  await appendFile(process.env.GITHUB_OUTPUT, `${k}=${String(v).replace(/\n/g, ' ')}\n`);
+}
+
 function parseArgs(argv) {
   const args = {};
   for (const a of argv.slice(2)) {
@@ -39,32 +30,80 @@ function parseArgs(argv) {
   return args;
 }
 
-async function fileExists(p) {
-  try { await access(p); return true; } catch { return false; }
+// -----------------------------------------------------------------------------
+// AUTO-REFILL : quand la queue est vide, Gemini propose 10 nouveaux sujets
+// -----------------------------------------------------------------------------
+async function refillQueue(ideas) {
+  const publishedFiles = await import('node:fs/promises').then(fs => fs.readdir(CONTENT_DIR));
+  const publishedTitles = [];
+  for (const f of publishedFiles) {
+    if (!/\.(md|mdx)$/.test(f)) continue;
+    const content = await readFile(path.join(CONTENT_DIR, f), 'utf8');
+    const m = content.match(/^title:\s*["']?(.+?)["']?\s*$/m);
+    if (m) publishedTitles.push(m[1]);
+  }
+  const existingTopics = ideas.map(i => i.topic);
+
+  console.log('[refill] Queue vide — appel Gemini pour 10 nouveaux sujets…');
+
+  const IDEAS_SCHEMA = {
+    type: 'object',
+    properties: {
+      ideas: {
+        type: 'array', minItems: 5, maxItems: 12,
+        items: {
+          type: 'object',
+          properties: {
+            topic: { type: 'string' },
+            category: { type: 'string', enum: ['epargne','banques','assurances','credit','investissement'] },
+            angle: { type: 'string' },
+          },
+          required: ['topic', 'category', 'angle'],
+        },
+      },
+    },
+    required: ['ideas'],
+  };
+
+  const response = await generateStructured({
+    systemPrompt: `Tu es rédacteur en chef d'Épargner Maroc, publication marocaine de finance personnelle. Propose 10 nouveaux sujets d'articles pertinents pour un lecteur marocain, non-redondants avec ceux déjà publiés ou en file. Répartir entre epargne, banques, assurances, credit, investissement. Angles pratiques, pas conceptuels. Contexte Bank Al-Maghrib, ACAPS, Bourse de Casablanca. Retourner strictement le JSON.`,
+    userPrompt: `Articles déjà publiés :\n${publishedTitles.map(t=>'- '+t).join('\n')||'(aucun)'}\n\nSujets déjà proposés :\n${existingTopics.map(t=>'- '+t).join('\n')||'(aucun)'}\n\nPropose 10 NOUVEAUX sujets.`,
+    schema: IDEAS_SCHEMA,
+    temperature: 0.9,
+  });
+
+  const existingLower = new Set([...existingTopics, ...publishedTitles].map(t => t.toLowerCase().trim()));
+  const fresh = (response.ideas || [])
+    .filter(i => i.topic && !existingLower.has(i.topic.toLowerCase().trim()))
+    .map(i => ({ ...i, used: false }));
+
+  console.log(`[refill] ✅ ${fresh.length} nouveau(x) sujet(s) ajouté(s).`);
+  return [...ideas, ...fresh];
 }
 
-async function ghOutput(k, v) {
-  if (!process.env.GITHUB_OUTPUT) return;
-  await appendFile(process.env.GITHUB_OUTPUT, `${k}=${String(v).replace(/\n/g, ' ')}\n`);
-}
-
+// -----------------------------------------------------------------------------
 async function main() {
   const args = parseArgs(process.argv);
-  const forceReview = Boolean(args['no-auto-publish']); // opt-out per invocation
+  const forceReview = Boolean(args['no-auto-publish']);
 
-  // 1. Determine the idea
   let idea;
   if (args.topic && args.category) {
-    idea = { topic: args.topic, category: args.category,
-             angle: args.angle ?? 'Angle pédagogique et pratique pour un lecteur marocain.' };
+    idea = { topic: args.topic, category: args.category, angle: args.angle ?? 'Angle pédagogique.' };
   } else {
-    const rawIdeas = await readFile(IDEAS_PATH, 'utf8');
-    const ideas = JSON.parse(rawIdeas);
-    const pending = ideas.filter((i) => !i.used);
+    let ideas = JSON.parse(await readFile(IDEAS_PATH, 'utf8'));
+    let pending = ideas.filter(i => !i.used);
+
+    // AUTO-REFILL si la queue est vide
     if (pending.length === 0) {
-      console.log('[generate] Aucune idée en attente.');
-      process.exit(0);
+      ideas = await refillQueue(ideas);
+      await writeFile(IDEAS_PATH, JSON.stringify(ideas, null, 2) + '\n');
+      pending = ideas.filter(i => !i.used);
+      if (pending.length === 0) {
+        console.error('[generate] Refill n\'a rien produit — abandon.');
+        process.exit(0);
+      }
     }
+
     idea = pending[args.index ? Number(args.index) : 0] ?? pending[0];
   }
 
@@ -77,7 +116,6 @@ async function main() {
     process.exit(2);
   }
 
-  // 2. First pass — generation
   console.log('[generate] Pass 1 · génération…');
   const article = await generateStructured({
     systemPrompt: SYSTEM_PROMPT,
@@ -93,16 +131,13 @@ async function main() {
     process.exit(1);
   }
 
-  // 3. Sanitizer — remove obvious fabricated patterns
   const { body: cleanBody, notes: sanitizeNotes } = sanitizeArticle(article.body_mdx);
   article.body_mdx = cleanBody;
   if (sanitizeNotes.length > 0) {
-    console.log(`[generate] Sanitizer a retiré ${sanitizeNotes.length} passage(s) suspect(s).`);
-    for (const n of sanitizeNotes) console.log(`  - ${n}`);
+    console.log(`[generate] Sanitizer a retiré ${sanitizeNotes.length} passage(s).`);
   }
 
-  // 4. Second pass — critic
-  console.log('[generate] Pass 2 · critique adversariale…');
+  console.log('[generate] Pass 2 · critique…');
   const review = await reviewArticle({
     title: article.title,
     description: article.description,
@@ -110,20 +145,10 @@ async function main() {
     body_mdx: article.body_mdx,
   });
   console.log(`[generate] Verdict : ${review.verdict} · score ${review.score}/100`);
-  if (review.blockers.length > 0) {
-    console.log('[generate] Blockers :');
-    for (const b of review.blockers) console.log(`  ⛔ ${b}`);
-  }
-  if (review.softs.length > 0) {
-    console.log('[generate] Softs :');
-    for (const s of review.softs) console.log(`  ⚠️  ${s}`);
-  }
 
-  // 5. Decision
   if (review.verdict === 'reject') {
-    console.error('[generate] ❌ Article rejeté (score trop bas). Rien n\'est écrit.');
+    console.error('[generate] ❌ Rejeté.');
     await ghOutput('verdict', 'reject');
-    await ghOutput('score', review.score);
     process.exit(3);
   }
 
@@ -131,35 +156,22 @@ async function main() {
   const draft = !willAutoPublish;
   const aiReview = {
     score: review.score,
-    notes: [
-      `Verdict critique IA : ${review.verdict}`,
-      ...sanitizeNotes.map((n) => `Sanitizer : ${n}`),
-      ...review.softs.map((s) => `Soft : ${s}`),
-    ],
+    notes: [`Verdict : ${review.verdict}`, ...sanitizeNotes.map(n => `Sanitizer : ${n}`), ...review.softs.map(s => `Soft : ${s}`)],
   };
 
   const filePath = await writeMdxArticle({
-    slug,
-    category: idea.category,
-    article,
-    contentDir: CONTENT_DIR,
-    draft,
-    aiGenerated: true,
-    aiReview,
+    slug, category: idea.category, article, contentDir: CONTENT_DIR,
+    draft, aiGenerated: true, aiReview,
   });
-  console.log(`[generate] ✅ ${draft ? 'Draft écrit' : 'Auto-publié'} : ${path.relative(ROOT, filePath)}`);
+  console.log(`[generate] ✅ ${draft ? 'Draft' : 'Auto-publié'} : ${path.relative(ROOT, filePath)}`);
 
-  // 6. Mark idea used
   if (!args.topic) {
-    const rawIdeas = await readFile(IDEAS_PATH, 'utf8');
-    const ideas = JSON.parse(rawIdeas);
-    const idx = ideas.findIndex((i) => i.topic === idea.topic && i.category === idea.category);
+    const ideas = JSON.parse(await readFile(IDEAS_PATH, 'utf8'));
+    const idx = ideas.findIndex(i => i.topic === idea.topic && i.category === idea.category);
     if (idx >= 0) {
       ideas[idx].used = true;
       ideas[idx].generatedAt = new Date().toISOString();
       ideas[idx].slug = slug;
-      ideas[idx].verdict = review.verdict;
-      ideas[idx].score = review.score;
       await writeFile(IDEAS_PATH, JSON.stringify(ideas, null, 2) + '\n');
     }
   }
