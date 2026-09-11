@@ -1,20 +1,23 @@
 ---
-import Input from '../ui/Input.astro';
-import Button from '../ui/Button.astro';
 import EditorialLabel from '../ui/EditorialLabel.astro';
 
 // -----------------------------------------------------------------------------
-// Newsletter form — MailerLite integration.
-// Account: 2629612 · Form: 198312522838705786
+// Newsletter form — MailerLite integration (v3, script officiel).
 //
-// Stratégie : soumission classique du formulaire dans une iframe cachée
-// (target="ml-newsletter-target"). Marche partout : pas de CORS, pas de fetch,
-// pas de bloqueur d'extension. Après soumission, JS bascule sur le message de
-// succès. Aucun rechargement de page pour l'utilisateur.
+// MailerLite fournit un script `webforms.min.js` qui trouve les formulaires
+// avec le class-name `.ml-subscribe-form-{form_id}` et attache la logique
+// d'inscription (AJAX, validation, honeypot, redirection succès). On garde
+// EXACTEMENT les class-names et la structure DOM que leur script attend,
+// et on override le CSS avec nos couleurs de marque.
+//
+// Account: 2629612 · Form: 198312522838705786 · Form UI ID: 45824205
 // -----------------------------------------------------------------------------
 
-const MAILERLITE_ACTION =
+const ML_FORM_ID = '45824205';
+const ML_FORM_ACTION =
   'https://assets.mailerlite.com/jsonp/2629612/forms/198312522838705786/subscribe';
+const ML_TAKEL_URL =
+  'https://assets.mailerlite.com/jsonp/2629612/forms/198312522838705786/takel';
 ---
 
 <section
@@ -40,113 +43,265 @@ const MAILERLITE_ACTION =
       </div>
 
       <div class="lg:col-span-5">
-        <!-- Hidden iframe that absorbs MailerLite's response so the user stays on the page. -->
-        <iframe
-          name="ml-newsletter-target"
-          title="Newsletter submission target"
-          aria-hidden="true"
-          tabindex="-1"
-          style="position:absolute;left:-9999px;width:1px;height:1px;border:0"
-        ></iframe>
-
-        <!-- Form -->
-        <form
-          id="newsletter-form"
-          action={MAILERLITE_ACTION}
-          method="post"
-          target="ml-newsletter-target"
-          class="flex flex-col gap-4 sm:flex-row sm:items-end"
-          aria-describedby="newsletter-note"
-        >
-          <div class="flex-1">
-            <Input
-              id="newsletter-email"
-              name="fields[email]"
-              label="Votre e-mail"
-              type="email"
-              placeholder="vous@exemple.ma"
-              autocomplete="email"
-              required
-            />
-          </div>
-          <!-- MailerLite required hidden inputs -->
-          <input type="hidden" name="ml-submit" value="1" />
-          <input type="hidden" name="anticsrf" value="true" />
-          <Button type="submit" size="lg" iconRight="arrow-right">
-            Je m'inscris
-          </Button>
-        </form>
-
-        <!-- Success message (hidden by default) -->
+        <!--
+          Structure officielle MailerLite : leur script cherche les
+          class-names ml-subscribe-form-{ID}, ml-block-form, row-form,
+          row-success, ml-form-fieldRow, ml-form-embedSubmit.
+          Ne PAS renommer ces classes.
+        -->
         <div
-          id="newsletter-success"
-          hidden
-          class="rounded-[var(--radius-sm)] border border-[color:var(--color-sage-300)]/30 bg-[color:var(--color-sage-300)]/10 p-5"
-          role="status"
-          aria-live="polite"
+          id={`mlb2-${ML_FORM_ID}`}
+          class:list={[
+            'ml-form-embedContainer',
+            'ml-subscribe-form',
+            `ml-subscribe-form-${ML_FORM_ID}`,
+            'em-newsletter',
+          ]}
         >
-          <p class="text-[1rem] font-medium text-[color:var(--color-ivory-50)]">
-            ✅ Merci — inscription confirmée.
-          </p>
-          <p class="mt-1 text-[0.875rem] text-[color:var(--color-sage-300)]">
-            Vous recevrez notre prochaine lettre vendredi. Vérifiez vos spams
-            si vous ne trouvez pas notre email de bienvenue.
-          </p>
-        </div>
+          <div class="ml-form-embedWrapper">
+            <!-- État initial : formulaire -->
+            <div class="ml-form-embedBody row-form">
+              <form
+                class="ml-block-form em-form"
+                action={ML_FORM_ACTION}
+                method="post"
+                target="_blank"
+                data-code=""
+                aria-describedby="newsletter-note"
+              >
+                <div class="ml-form-formContent">
+                  <div class="ml-form-fieldRow ml-last-item em-field-row">
+                    <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required em-field-group">
+                      <label for="newsletter-email" class="em-label">
+                        Votre e-mail <span aria-hidden="true" class="em-required">*</span>
+                      </label>
+                      <input
+                        id="newsletter-email"
+                        aria-label="email"
+                        aria-required="true"
+                        type="email"
+                        class="form-control em-input"
+                        name="fields[email]"
+                        placeholder="vous@exemple.ma"
+                        autocomplete="email"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
 
-        <p
-          id="newsletter-note"
-          class="mt-4 text-[0.75rem] leading-relaxed text-[color:var(--color-sage-500)]"
-        >
-          En vous inscrivant, vous acceptez de recevoir la newsletter d'Épargner
-          Maroc. Vos données ne sont ni revendues ni partagées.
-        </p>
+                <input type="hidden" name="ml-submit" value="1" />
+                <input type="hidden" name="anticsrf" value="true" />
+
+                <div class="ml-form-embedSubmit em-submit-row">
+                  <button type="submit" class="primary em-submit">
+                    Je m'inscris <span aria-hidden="true" class="em-arrow">→</span>
+                  </button>
+                  <button
+                    disabled
+                    style="display:none"
+                    type="button"
+                    class="loading em-submit em-loading"
+                  >
+                    <span class="em-spinner" aria-hidden="true"></span>
+                    <span>Envoi…</span>
+                  </button>
+                </div>
+              </form>
+
+              <p id="newsletter-note" class="em-note">
+                En vous inscrivant, vous acceptez de recevoir la newsletter d'Épargner
+                Maroc. Vos données ne sont ni revendues ni partagées.
+              </p>
+            </div>
+
+            <!-- État succès : caché par défaut, révélé par ml_webform_success_XXXX -->
+            <div class="ml-form-successBody row-success" style="display:none">
+              <div class="em-success">
+                <p class="em-success-title">✅ Merci — inscription confirmée.</p>
+                <p class="em-success-text">
+                  Vous recevrez notre prochaine lettre vendredi. Vérifiez vos spams
+                  si vous ne trouvez pas notre email de bienvenue.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  /* Override input surface colors so the field reads correctly on the dark band. */
-  section :global(label) {
-    color: var(--color-ivory-50) !important;
+  /* Override any MailerLite default we don't want, and style the form to
+     match Épargner Maroc's editorial identity. Scope everything to
+     .em-newsletter to avoid leaking. */
+
+  .em-newsletter {
+    box-sizing: border-box;
   }
-  section :global(input) {
-    background: rgba(255, 255, 255, 0.06) !important;
-    border-color: rgba(255, 255, 255, 0.18) !important;
-    color: var(--color-ivory-50) !important;
+  .em-newsletter * {
+    box-sizing: border-box;
   }
-  section :global(input::placeholder) {
-    color: var(--color-sage-500) !important;
+
+  .em-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
   }
-  section :global(input:focus) {
-    border-color: var(--color-sage-300) !important;
-    box-shadow: 0 0 0 3px rgba(193, 207, 196, 0.18) !important;
+  @media (min-width: 640px) {
+    .em-form {
+      flex-direction: row;
+      align-items: flex-end;
+    }
+  }
+
+  .em-field-row {
+    margin: 0 !important;
+    flex: 1;
+  }
+  .em-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    text-align: left;
+  }
+  .em-label {
+    color: var(--color-ivory-50);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+  }
+  .em-required {
+    color: var(--color-terracotta-700);
+  }
+  .em-input {
+    width: 100%;
+    height: 2.75rem;
+    padding: 0 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--color-ivory-50);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .em-input::placeholder {
+    color: var(--color-sage-500);
+  }
+  .em-input:focus {
+    outline: none;
+    border-color: var(--color-sage-300);
+    box-shadow: 0 0 0 3px rgba(193, 207, 196, 0.18);
+  }
+
+  .em-submit-row {
+    margin: 0 !important;
+    display: flex;
+    align-items: flex-end;
+  }
+  .em-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding: 0 1.25rem;
+    background: var(--color-forest-500);
+    color: var(--color-ivory-50);
+    border: 1px solid var(--color-forest-500);
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease;
+    white-space: nowrap;
+  }
+  .em-submit:hover {
+    background: var(--color-forest-700, #143128);
+    border-color: var(--color-forest-700, #143128);
+  }
+  .em-submit:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(193, 207, 196, 0.18);
+  }
+  .em-arrow {
+    display: inline-block;
+    transform: translateY(-1px);
+  }
+
+  .em-loading {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.1);
+    cursor: wait;
+  }
+  .em-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: var(--color-ivory-50);
+    border-radius: 50%;
+    animation: em-spin 0.8s linear infinite;
+  }
+  @keyframes em-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .em-note {
+    margin: 1rem 0 0 0;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--color-sage-500);
+  }
+
+  .em-success {
+    padding: 1.25rem;
+    background: rgba(193, 207, 196, 0.1);
+    border: 1px solid rgba(193, 207, 196, 0.3);
+    border-radius: var(--radius-sm);
+  }
+  .em-success-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-ivory-50);
+  }
+  .em-success-text {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.875rem;
+    color: var(--color-sage-300);
   }
 </style>
 
-<script is:inline>
-  (function () {
-    var form = document.getElementById('newsletter-form');
-    var successBox = document.getElementById('newsletter-success');
-    if (!form || !successBox) return;
+<!-- MailerLite success callback : les scripts de MailerLite l'appellent
+     avec ce nom exact (dépend du form UI ID). Ne PAS renommer. -->
+<script is:inline define:vars={{ ML_FORM_ID }}>
+  window[`ml_webform_success_${ML_FORM_ID}`] = function () {
+    var container = document.querySelector('.ml-subscribe-form-' + ML_FORM_ID);
+    if (!container) return;
+    var form = container.querySelector('.row-form');
+    var success = container.querySelector('.row-success');
+    if (form) form.style.display = 'none';
+    if (success) success.style.display = 'block';
+  };
+</script>
 
-    var submitted = false;
+<!-- Script officiel MailerLite qui gère la soumission AJAX -->
+<script
+  is:inline
+  src="https://groot.mailerlite.com/js/w/webforms.min.js?v83147fa8ce2d95cb73ece7f28b469519"
+></script>
 
-    form.addEventListener('submit', function () {
-      // Let the browser send the POST into the hidden iframe.
-      // Then flip the UI to the success state after a short beat.
-      if (submitted) return;
-      submitted = true;
-
-      var submitButton = form.querySelector('button[type="submit"]');
-      if (submitButton) submitButton.setAttribute('disabled', 'disabled');
-
-      // Give the browser ~800ms to fire the POST, then swap the UI.
-      window.setTimeout(function () {
-        form.hidden = true;
-        successBox.hidden = false;
-      }, 800);
-    });
-  })();
+<!-- Appel d'initialisation MailerLite (session/tracking) -->
+<script is:inline define:vars={{ ML_TAKEL_URL }}>
+  try {
+    fetch(ML_TAKEL_URL, { mode: 'no-cors' });
+  } catch (e) {
+    // silent
+  }
 </script>
