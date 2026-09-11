@@ -2,13 +2,14 @@
 import EditorialLabel from '../ui/EditorialLabel.astro';
 
 // -----------------------------------------------------------------------------
-// Newsletter form — MailerLite integration (v3, script officiel).
+// Newsletter form — MailerLite integration (v4, fix about:blank).
 //
-// MailerLite fournit un script `webforms.min.js` qui trouve les formulaires
-// avec le class-name `.ml-subscribe-form-{form_id}` et attache la logique
-// d'inscription (AJAX, validation, honeypot, redirection succès). On garde
-// EXACTEMENT les class-names et la structure DOM que leur script attend,
-// et on override le CSS avec nos couleurs de marque.
+// Le formulaire soumet dans une iframe cachée (target="ml-target") au lieu
+// de "_blank" — ainsi aucun onglet vide ne s'ouvre lorsqu'un visiteur clique
+// sur "Je m'inscris". Le script officiel MailerLite est toujours chargé et
+// tentera d'intercepter la soumission (AJAX + callback succès) ; s'il échoue
+// à s'attacher, la soumission normale du navigateur vers l'iframe cachée
+// prend le relais et notre JS bascule vers le message de succès.
 //
 // Account: 2629612 · Form: 198312522838705786 · Form UI ID: 45824205
 // -----------------------------------------------------------------------------
@@ -44,10 +45,21 @@ const ML_TAKEL_URL =
 
       <div class="lg:col-span-5">
         <!--
-          Structure officielle MailerLite : leur script cherche les
-          class-names ml-subscribe-form-{ID}, ml-block-form, row-form,
-          row-success, ml-form-fieldRow, ml-form-embedSubmit.
-          Ne PAS renommer ces classes.
+          Iframe cachée qui reçoit la réponse de MailerLite si la soumission
+          navigateur classique se déclenche (au lieu d'ouvrir "_blank").
+          Positionnée en dehors de l'écran, sans dimensions visibles.
+        -->
+        <iframe
+          name="ml-target"
+          title="MailerLite submission target"
+          aria-hidden="true"
+          tabindex="-1"
+          style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;border:0;visibility:hidden"
+        ></iframe>
+
+        <!--
+          Structure MailerLite : leur script cherche .ml-subscribe-form-{ID},
+          .ml-block-form, .row-form, .row-success, .ml-form-fieldRow.
         -->
         <div
           id={`mlb2-${ML_FORM_ID}`}
@@ -59,13 +71,13 @@ const ML_TAKEL_URL =
           ]}
         >
           <div class="ml-form-embedWrapper">
-            <!-- État initial : formulaire -->
             <div class="ml-form-embedBody row-form">
               <form
+                id="newsletter-form"
                 class="ml-block-form em-form"
                 action={ML_FORM_ACTION}
                 method="post"
-                target="_blank"
+                target="ml-target"
                 data-code=""
                 aria-describedby="newsletter-note"
               >
@@ -115,7 +127,6 @@ const ML_TAKEL_URL =
               </p>
             </div>
 
-            <!-- État succès : caché par défaut, révélé par ml_webform_success_XXXX -->
             <div class="ml-form-successBody row-success" style="display:none">
               <div class="em-success">
                 <p class="em-success-title">✅ Merci — inscription confirmée.</p>
@@ -133,13 +144,7 @@ const ML_TAKEL_URL =
 </section>
 
 <style>
-  /* Override any MailerLite default we don't want, and style the form to
-     match Épargner Maroc's editorial identity. Scope everything to
-     .em-newsletter to avoid leaking. */
-
-  .em-newsletter {
-    box-sizing: border-box;
-  }
+  .em-newsletter,
   .em-newsletter * {
     box-sizing: border-box;
   }
@@ -278,10 +283,9 @@ const ML_TAKEL_URL =
   }
 </style>
 
-<!-- MailerLite success callback : les scripts de MailerLite l'appellent
-     avec ce nom exact (dépend du form UI ID). Ne PAS renommer. -->
+<!-- Callback succès attendu par le script MailerLite (nom exact requis). -->
 <script is:inline define:vars={{ ML_FORM_ID }}>
-  window[`ml_webform_success_${ML_FORM_ID}`] = function () {
+  window['ml_webform_success_' + ML_FORM_ID] = function () {
     var container = document.querySelector('.ml-subscribe-form-' + ML_FORM_ID);
     if (!container) return;
     var form = container.querySelector('.row-form');
@@ -291,13 +295,40 @@ const ML_TAKEL_URL =
   };
 </script>
 
-<!-- Script officiel MailerLite qui gère la soumission AJAX -->
+<!-- Fallback JS : si MailerLite ne s'attache pas, on bascule quand même
+     l'UI vers le message succès après la soumission (via iframe cachée). -->
+<script is:inline>
+  (function () {
+    var form = document.getElementById('newsletter-form');
+    if (!form) return;
+    form.addEventListener('submit', function () {
+      var submitButton = form.querySelector('button.primary');
+      if (submitButton) submitButton.setAttribute('disabled', 'disabled');
+
+      // Laisse 900 ms à MailerLite pour intercepter et prendre le contrôle.
+      // Sinon on bascule nous-mêmes vers l'UI succès.
+      window.setTimeout(function () {
+        var container = document.querySelector('.ml-subscribe-form-45824205');
+        if (!container) return;
+        var successBox = container.querySelector('.row-success');
+        // Ne bascule que si MailerLite n'a pas déjà changé l'affichage.
+        if (successBox && successBox.style.display !== 'block') {
+          var formBox = container.querySelector('.row-form');
+          if (formBox) formBox.style.display = 'none';
+          successBox.style.display = 'block';
+        }
+      }, 900);
+    });
+  })();
+</script>
+
+<!-- Script officiel MailerLite (tentera d'intercepter proprement) -->
 <script
   is:inline
   src="https://groot.mailerlite.com/js/w/webforms.min.js?v83147fa8ce2d95cb73ece7f28b469519"
 ></script>
 
-<!-- Appel d'initialisation MailerLite (session/tracking) -->
+<!-- Initialisation session MailerLite -->
 <script is:inline define:vars={{ ML_TAKEL_URL }}>
   try {
     fetch(ML_TAKEL_URL, { mode: 'no-cors' });
