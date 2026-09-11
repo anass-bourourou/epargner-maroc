@@ -4,39 +4,50 @@ import Button from '../ui/Button.astro';
 import EditorialLabel from '../ui/EditorialLabel.astro';
 
 // -----------------------------------------------------------------------------
-// TODO(phase-later): connect this form to a real newsletter provider.
-// Integration boundary: POST { email } to /api/newsletter/subscribe.
-// The form currently has no `action` / `method` so the browser will not attempt
-// a submission — the button is presentational until the backend exists.
+// Newsletter form — MailerLite integration.
+// Account: 2629612 · Form: 198312522838705786
+// Soumission par fetch (no-cors) pour rester sur la page sans ouvrir d'onglet.
 // -----------------------------------------------------------------------------
+
+const MAILERLITE_ACTION =
+  'https://assets.mailerlite.com/jsonp/2629612/forms/198312522838705786/subscribe';
 ---
 
-<section class="border-b border-[color:var(--color-border)] bg-[color:var(--color-forest-900)] text-[color:var(--color-ivory-50)]">
+<section
+  class="border-b border-[color:var(--color-border)] bg-[color:var(--color-forest-900)] text-[color:var(--color-ivory-50)]"
+>
   <div class="container-wide py-20 md:py-24">
     <div class="grid gap-12 lg:grid-cols-12 lg:items-end lg:gap-16">
       <div class="lg:col-span-7">
         <EditorialLabel tone="muted" class="mb-5 !text-[color:var(--color-sage-300)]">
           Newsletter
         </EditorialLabel>
-        <h2 class="max-w-[18ch] text-[color:var(--color-ivory-50)] text-[clamp(2rem,3.5vw,3rem)] leading-[1.08]">
+        <h2
+          class="max-w-[18ch] text-[color:var(--color-ivory-50)] text-[clamp(2rem,3.5vw,3rem)] leading-[1.08]"
+        >
           Les bonnes informations financières,<br />sans le bruit.
         </h2>
-        <p class="mt-5 max-w-[56ch] text-[1.0625rem] leading-relaxed text-[color:var(--color-sage-300)]">
+        <p
+          class="mt-5 max-w-[56ch] text-[1.0625rem] leading-relaxed text-[color:var(--color-sage-300)]"
+        >
           Un e-mail par semaine — une lecture recommandée, un outil utile,
           un chiffre à retenir. Rien de plus. Désinscription en un clic.
         </p>
       </div>
 
       <div class="lg:col-span-5">
+        <!-- Form -->
         <form
-          novalidate
+          id="newsletter-form"
+          action={MAILERLITE_ACTION}
+          method="post"
           class="flex flex-col gap-4 sm:flex-row sm:items-end"
           aria-describedby="newsletter-note"
         >
           <div class="flex-1">
             <Input
               id="newsletter-email"
-              name="email"
+              name="fields[email]"
               label="Votre e-mail"
               type="email"
               placeholder="vous@exemple.ma"
@@ -44,10 +55,43 @@ import EditorialLabel from '../ui/EditorialLabel.astro';
               required
             />
           </div>
+          <!-- MailerLite required hidden inputs -->
+          <input type="hidden" name="ml-submit" value="1" />
+          <input type="hidden" name="anticsrf" value="true" />
           <Button type="submit" size="lg" iconRight="arrow-right">
             Je m'inscris
           </Button>
         </form>
+
+        <!-- Success message (hidden by default) -->
+        <div
+          id="newsletter-success"
+          hidden
+          class="rounded-[var(--radius-sm)] border border-[color:var(--color-sage-300)]/30 bg-[color:var(--color-sage-300)]/10 p-5"
+          role="status"
+          aria-live="polite"
+        >
+          <p class="text-[1rem] font-medium text-[color:var(--color-ivory-50)]">
+            ✅ Merci — inscription confirmée.
+          </p>
+          <p class="mt-1 text-[0.875rem] text-[color:var(--color-sage-300)]">
+            Vous recevrez notre prochaine lettre vendredi. Vérifiez vos spams
+            si vous ne trouvez pas notre email de bienvenue.
+          </p>
+        </div>
+
+        <!-- Error message (hidden by default) -->
+        <div
+          id="newsletter-error"
+          hidden
+          class="rounded-[var(--radius-sm)] border border-[color:var(--color-terracotta-700)]/40 bg-[color:var(--color-terracotta-700)]/10 p-4"
+          role="alert"
+        >
+          <p class="text-[0.9375rem] text-[color:var(--color-ivory-50)]">
+            Une erreur est survenue. Merci de réessayer dans un instant.
+          </p>
+        </div>
+
         <p
           id="newsletter-note"
           class="mt-4 text-[0.75rem] leading-relaxed text-[color:var(--color-sage-500)]"
@@ -78,3 +122,53 @@ import EditorialLabel from '../ui/EditorialLabel.astro';
     box-shadow: 0 0 0 3px rgba(193, 207, 196, 0.18) !important;
   }
 </style>
+
+<script is:inline>
+  (function () {
+    var form = document.getElementById('newsletter-form');
+    var successBox = document.getElementById('newsletter-success');
+    var errorBox = document.getElementById('newsletter-error');
+
+    if (!form || !successBox || !errorBox) return;
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      var emailInput = form.querySelector('input[type="email"]');
+      var email = emailInput ? String(emailInput.value || '').trim() : '';
+
+      if (!email) return;
+
+      var submitButton = form.querySelector('button[type="submit"]');
+      if (submitButton) submitButton.setAttribute('disabled', 'disabled');
+
+      errorBox.hidden = true;
+
+      var body = new URLSearchParams();
+      body.append('fields[email]', email);
+      body.append('ml-submit', '1');
+      body.append('anticsrf', 'true');
+
+      // MailerLite endpoint does not send CORS headers so we submit fire-and-forget.
+      // The subscription is created server-side regardless of our ability to read
+      // the response — this is the same trick their own webforms.min.js uses.
+      fetch(
+        'https://assets.mailerlite.com/jsonp/2629612/forms/198312522838705786/subscribe',
+        {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: body.toString(),
+        },
+      )
+        .then(function () {
+          form.hidden = true;
+          successBox.hidden = false;
+        })
+        .catch(function () {
+          errorBox.hidden = false;
+          if (submitButton) submitButton.removeAttribute('disabled');
+        });
+    });
+  })();
+</script>
