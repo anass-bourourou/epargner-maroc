@@ -6,7 +6,11 @@ import EditorialLabel from '../ui/EditorialLabel.astro';
 // -----------------------------------------------------------------------------
 // Newsletter form — MailerLite integration.
 // Account: 2629612 · Form: 198312522838705786
-// Soumission par fetch (no-cors) pour rester sur la page sans ouvrir d'onglet.
+//
+// Stratégie : soumission classique du formulaire dans une iframe cachée
+// (target="ml-newsletter-target"). Marche partout : pas de CORS, pas de fetch,
+// pas de bloqueur d'extension. Après soumission, JS bascule sur le message de
+// succès. Aucun rechargement de page pour l'utilisateur.
 // -----------------------------------------------------------------------------
 
 const MAILERLITE_ACTION =
@@ -36,11 +40,21 @@ const MAILERLITE_ACTION =
       </div>
 
       <div class="lg:col-span-5">
+        <!-- Hidden iframe that absorbs MailerLite's response so the user stays on the page. -->
+        <iframe
+          name="ml-newsletter-target"
+          title="Newsletter submission target"
+          aria-hidden="true"
+          tabindex="-1"
+          style="position:absolute;left:-9999px;width:1px;height:1px;border:0"
+        ></iframe>
+
         <!-- Form -->
         <form
           id="newsletter-form"
           action={MAILERLITE_ACTION}
           method="post"
+          target="ml-newsletter-target"
           class="flex flex-col gap-4 sm:flex-row sm:items-end"
           aria-describedby="newsletter-note"
         >
@@ -80,18 +94,6 @@ const MAILERLITE_ACTION =
           </p>
         </div>
 
-        <!-- Error message (hidden by default) -->
-        <div
-          id="newsletter-error"
-          hidden
-          class="rounded-[var(--radius-sm)] border border-[color:var(--color-terracotta-700)]/40 bg-[color:var(--color-terracotta-700)]/10 p-4"
-          role="alert"
-        >
-          <p class="text-[0.9375rem] text-[color:var(--color-ivory-50)]">
-            Une erreur est survenue. Merci de réessayer dans un instant.
-          </p>
-        </div>
-
         <p
           id="newsletter-note"
           class="mt-4 text-[0.75rem] leading-relaxed text-[color:var(--color-sage-500)]"
@@ -127,48 +129,24 @@ const MAILERLITE_ACTION =
   (function () {
     var form = document.getElementById('newsletter-form');
     var successBox = document.getElementById('newsletter-success');
-    var errorBox = document.getElementById('newsletter-error');
+    if (!form || !successBox) return;
 
-    if (!form || !successBox || !errorBox) return;
+    var submitted = false;
 
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-
-      var emailInput = form.querySelector('input[type="email"]');
-      var email = emailInput ? String(emailInput.value || '').trim() : '';
-
-      if (!email) return;
+    form.addEventListener('submit', function () {
+      // Let the browser send the POST into the hidden iframe.
+      // Then flip the UI to the success state after a short beat.
+      if (submitted) return;
+      submitted = true;
 
       var submitButton = form.querySelector('button[type="submit"]');
       if (submitButton) submitButton.setAttribute('disabled', 'disabled');
 
-      errorBox.hidden = true;
-
-      var body = new URLSearchParams();
-      body.append('fields[email]', email);
-      body.append('ml-submit', '1');
-      body.append('anticsrf', 'true');
-
-      // MailerLite endpoint does not send CORS headers so we submit fire-and-forget.
-      // The subscription is created server-side regardless of our ability to read
-      // the response — this is the same trick their own webforms.min.js uses.
-      fetch(
-        'https://assets.mailerlite.com/jsonp/2629612/forms/198312522838705786/subscribe',
-        {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: body.toString(),
-        },
-      )
-        .then(function () {
-          form.hidden = true;
-          successBox.hidden = false;
-        })
-        .catch(function () {
-          errorBox.hidden = false;
-          if (submitButton) submitButton.removeAttribute('disabled');
-        });
+      // Give the browser ~800ms to fire the POST, then swap the UI.
+      window.setTimeout(function () {
+        form.hidden = true;
+        successBox.hidden = false;
+      }, 800);
     });
   })();
 </script>
