@@ -29,7 +29,9 @@
     "topic": "Faut-il rembourser son crédit par anticipation",
     "category": "credit",
     "angle": "Les critères pour arbitrer entre remboursement anticipé et placement de la trésorerie.",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-09-13T13:05:28.895Z",
+    "slug": "faut-il-rembourser-son-credit-par-anticipation"
   },
   {
     "topic": "Comment lire son relevé de compte bancaire",
