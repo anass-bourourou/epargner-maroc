@@ -37,7 +37,9 @@
     "topic": "Comment lire son relevé de compte bancaire",
     "category": "banques",
     "angle": "Décrypter les libellés obscurs et repérer les frais silencieux ligne par ligne.",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-09-14T14:42:33.643Z",
+    "slug": "comment-lire-son-releve-de-compte-bancaire"
   },
   {
     "topic": "Assurance santé complémentaire : les questions à poser avant de souscrire",
