@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://epargnermaroc.ma',
+  site: 'https://epargner-maroc.com',
   // French-first. Additional locales (Arabic, ...) added later without rewrite.
   i18n: {
     defaultLocale: 'fr',
@@ -37,7 +37,7 @@ export default defineConfig({
         } else if (u.match(/\/(epargne|banques|assurances|credit|investissement|outils)\/$/)) {
           item.changefreq = 'weekly';
           item.priority = 0.8;
-        } else if (u === 'https://epargnermaroc.ma/') {
+        } else if (u === 'https://epargner-maroc.com/') {
           item.changefreq = 'weekly';
           item.priority = 1.0;
         } else {
