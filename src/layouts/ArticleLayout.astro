@@ -9,6 +9,8 @@ import RelatedArticles from '../components/articles/RelatedArticles.astro';
 import RelatedGuides from '../components/guides/RelatedGuides.astro';
 import ArticleFooterCTA from '../components/articles/ArticleFooterCTA.astro';
 import AiDisclosure from '../components/articles/AiDisclosure.astro';
+import ShareButtons from '../components/articles/ShareButtons.astro';
+import { articleHref } from '../lib/articles';
 import NewsletterSection from '../components/home/NewsletterSection.astro';
 import { categoryMeta } from '../lib/categories';
 import { articleSchema } from '../lib/seo';
@@ -39,7 +41,7 @@ const {
 } = Astro.props as Props;
 
 const cat = categoryMeta(article.data.category);
-const site = Astro.site?.toString() ?? 'https://epargnermaroc.ma';
+const site = Astro.site?.toString() ?? 'https://epargner-maroc.com';
 const canonicalUrl =
   article.data.seo?.canonical ?? new URL(Astro.url.pathname, site).toString();
 
@@ -89,6 +91,11 @@ const toolCta = cat.toolCta;
         <div class="article-prose">
           <slot />
         </div>
+
+        <ShareButtons
+          title={article.data.title}
+          url={new URL(articleHref(article), site).toString()}
+        />
 
         {toolCta && (
           <div class="mt-12">
