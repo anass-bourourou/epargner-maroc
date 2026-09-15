@@ -9,6 +9,7 @@ export interface NavItem {
 }
 
 export const PRIMARY_NAV: readonly NavItem[] = [
+  { label: 'Articles', href: '/articles/' },
   { label: 'Épargne', href: '/epargne/' },
   { label: 'Banques', href: '/banques/' },
   { label: 'Assurances', href: '/assurances/' },
