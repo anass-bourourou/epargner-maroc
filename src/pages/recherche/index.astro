@@ -1,0 +1,373 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../components/ui/EditorialLabel.astro';
+import NewsletterSection from '../../components/home/NewsletterSection.astro';
+import { getPublishedArticles, articleHref, guideHref } from '../../lib/articles';
+import { getCollection } from 'astro:content';
+import { categoryMeta } from '../../lib/categories';
+import { formatDateLong } from '../../lib/formatters/date';
+
+// -----------------------------------------------------------------------------
+// Page de recherche — 100% côté client.
+// On construit un index JSON à build-time avec toutes les articles + guides,
+// puis un petit script filtre les résultats au fur et à mesure que l'utilisateur
+// tape. Pas de backend, pas d'API externe, pas de dépendance.
+// -----------------------------------------------------------------------------
+
+const [articles, guides] = await Promise.all([
+  getPublishedArticles(),
+  getCollection('guides', (g) => !g.data.draft),
+]);
+
+// Build the search index: normalize text (lowercase, strip accents) for
+// robust matching across French diacritics.
+function normalize(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '');
+}
+
+const articleIndex = articles.map((a) => ({
+  type: 'article' as const,
+  title: a.data.title,
+  description: a.data.description,
+  category: a.data.category,
+  categoryLabel: categoryMeta(a.data.category).label,
+  href: articleHref(a),
+  publishedAt: a.data.publishedAt.toISOString(),
+  publishedAtLabel: formatDateLong(a.data.publishedAt),
+  haystack: normalize(
+    [a.data.title, a.data.description, a.data.category, ...(a.data.tags ?? [])].join(' '),
+  ),
+}));
+
+const guideIndex = guides.map((g) => ({
+  type: 'guide' as const,
+  title: g.data.title,
+  description: g.data.description,
+  category: g.data.category,
+  categoryLabel: categoryMeta(g.data.category).label,
+  href: guideHref(g),
+  publishedAt: g.data.publishedAt.toISOString(),
+  publishedAtLabel: formatDateLong(g.data.publishedAt),
+  haystack: normalize([g.data.title, g.data.description, g.data.category].join(' ')),
+}));
+
+const searchIndex = [...articleIndex, ...guideIndex];
+---
+
+<BaseLayout
+  title="Recherche"
+  description="Rechercher un article ou un guide sur Épargner Maroc — épargne, banques, assurances, crédit, investissement."
+>
+  <div class="container-wide py-10 md:py-14">
+    <Breadcrumbs items={[{ name: 'Recherche', href: '/recherche/' }]} class="mb-8" />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Recherche</EditorialLabel>
+      <h1>Trouver un article ou un guide.</h1>
+      <p
+        class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]"
+      >
+        Tapez un mot-clé — épargne, crédit, banque, assurance — pour explorer
+        toute la publication. La recherche s'affine au fur et à mesure.
+      </p>
+    </header>
+
+    <div class="mt-10 max-w-2xl">
+      <label for="search-input" class="sr-only">Chercher un article</label>
+      <div class="em-search-wrapper">
+        <svg
+          class="em-search-icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <input
+          id="search-input"
+          type="search"
+          class="em-search-input"
+          placeholder="Épargne, crédit immobilier, frais bancaires…"
+          autocomplete="off"
+          autofocus
+          aria-describedby="search-count"
+        />
+      </div>
+      <p
+        id="search-count"
+        class="mt-3 text-[0.875rem] text-[color:var(--color-foreground-muted)]"
+      >
+        {searchIndex.length} contenus disponibles.
+      </p>
+    </div>
+
+    <div class="mt-10">
+      <ul id="search-results" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3"></ul>
+      <div id="search-empty" hidden class="py-16 text-center">
+        <p class="text-[1.0625rem] text-[color:var(--color-foreground-muted)]">
+          Aucun résultat pour votre recherche.
+        </p>
+        <p class="mt-2 text-[0.875rem] text-[color:var(--color-foreground-subtle)]">
+          Essayez avec un autre mot-clé — ou parcourez
+          <a href="/articles/" class="underline">tous les articles</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <NewsletterSection />
+</BaseLayout>
+
+<style>
+  .em-search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .em-search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--color-foreground-muted);
+    pointer-events: none;
+  }
+  .em-search-input {
+    width: 100%;
+    height: 3.25rem;
+    padding: 0 1rem 0 3rem;
+    background: var(--color-surface);
+    color: var(--color-foreground-strong);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .em-search-input::placeholder {
+    color: var(--color-foreground-subtle);
+  }
+  .em-search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(20, 49, 40, 0.15);
+  }
+
+  .em-result-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 150ms ease, transform 150ms ease;
+  }
+  .em-result-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+  .em-result-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary);
+  }
+  .em-result-type {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.5rem;
+    background: var(--color-surface-muted);
+    color: var(--color-foreground-muted);
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .em-result-title {
+    margin: 0.25rem 0 0 0;
+    font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+    font-size: 1.25rem;
+    line-height: 1.25;
+    color: var(--color-foreground-strong);
+  }
+  .em-result-desc {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-foreground-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .em-result-date {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-foreground-subtle);
+  }
+
+  .em-highlight {
+    background: rgba(212, 165, 116, 0.25);
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+</style>
+
+<script is:inline define:vars={{ searchIndex }}>
+  (function () {
+    var input = document.getElementById('search-input');
+    var resultsList = document.getElementById('search-results');
+    var emptyState = document.getElementById('search-empty');
+    var countEl = document.getElementById('search-count');
+    if (!input || !resultsList || !emptyState || !countEl) return;
+
+    function normalize(s) {
+      return String(s || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '');
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function highlight(text, terms) {
+      if (!terms.length) return escapeHtml(text);
+      var escaped = escapeHtml(text);
+      var normalized = normalize(text);
+      // Build one regex from all terms, find matches in normalized text,
+      // then map indices back to original (both strings same length since
+      // NFD → keep base chars).
+      var pattern = terms
+        .map(function (t) {
+          return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        })
+        .join('|');
+      if (!pattern) return escaped;
+      var re = new RegExp('(' + pattern + ')', 'gi');
+      var out = '';
+      var lastIndex = 0;
+      var match;
+      while ((match = re.exec(normalized)) !== null) {
+        var start = match.index;
+        var end = start + match[0].length;
+        out +=
+          escapeHtml(text.slice(lastIndex, start)) +
+          '<mark class="em-highlight">' +
+          escapeHtml(text.slice(start, end)) +
+          '</mark>';
+        lastIndex = end;
+      }
+      out += escapeHtml(text.slice(lastIndex));
+      return out;
+    }
+
+    function render(query) {
+      var q = normalize(query.trim());
+      var terms = q.split(/\s+/).filter(Boolean);
+
+      var matches;
+      if (terms.length === 0) {
+        matches = searchIndex.slice();
+      } else {
+        matches = searchIndex.filter(function (item) {
+          return terms.every(function (t) {
+            return item.haystack.indexOf(t) !== -1;
+          });
+        });
+      }
+
+      // Sort: articles/guides mixed, newest first
+      matches.sort(function (a, b) {
+        return b.publishedAt.localeCompare(a.publishedAt);
+      });
+
+      var total = matches.length;
+      countEl.textContent =
+        total === 0
+          ? 'Aucun résultat.'
+          : total === 1
+            ? '1 résultat.'
+            : total + ' résultats.';
+
+      resultsList.innerHTML = matches
+        .map(function (item) {
+          var typeLabel = item.type === 'guide' ? 'Guide' : 'Article';
+          return (
+            '<li>' +
+            '<a class="em-result-card" href="' +
+            escapeHtml(item.href) +
+            '">' +
+            '<span class="em-result-eyebrow">' +
+            escapeHtml(item.categoryLabel) +
+            ' <span class="em-result-type">' +
+            typeLabel +
+            '</span></span>' +
+            '<h2 class="em-result-title">' +
+            highlight(item.title, terms) +
+            '</h2>' +
+            '<p class="em-result-desc">' +
+            highlight(item.description, terms) +
+            '</p>' +
+            '<span class="em-result-date">' +
+            escapeHtml(item.publishedAtLabel) +
+            '</span>' +
+            '</a>' +
+            '</li>'
+          );
+        })
+        .join('');
+
+      if (total === 0) {
+        resultsList.hidden = true;
+        emptyState.hidden = false;
+      } else {
+        resultsList.hidden = false;
+        emptyState.hidden = true;
+      }
+    }
+
+    // Initial render
+    render('');
+
+    // Debounced input
+    var timeout;
+    input.addEventListener('input', function (e) {
+      clearTimeout(timeout);
+      timeout = setTimeout(function () {
+        render(e.target.value || '');
+      }, 80);
+    });
+
+    // Support ?q= URL parameter (deep-link searches)
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var initial = params.get('q');
+      if (initial) {
+        input.value = initial;
+        render(initial);
+      }
+    } catch (_) {}
+  })();
+</script>
