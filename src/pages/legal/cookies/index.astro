@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../../components/ui/EditorialLabel.astro';
+import NewsletterSection from '../../../components/home/NewsletterSection.astro';
+---
+
+<BaseLayout
+  title="Politique de cookies"
+  description="Épargner Maroc n'utilise aucun cookie publicitaire ni tracker tiers. Détail des seules données techniques stockées dans votre navigateur."
+>
+  <div class="container-narrow py-10 md:py-14">
+    <Breadcrumbs
+      items={[{ name: 'Cookies', href: '/legal/cookies/' }]}
+      class="mb-8"
+    />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Cookies</EditorialLabel>
+      <h1>Politique de cookies.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Épargner Maroc ne pose <strong>aucun cookie publicitaire</strong>,
+        aucun tracker tiers, aucun outil de reciblage. Cette page détaille
+        les seules données techniques stockées dans votre navigateur.
+      </p>
+    </header>
+
+    <div class="article-prose mt-12">
+      <h2>Qu'est-ce qu'un cookie ?</h2>
+      <p>
+        Un cookie est un petit fichier texte déposé par un site web dans
+        votre navigateur pour mémoriser des informations d'une visite à
+        l'autre.
+      </p>
+
+      <h2>Notre position</h2>
+      <p>
+        Nous ne posons <strong>aucun cookie à des fins de traçage,
+        publicitaires ou de profilage</strong>. Nous n'utilisons pas Google
+        Analytics, Facebook Pixel, ni aucun outil similaire.
+      </p>
+
+      <h2>Ce qui est stocké dans votre navigateur</h2>
+
+      <h3>1. Cookies techniques Cloudflare (obligatoires)</h3>
+      <p>
+        Cloudflare, notre hébergeur, peut déposer un ou deux cookies
+        strictement techniques :
+      </p>
+      <ul>
+        <li><code>__cf_bm</code> — protection anti-bot, durée : 30 minutes. Aucune donnée d'identification personnelle.</li>
+        <li><code>__cflb</code> (le cas échéant) — équilibrage de charge, durée : session. Aucune donnée personnelle.</li>
+      </ul>
+      <p>
+        Ces cookies techniques sont nécessaires au fonctionnement sécurisé
+        du site et n'ont pas besoin de consentement selon les
+        recommandations CNIL/CNDP.
+      </p>
+
+      <h3>2. localStorage (état local du navigateur)</h3>
+      <p>Nous utilisons le stockage local de votre navigateur uniquement pour :</p>
+      <ul>
+        <li><strong>Mémoriser la fermeture du popup newsletter</strong> — pour ne pas vous le remontrer pendant 30 jours si vous l'avez fermé. Aucune donnée personnelle n'est stockée, juste un horodatage. Clé : <code>em_newsletter_popup_dismissed_v1</code>.</li>
+      </ul>
+      <p>
+        Ce stockage reste dans votre navigateur, sur votre appareil. Il
+        n'est jamais transmis à nos serveurs ni à un tiers.
+      </p>
+
+      <h3>3. Aucun cookie tiers</h3>
+      <p>
+        Nous n'intégrons aucun tracker publicitaire (Google Ads, Meta Pixel,
+        LinkedIn Insight Tag, TikTok Pixel), aucun outil de heatmap (Hotjar,
+        Microsoft Clarity), aucun A/B testing.
+      </p>
+
+      <h2>Comment supprimer nos données de votre navigateur</h2>
+      <p>
+        Vous pouvez à tout moment supprimer les cookies et le stockage local
+        de votre navigateur pour epargner-maroc.com :
+      </p>
+      <ul>
+        <li><strong>Chrome / Edge</strong> : Paramètres → Confidentialité et sécurité → Cookies et autres données de sites → Voir tous les cookies → chercher "epargner-maroc.com" → Supprimer.</li>
+        <li><strong>Firefox</strong> : Paramètres → Vie privée et sécurité → Cookies et données de sites → Gérer les données → chercher "epargner-maroc.com" → Supprimer.</li>
+        <li><strong>Safari</strong> : Réglages → Confidentialité → Gérer les données de sites web → chercher "epargner-maroc.com" → Supprimer.</li>
+      </ul>
+
+      <h2>Mesure d'audience anonyme</h2>
+      <p>
+        Nous utilisons les statistiques d'audience agrégées fournies par
+        Cloudflare (nombre de visites par pays et par page). Ces statistiques
+        <strong>ne reposent pas sur des cookies</strong> et ne permettent
+        aucune identification individuelle. Elles sont analysées côté
+        serveur, à partir des logs anonymisés de Cloudflare.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Pour toute question relative à cette politique, contactez-nous à
+        <a href="mailto:hello@epargner-maroc.com">hello@epargner-maroc.com</a>.
+      </p>
+
+      <p><em>Dernière mise à jour : septembre 2026.</em></p>
+    </div>
+  </div>
+
+  <NewsletterSection />
+</BaseLayout>
