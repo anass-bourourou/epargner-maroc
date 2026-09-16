@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../components/ui/EditorialLabel.astro';
+import NewsletterSection from '../../components/home/NewsletterSection.astro';
+---
+
+<BaseLayout
+  title="Méthodologie éditoriale"
+  description="Comment Épargner Maroc produit et vérifie ses contenus. Transparence sur l'usage d'IA, la revue, les sources et les corrections."
+>
+  <div class="container-narrow py-10 md:py-14">
+    <Breadcrumbs items={[{ name: 'Méthodologie', href: '/methodologie/' }]} class="mb-8" />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Méthodologie</EditorialLabel>
+      <h1>Comment nos contenus sont produits.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Nous croyons à la transparence. Cette page explique en détail comment
+        nous rédigeons, vérifions et publions les contenus d'Épargner Maroc —
+        y compris notre usage d'outils d'intelligence artificielle.
+      </p>
+    </header>
+
+    <div class="article-prose mt-12">
+      <h2>Deux types de contenus</h2>
+      <p>
+        Nos publications se répartissent en deux catégories, clairement
+        distinguées sur chaque page :
+      </p>
+      <ul>
+        <li><strong>Articles rédigés par un humain</strong> : rédaction intégrale par un contributeur humain, avec vérification manuelle des sources.</li>
+        <li><strong>Articles rédigés avec assistance IA</strong> : rédaction initiale par un modèle de langage (Gemini), suivie d'une revue automatisée par un second modèle indépendant qui vérifie la cohérence, l'absence de fabrication de données et le respect de notre ligne éditoriale. Chaque article de ce type porte un bandeau de transparence visible en tête, indiquant le score de revue.</li>
+      </ul>
+
+      <h2>Pourquoi l'IA</h2>
+      <p>Nous utilisons l'IA pour trois raisons éditoriales :</p>
+      <ol>
+        <li><strong>Régularité</strong> : publier plusieurs articles par semaine sans dépendre de la disponibilité d'un rédacteur unique.</li>
+        <li><strong>Couverture</strong> : traiter un large éventail de sujets finance marocaine (épargne, banques, assurances, crédit, investissement) avec une qualité homogène.</li>
+        <li><strong>Coût</strong> : maintenir une publication indépendante sans publicité ni sponsoring, financée uniquement par son auteur.</li>
+      </ol>
+
+      <h2>Le pipeline de production</h2>
+      <p>Chaque article automatique passe par cinq étapes vérifiables :</p>
+      <ol>
+        <li><strong>Génération</strong> : un modèle Gemini rédige l'article à partir d'un brief éditorial et d'un contexte marocain défini par un rédacteur humain.</li>
+        <li><strong>Filtrage anti-fabrication</strong> : un filtre automatisé vérifie la présence de statistiques précises non sourcées (taux exacts, prix, pourcentages précis). Ces contenus sont soit reformulés en cadre méthodologique, soit signalés à revue humaine.</li>
+        <li><strong>Revue automatique adversariale</strong> : un second modèle indépendant relit l'article avec pour consigne de trouver les erreurs, les affirmations non fondées et les risques juridiques. Il attribue un score de 0 à 100.</li>
+        <li><strong>Décision de publication</strong> : si le score est supérieur à 75 et sans risque critique, l'article est publié automatiquement. Sinon, il est mis en revue humaine sous forme de demande de relecture.</li>
+        <li><strong>Publication</strong> : l'article est déployé sur le site avec le bandeau de transparence indiquant le score, un rappel de vérifier les données spécifiques auprès de sources officielles, et un email de signalement d'erreur.</li>
+      </ol>
+
+      <h2>Sources et vérification</h2>
+      <p>Nos articles s'appuient sur des sources publiquement accessibles :</p>
+      <ul>
+        <li><strong>Bank Al-Maghrib</strong> — cadre bancaire et publications officielles ;</li>
+        <li><strong>ACAPS</strong> — Autorité de contrôle des assurances et de la prévoyance sociale ;</li>
+        <li><strong>AMMC</strong> — Autorité marocaine du marché des capitaux ;</li>
+        <li><strong>Bourse de Casablanca</strong> — données de marché ;</li>
+        <li><strong>Code monétaire et financier marocain</strong> — cadre réglementaire ;</li>
+        <li>Publications spécialisées, ouvrages de finance personnelle, et notices d'établissements.</li>
+      </ul>
+      <p>
+        Nous privilégions volontairement les cadres méthodologiques durables
+        aux chiffres instantanés. Un article sur les frais bancaires expliquera
+        les postes qui pèsent le plus dans une année ordinaire, mais ne
+        prétendra pas indiquer le tarif exact d'une carte X dans une banque Y —
+        ces informations changent trop vite et doivent être vérifiées auprès
+        de la source concernée.
+      </p>
+
+      <h2>Correction d'erreurs</h2>
+      <p>
+        Nous nous engageons à corriger publiquement toute erreur signalée
+        dans les 48 heures ouvrées. Pour signaler une erreur, contactez-nous
+        via <a href="/contact/">la page contact</a> ou par email à
+        <code>hello@epargner-maroc.com</code>.
+      </p>
+      <p>
+        Les corrections importantes (chiffre erroné, information trompeuse)
+        sont signalées par une note d'errata visible en tête de l'article
+        concerné, avec la date et la nature de la correction.
+      </p>
+
+      <h2>Ce que nous NE faisons PAS</h2>
+      <ul>
+        <li>Nous ne donnons <strong>jamais de conseil personnalisé</strong> — nos contenus sont éducatifs, pas prescriptifs. Un conseil financier personnalisé nécessite une licence et l'analyse de votre situation individuelle par un professionnel agréé.</li>
+        <li>Nous ne recommandons <strong>jamais un produit financier nommément</strong> en échange de rémunération. Nos comparatifs se basent sur des critères méthodologiques transparents.</li>
+        <li>Nous ne fabriquons <strong>jamais de statistiques, de taux ou de prix</strong>. Si un chiffre spécifique manque, nous préférons l'omettre plutôt que l'inventer.</li>
+        <li>Nous ne diffusons <strong>aucune publicité tierce</strong> ni aucun tracker à des fins publicitaires.</li>
+      </ul>
+
+      <h2>Une question sur notre méthode ?</h2>
+      <p>
+        Nous prenons cette transparence au sérieux. Si vous avez des questions
+        sur nos processus, nos modèles utilisés ou nos critères de publication,
+        écrivez-nous via <a href="/contact/">la page contact</a>. Toute
+        question éditoriale reçoit une réponse.
+      </p>
+    </div>
+  </div>
+
+  <NewsletterSection />
+</BaseLayout>
