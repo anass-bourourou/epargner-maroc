@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../components/ui/EditorialLabel.astro';
+import NewsletterSection from '../../components/home/NewsletterSection.astro';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Contacter Épargner Maroc — publication indépendante de finance personnelle au Maroc."
+>
+  <div class="container-narrow py-10 md:py-14">
+    <Breadcrumbs items={[{ name: 'Contact', href: '/contact/' }]} class="mb-8" />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Contact</EditorialLabel>
+      <h1>Nous écrire.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Une question, une remarque, un signalement d'erreur, une proposition
+        éditoriale ? Voici comment nous joindre.
+      </p>
+    </header>
+
+    <div class="article-prose mt-12">
+      <h2>Par email</h2>
+      <p>Vous pouvez nous contacter à l'adresse suivante :</p>
+      <p>
+        <a href="mailto:hello@epargner-maroc.com" class="em-contact-mail">hello@epargner-maroc.com</a>
+      </p>
+      <p>Nous répondons à toutes les questions éditoriales dans un délai de 48 heures ouvrées.</p>
+
+      <h2>Motifs fréquents</h2>
+      <ul>
+        <li><strong>Signaler une erreur</strong> : indiquez le lien de l'article, le passage concerné et la source de la correction si possible.</li>
+        <li><strong>Proposer un sujet</strong> : décrivez brièvement le sujet et pourquoi il vous semble utile aux lecteurs marocains.</li>
+        <li><strong>Question sur la méthodologie</strong> : consultez d'abord notre page <a href="/methodologie/">Méthodologie</a>, où sont détaillés notre processus éditorial et notre usage d'IA.</li>
+        <li><strong>Demande de retrait de contenu</strong> : si un contenu vous concerne personnellement et pose problème, contactez-nous — nous étudierons chaque demande sérieusement.</li>
+        <li><strong>Question RGPD / données personnelles</strong> : consultez notre <a href="/legal/confidentialite/">politique de confidentialité</a>, puis écrivez-nous si votre question n'y est pas traitée.</li>
+      </ul>
+
+      <h2>Ce que nous ne traitons pas</h2>
+      <ul>
+        <li><strong>Demande de conseil financier personnalisé</strong> : nous ne donnons pas de conseils personnalisés. Consultez un conseiller en investissement financier agréé pour tout choix engageant votre patrimoine.</li>
+        <li><strong>Demande de partenariat commercial ou publicitaire</strong> : Épargner Maroc n'accepte aucun sponsor, publicité, article sponsorisé ou affiliation. Voir notre <a href="/a-propos/">page À propos</a> pour comprendre pourquoi.</li>
+        <li><strong>Sollicitations commerciales</strong> : les emails de prospection ne reçoivent pas de réponse.</li>
+      </ul>
+
+      <h2>Newsletter</h2>
+      <p>
+        Pour vous inscrire à notre newsletter hebdomadaire, utilisez le
+        formulaire présent sur la page d'accueil ou en bas de chaque article.
+        La désinscription se fait en un clic depuis chaque email envoyé.
+      </p>
+    </div>
+  </div>
+
+  <NewsletterSection />
+</BaseLayout>
+
+<style>
+  .em-contact-mail {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, monospace);
+    font-size: 1.125rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--color-primary);
+    display: inline-block;
+  }
+  .em-contact-mail:hover {
+    background: var(--color-surface);
+    text-decoration: underline;
+  }
+</style>
