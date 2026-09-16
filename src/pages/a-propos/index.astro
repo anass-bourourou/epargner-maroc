@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../components/ui/EditorialLabel.astro';
+import NewsletterSection from '../../components/home/NewsletterSection.astro';
+---
+
+<BaseLayout
+  title="À propos"
+  description="Épargner Maroc — publication indépendante de finance personnelle au Maroc. Notre mission, notre méthode, notre indépendance."
+>
+  <div class="container-narrow py-10 md:py-14">
+    <Breadcrumbs items={[{ name: 'À propos', href: '/a-propos/' }]} class="mb-8" />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">À propos</EditorialLabel>
+      <h1>Une publication pour mieux gérer son argent au Maroc.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Épargner Maroc est une publication éditoriale indépendante consacrée
+        à la finance personnelle marocaine. Nous publions des articles clairs,
+        des outils simples et des comparatifs transparents pour aider les
+        lecteurs à prendre de meilleures décisions financières.
+      </p>
+    </header>
+
+    <div class="article-prose mt-12">
+      <h2>Notre mission</h2>
+      <p>
+        Au Maroc, l'éducation financière reste inégale. Les banques, les
+        assureurs et les courtiers ont beaucoup de choses à vendre ; peu de
+        publications indépendantes prennent le temps d'expliquer sereinement,
+        en français, avec le contexte marocain, ce qu'est un compte courant,
+        comment fonctionne un crédit immobilier ou pourquoi une assurance
+        emprunteur peut coûter aussi cher que le prêt qu'elle protège.
+      </p>
+      <p>
+        Épargner Maroc existe pour combler ce vide. Nos articles ne remplacent
+        pas un conseiller financier — ils vous donnent la culture financière
+        nécessaire pour poser les bonnes questions et éviter les pièges les
+        plus courants.
+      </p>
+
+      <h2>Notre indépendance</h2>
+      <p>
+        Nous ne sommes affiliés à aucune banque, aucune compagnie d'assurance,
+        aucun courtier. Aucun article n'est sponsorisé. Aucun produit financier
+        n'est mis en avant en échange d'une commission. Le site est intégralement
+        financé par son auteur, et ne diffuse aucune publicité tierce.
+      </p>
+      <p>
+        Cette indépendance est notre engagement principal envers nos lecteurs :
+        vous pouvez lire nos articles en sachant que la seule intention est
+        éditoriale. Le jour où cela changera (partenariat, sponsor, encart
+        publicitaire), ce sera annoncé clairement et signalé sur chaque contenu
+        concerné.
+      </p>
+
+      <h2>Ce que nous publions</h2>
+      <ul>
+        <li><strong>Articles éducatifs</strong> : sur l'épargne, les banques, les assurances, le crédit et l'investissement au Maroc.</li>
+        <li><strong>Guides pratiques</strong> : dossiers de fond pour comprendre en profondeur un domaine (débuter l'épargne, comprendre le crédit, choisir une assurance).</li>
+        <li><strong>Outils</strong> : calculateurs interactifs (épargne, crédit, budget) pour estimer une simulation à partir de vos propres chiffres.</li>
+      </ul>
+
+      <h2>Notre approche éditoriale</h2>
+      <p>
+        Nous privilégions les cadres et méthodes durables plutôt que les
+        chiffres instantanés qui changent chaque semaine (taux directeurs,
+        offres promotionnelles). Nos articles indiquent leurs sources et
+        recommandent systématiquement de vérifier les informations spécifiques
+        auprès de sources officielles (Bank Al-Maghrib, ACAPS, AMMC) avant
+        toute décision engageante.
+      </p>
+      <p>
+        Notre méthode de production éditoriale — y compris l'usage d'outils
+        d'intelligence artificielle assistés d'une revue automatisée — est
+        détaillée dans notre page <a href="/methodologie/">Méthodologie</a>.
+      </p>
+
+      <h2>Auteur & contact</h2>
+      <p>
+        Épargner Maroc est édité par un professionnel marocain de la tech,
+        passionné de finance personnelle. Pour toute question, remarque ou
+        signalement d'erreur, vous pouvez nous joindre via la page
+        <a href="/contact/">Contact</a>.
+      </p>
+
+      <h2>Notre engagement</h2>
+      <p>Nous nous engageons à :</p>
+      <ul>
+        <li>Publier des articles honnêtes, sans fabrication de statistiques ou de taux ;</li>
+        <li>Corriger publiquement toute erreur signalée dans les 48 heures ;</li>
+        <li>Ne jamais partager, revendre ou monétiser les données personnelles de nos lecteurs ;</li>
+        <li>Rester indépendants — ou l'annoncer clairement si cela change.</li>
+      </ul>
+    </div>
+  </div>
+
+  <NewsletterSection />
+</BaseLayout>
