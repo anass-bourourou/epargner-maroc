@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../../components/ui/EditorialLabel.astro';
+import NewsletterSection from '../../../components/home/NewsletterSection.astro';
+---
+
+<BaseLayout
+  title="Mentions légales"
+  description="Mentions légales d'Épargner Maroc — éditeur, hébergement, propriété intellectuelle."
+>
+  <div class="container-narrow py-10 md:py-14">
+    <Breadcrumbs
+      items={[{ name: 'Mentions légales', href: '/legal/mentions-legales/' }]}
+      class="mb-8"
+    />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Mentions légales</EditorialLabel>
+      <h1>Mentions légales.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Informations légales concernant l'édition, la propriété intellectuelle
+        et l'hébergement du site epargner-maroc.com.
+      </p>
+    </header>
+
+    <div class="article-prose mt-12">
+      <h2>Éditeur du site</h2>
+      <p>
+        <strong>Nom du site</strong> : Épargner Maroc<br />
+        <strong>Adresse</strong> : <a href="https://epargner-maroc.com">https://epargner-maroc.com</a><br />
+        <strong>Nature</strong> : Publication éditoriale indépendante à but non commercial<br />
+        <strong>Contact</strong> : <a href="mailto:hello@epargner-maroc.com">hello@epargner-maroc.com</a>
+      </p>
+      <p>
+        Épargner Maroc est un projet personnel édité à titre non professionnel.
+        Aucune activité commerciale, publicitaire ou de conseil financier
+        rémunéré n'y est exercée.
+      </p>
+
+      <h2>Directeur de la publication</h2>
+      <p>Le directeur de la publication est l'éditeur du site, joignable via l'adresse email ci-dessus.</p>
+
+      <h2>Hébergement</h2>
+      <p>Le site est hébergé sur les serveurs de <strong>Cloudflare, Inc.</strong></p>
+      <p>
+        Cloudflare, Inc.<br />
+        101 Townsend Street<br />
+        San Francisco, CA 94107<br />
+        États-Unis<br />
+        <a href="https://www.cloudflare.com/" target="_blank" rel="noopener">https://www.cloudflare.com/</a>
+      </p>
+
+      <h2>Propriété intellectuelle</h2>
+      <p>
+        L'ensemble des contenus publiés sur epargner-maroc.com (textes,
+        illustrations, code source, éléments graphiques, logo, mise en page)
+        est protégé par le droit d'auteur et est la propriété exclusive de
+        l'éditeur, sauf mention contraire.
+      </p>
+      <p>
+        Toute reproduction, représentation, modification, publication,
+        adaptation totale ou partielle des contenus, par quelque procédé que
+        ce soit, est interdite sans autorisation écrite préalable de l'éditeur,
+        à l'exception :
+      </p>
+      <ul>
+        <li>des citations courtes dans un contexte éditorial, respectant le droit de citation et créditant clairement la source ;</li>
+        <li>des partages via les fonctions de partage intégrées au site (WhatsApp, LinkedIn, copie de lien).</li>
+      </ul>
+
+      <h2>Marques et logos</h2>
+      <p>
+        Les marques et logos mentionnés sur ce site (banques, assureurs,
+        institutions marocaines) restent la propriété de leurs détenteurs
+        respectifs. Leur mention est faite à titre informatif dans le cadre
+        de contenus éditoriaux et n'implique aucun lien commercial ou
+        partenariat.
+      </p>
+
+      <h2>Contenu généré avec assistance IA</h2>
+      <p>
+        Certains articles publiés sur ce site sont rédigés avec l'assistance
+        d'outils d'intelligence artificielle, suivie d'une revue automatisée.
+        Ces contenus portent un bandeau de transparence visible en tête. La
+        méthodologie de production est détaillée sur la page
+        <a href="/methodologie/">Méthodologie</a>.
+      </p>
+
+      <h2>Responsabilité éditoriale</h2>
+      <p>
+        Les informations diffusées sur Épargner Maroc ont une vocation
+        éducative et générale. Elles ne constituent pas un conseil financier
+        personnalisé, un démarchage bancaire, une offre d'investissement ni
+        une recommandation de produit financier.
+      </p>
+      <p>
+        Malgré le soin apporté à la vérification des contenus, l'éditeur ne
+        saurait être tenu responsable des erreurs, omissions ou interprétations
+        erronées. Le lecteur est invité à vérifier auprès de sources officielles
+        (Bank Al-Maghrib, ACAPS, AMMC) ou de professionnels agréés toute
+        information servant de base à une décision financière engageante.
+      </p>
+
+      <h2>Liens hypertextes</h2>
+      <p>
+        Le site peut contenir des liens vers des sites tiers. L'éditeur n'est
+        pas responsable du contenu, de la disponibilité ou des politiques de
+        confidentialité de ces sites.
+      </p>
+
+      <h2>Droit applicable</h2>
+      <p>
+        Les présentes mentions légales sont régies par le droit marocain.
+        Tout litige relatif à l'interprétation ou à l'exécution des présentes
+        relèvera de la compétence des tribunaux marocains.
+      </p>
+
+      <h2>Contact et mises à jour</h2>
+      <p>
+        Pour toute question relative à ces mentions légales, contactez-nous
+        à l'adresse <a href="mailto:hello@epargner-maroc.com">hello@epargner-maroc.com</a>.
+      </p>
+      <p>
+        Ces mentions légales peuvent être mises à jour à tout moment. La
+        version en vigueur est celle publiée sur cette page à la date de la
+        consultation.
+      </p>
+    </div>
+  </div>
+
+  <NewsletterSection />
+</BaseLayout>
