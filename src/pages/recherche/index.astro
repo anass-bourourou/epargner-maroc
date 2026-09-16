@@ -3,7 +3,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/articles/Breadcrumbs.astro';
 import EditorialLabel from '../../components/ui/EditorialLabel.astro';
 import NewsletterSection from '../../components/home/NewsletterSection.astro';
-import { getPublishedArticles, articleHref, guideHref } from '../../lib/articles';
+import {
+  getPublishedArticles,
+  articleHref,
+  guideHref,
+  type Guide,
+} from '../../lib/articles';
 import { getCollection } from 'astro:content';
 import { categoryMeta } from '../../lib/categories';
 import { formatDateLong } from '../../lib/formatters/date';
@@ -17,7 +22,7 @@ import { formatDateLong } from '../../lib/formatters/date';
 
 const [articles, guides] = await Promise.all([
   getPublishedArticles(),
-  getCollection('guides', (g) => !g.data.draft),
+  getCollection('guides', (g: Guide) => !g.data.draft),
 ]);
 
 // Build the search index: normalize text (lowercase, strip accents) for
@@ -43,7 +48,7 @@ const articleIndex = articles.map((a) => ({
   ),
 }));
 
-const guideIndex = guides.map((g) => ({
+const guideIndex = guides.map((g: Guide) => ({
   type: 'guide' as const,
   title: g.data.title,
   description: g.data.description,
