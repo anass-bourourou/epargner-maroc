@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/articles/Breadcrumbs.astro';
+import EditorialLabel from '../../../components/ui/EditorialLabel.astro';
+import NewsletterSection from '../../../components/home/NewsletterSection.astro';
+---
+
+<BaseLayout
+  title="Politique de confidentialité"
+  description="Comment Épargner Maroc traite vos données personnelles — RGPD, loi 09-08 marocaine, droits d'accès et de suppression."
+>
+  <div class="container-narrow py-10 md:py-14">
+    <Breadcrumbs
+      items={[{ name: 'Confidentialité', href: '/legal/confidentialite/' }]}
+      class="mb-8"
+    />
+
+    <header class="max-w-3xl">
+      <EditorialLabel class="mb-5">Confidentialité</EditorialLabel>
+      <h1>Politique de confidentialité.</h1>
+      <p class="mt-6 text-[1.0625rem] leading-relaxed text-[color:var(--color-foreground-muted)]">
+        Cette politique explique comment nous collectons, utilisons et
+        protégeons vos données personnelles. Notre principe est simple :
+        nous collectons le strict minimum, ne partageons rien avec des tiers
+        commerciaux, et vous pouvez tout supprimer à tout moment.
+      </p>
+    </header>
+
+    <div class="article-prose mt-12">
+      <h2>En résumé</h2>
+      <ul>
+        <li>Nous collectons uniquement votre <strong>email</strong> si vous vous inscrivez à notre newsletter.</li>
+        <li>Nous ne vendons, ne louons, ne partageons jamais vos données avec des tiers commerciaux.</li>
+        <li>Nous utilisons Cloudflare (hébergement) et MailerLite (envoi d'emails) comme sous-traitants techniques.</li>
+        <li>Vous pouvez vous désinscrire ou demander la suppression de vos données à tout moment, en un email.</li>
+      </ul>
+
+      <h2>Responsable du traitement</h2>
+      <p>
+        Le responsable du traitement des données personnelles collectées sur
+        epargner-maroc.com est l'éditeur du site (voir
+        <a href="/legal/mentions-legales/">mentions légales</a>).
+      </p>
+      <p>
+        Contact pour toute question relative à vos données :
+        <a href="mailto:hello@epargner-maroc.com">hello@epargner-maroc.com</a>.
+      </p>
+
+      <h2>Données collectées</h2>
+      <h3>Newsletter</h3>
+      <p>Si vous vous inscrivez à notre newsletter, nous collectons :</p>
+      <ul>
+        <li>Votre adresse email ;</li>
+        <li>La date de votre inscription ;</li>
+        <li>Le statut de votre abonnement (actif, désinscrit).</li>
+      </ul>
+      <p>Aucune autre information personnelle (nom, prénom, âge, revenu) n'est demandée ni conservée.</p>
+
+      <h3>Analyse de trafic</h3>
+      <p>
+        Nous utilisons les statistiques d'audience anonymes fournies par
+        Cloudflare Analytics. Ces statistiques agrégées incluent :
+      </p>
+      <ul>
+        <li>Le nombre total de visites par pays et par page ;</li>
+        <li>Le type de navigateur et de système d'exploitation ;</li>
+        <li>La source du trafic (moteur de recherche, LinkedIn, etc.).</li>
+      </ul>
+      <p>
+        Ces données <strong>ne permettent pas de vous identifier
+        individuellement</strong>. Nous ne posons pas de cookies publicitaires
+        ni de trackers tiers.
+      </p>
+
+      <h2>Base légale</h2>
+      <p>
+        La collecte de votre email pour la newsletter repose sur votre
+        <strong>consentement libre et éclairé</strong> (article 6.1.a du RGPD ;
+        article 4 de la loi 09-08 marocaine relative à la protection des
+        données personnelles). Vous exprimez ce consentement en soumettant le
+        formulaire d'inscription.
+      </p>
+      <p>
+        L'analyse d'audience anonyme repose sur l'intérêt légitime de mesurer
+        l'efficacité éditoriale du site (article 6.1.f du RGPD), sans traitement
+        de données identifiantes.
+      </p>
+
+      <h2>Durée de conservation</h2>
+      <ul>
+        <li><strong>Email newsletter</strong> : conservé tant que vous restez abonné. Une fois désinscrit, votre email est supprimé sous 30 jours.</li>
+        <li><strong>Statistiques Cloudflare</strong> : agrégées et conservées par Cloudflare selon leur propre politique (généralement 30 jours pour les données détaillées).</li>
+      </ul>
+
+      <h2>Destinataires et sous-traitants</h2>
+      <p>Nous utilisons deux prestataires techniques :</p>
+      <ul>
+        <li><strong>Cloudflare</strong> — hébergement du site et analyse de trafic agrégée. Cloudflare est certifié conforme aux standards internationaux (SOC 2, ISO 27001). Politique : <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">cloudflare.com/privacypolicy</a>.</li>
+        <li><strong>MailerLite</strong> — envoi d'emails newsletter. Serveurs basés en Lituanie (UE), conforme RGPD. Politique : <a href="https://www.mailerlite.com/legal/privacy-policy" target="_blank" rel="noopener">mailerlite.com/legal/privacy-policy</a>.</li>
+      </ul>
+      <p>
+        Vos données ne sont partagées avec <strong>aucun autre tiers</strong>.
+        Nous ne les vendons pas, ne les louons pas, ne les monétisons pas.
+      </p>
+
+      <h2>Transferts hors Union Européenne</h2>
+      <p>
+        Cloudflare étant une société américaine, certaines données
+        techniques peuvent transiter par les États-Unis. Cloudflare adhère
+        aux clauses contractuelles types de la Commission européenne (SCC)
+        et au Data Privacy Framework, garantissant un niveau de protection
+        adéquat.
+      </p>
+
+      <h2>Vos droits</h2>
+      <p>
+        Conformément au RGPD et à la loi 09-08, vous disposez à tout moment
+        des droits suivants sur vos données personnelles :
+      </p>
+      <ul>
+        <li><strong>Droit d'accès</strong> — obtenir une copie des données que nous détenons sur vous ;</li>
+        <li><strong>Droit de rectification</strong> — corriger une information inexacte ;</li>
+        <li><strong>Droit de suppression</strong> ("droit à l'oubli") — demander la suppression de toutes vos données ;</li>
+        <li><strong>Droit de portabilité</strong> — récupérer vos données dans un format lisible ;</li>
+        <li><strong>Droit d'opposition</strong> — refuser certains traitements ;</li>
+        <li><strong>Droit de retrait du consentement</strong> — vous désinscrire en un clic depuis chaque email.</li>
+      </ul>
+      <p>
+        Pour exercer l'un de ces droits, écrivez-nous à
+        <a href="mailto:hello@epargner-maroc.com">hello@epargner-maroc.com</a>.
+        Nous répondrons dans un délai maximum de 30 jours.
+      </p>
+
+      <h2>Recours</h2>
+      <p>
+        Si vous estimez que le traitement de vos données personnelles ne
+        respecte pas la réglementation, vous pouvez introduire une
+        réclamation auprès de :
+      </p>
+      <ul>
+        <li><strong>CNDP (Maroc)</strong> — Commission Nationale de contrôle de la protection des Données à caractère Personnel : <a href="https://www.cndp.ma/" target="_blank" rel="noopener">cndp.ma</a></li>
+        <li><strong>CNIL (France)</strong> — pour les utilisateurs français ou européens : <a href="https://www.cnil.fr/" target="_blank" rel="noopener">cnil.fr</a></li>
+      </ul>
+
+      <h2>Sécurité</h2>
+      <p>
+        Nous mettons en œuvre des mesures techniques et organisationnelles
+        appropriées pour protéger vos données : connexion HTTPS obligatoire,
+        stockage chiffré des emails côté MailerLite, accès administrateur
+        limité et sécurisé par authentification forte.
+      </p>
+
+      <h2>Mise à jour de la politique</h2>
+      <p>
+        Cette politique peut être mise à jour pour refléter des changements
+        techniques ou réglementaires. La date de dernière mise à jour est
+        indiquée ci-dessous. En cas de changement significatif, les abonnés
+        newsletter seront informés par email.
+      </p>
+      <p>
+        <em>Dernière mise à jour : septembre 2026.</em>
+      </p>
+    </div>
+  </div>
+
+  <NewsletterSection />
+</BaseLayout>
