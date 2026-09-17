@@ -47,7 +47,9 @@ const alreadyBranded = /Épargner Maroc/i.test(NORMALIZED);
 const fullTitle = alreadyBranded ? NORMALIZED : `${NORMALIZED} — Épargner Maroc`;
 
 // Default social share image — self-hosted, editorial, brand-consistent.
-const socialImage = ogImage ?? `${siteBase}/og/default.svg`;
+// PNG format (not SVG) for maximum compatibility with WhatsApp, LinkedIn,
+// Facebook, Twitter and iMessage previews.
+const socialImage = ogImage ?? `${siteBase}/og/default.png`;
 
 // Sitewide schemas emitted once per page.
 const orgLd = organizationSchema(site);
