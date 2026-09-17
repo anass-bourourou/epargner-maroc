@@ -1,43 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" preserveAspectRatio="xMidYMid meet">
   <defs>
     <style>
-      .serif { font-family: 'Playfair Display', Georgia, serif; }
-      .sans  { font-family: 'Public Sans', system-ui, sans-serif; }
+      .serif { font-family: 'Playfair Display', 'Georgia', serif; }
+      .sans  { font-family: 'Public Sans', 'Helvetica Neue', system-ui, sans-serif; }
     </style>
+    <linearGradient id="grad-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbf8f2"/>
+      <stop offset="100%" stop-color="#f4efe4"/>
+    </linearGradient>
+    <linearGradient id="grad-band" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1c4b3d"/>
+      <stop offset="100%" stop-color="#143128"/>
+    </linearGradient>
   </defs>
-  <!-- Background: warm ivory -->
-  <rect width="1200" height="630" fill="#fbf8f2"/>
-  <!-- Editorial rule -->
-  <line x1="80" y1="120" x2="1120" y2="120" stroke="#e5ded0" stroke-width="1"/>
-  <line x1="80" y1="510" x2="1120" y2="510" stroke="#e5ded0" stroke-width="1"/>
 
-  <!-- Wordmark -->
-  <text x="80" y="95" class="serif" font-size="34" fill="#14161a">Épargner</text>
-  <text x="272" y="95" class="sans" font-size="14" font-weight="700"
-        fill="#1c4b3d" letter-spacing="4">MAROC</text>
+  <!-- Ivory gradient background -->
+  <rect width="1200" height="630" fill="url(#grad-bg)"/>
+
+  <!-- Top wordmark strip -->
+  <g>
+    <text x="80" y="80" class="serif" font-size="36" fill="#14161a" font-weight="600">Épargner</text>
+    <text x="285" y="80" class="sans" font-size="15" font-weight="700"
+          fill="#1c4b3d" letter-spacing="5">MAROC</text>
+    <line x1="80" y1="105" x2="200" y2="105" stroke="#1c4b3d" stroke-width="2"/>
+  </g>
 
   <!-- Overline -->
-  <text x="80" y="180" class="sans" font-size="18" font-weight="600"
-        fill="#1c4b3d" letter-spacing="3.5">FINANCE PERSONNELLE</text>
+  <text x="80" y="185" class="sans" font-size="17" font-weight="700"
+        fill="#1c4b3d" letter-spacing="4">FINANCE PERSONNELLE · MAROC</text>
 
-  <!-- Editorial headline -->
-  <text x="80" y="290" class="serif" font-size="86" fill="#14161a">Mieux gérer</text>
-  <text x="80" y="380" class="serif" font-size="86" fill="#14161a">son argent au Maroc.</text>
+  <!-- Main editorial headline -->
+  <text x="80" y="295" class="serif" font-size="92" fill="#14161a" font-weight="500">Mieux gérer</text>
+  <text x="80" y="395" class="serif" font-size="92" fill="#14161a" font-weight="500">son argent au Maroc.</text>
 
-  <!-- Description -->
-  <text x="80" y="450" class="sans" font-size="22" fill="#4b5158">
-    Conseils, outils et comparatifs pour prendre de meilleures décisions financières.
+  <!-- Subtitle -->
+  <text x="80" y="460" class="sans" font-size="24" fill="#4b5158" font-weight="400">
+    Conseils, outils et comparatifs — publication indépendante.
   </text>
 
-  <!-- Footer domain -->
-  <text x="80" y="560" class="sans" font-size="16" fill="#8a8f97" letter-spacing="1">epargnermaroc.ma</text>
+  <!-- Savings curve motif (bottom right) -->
+  <g stroke="#1c4b3d" stroke-width="3" fill="none" opacity="0.75">
+    <polyline points="820,485 880,468 940,442 1000,405 1060,355 1120,290" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="1120" cy="290" r="8" fill="#1c4b3d"/>
+    <circle cx="820" cy="485" r="6" fill="#1c4b3d"/>
+  </g>
+  <g stroke="#93a99a" stroke-width="1.5" stroke-dasharray="6 6" fill="none" opacity="0.5">
+    <line x1="820" y1="485" x2="1120" y2="290"/>
+  </g>
 
-  <!-- Subtle savings-curve motif on right -->
-  <g stroke="#1c4b3d" stroke-width="2" fill="none" opacity="0.55">
-    <polyline points="810,470 870,455 930,432 990,398 1050,352 1110,290"/>
-    <circle cx="1110" cy="290" r="6" fill="#1c4b3d"/>
-  </g>
-  <g stroke="#93a99a" stroke-width="1" stroke-dasharray="4 4" fill="none" opacity="0.6">
-    <line x1="810" y1="470" x2="1110" y2="330"/>
-  </g>
+  <!-- Bottom band -->
+  <rect x="0" y="560" width="1200" height="70" fill="url(#grad-band)"/>
+  <text x="80" y="605" class="sans" font-size="19" fill="#fbf8f2" font-weight="500" letter-spacing="1.5">
+    epargner-maroc.com
+  </text>
+  <text x="1120" y="605" class="sans" font-size="14" fill="#c1cfc4" font-weight="400" letter-spacing="2" text-anchor="end">
+    SANS PUB · SANS AFFILIATION
+  </text>
 </svg>
