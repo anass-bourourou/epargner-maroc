@@ -1,10 +1,13 @@
-// Minimal Gemini API client with retry on transient errors.
-
 const MODEL = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 const TRANSIENT = new Set([429, 500, 502, 503, 504]);
-const MAX_ATTEMPTS = 4;
+const MAX_ATTEMPTS = 6;
+
+// Backoff explicite en secondes — plus long pour absorber les vagues de
+// surcharge Gemini qui durent typiquement 1-3 minutes.
+// Total : 5 + 15 + 30 + 60 + 120 = ~4 minutes avant abandon
+const BACKOFF_SECONDS = [5, 15, 30, 60, 120];
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -55,10 +58,16 @@ export async function generateStructured({ systemPrompt, userPrompt, schema, tem
       throw lastErr;
     }
 
-    // Exponential backoff: 3s, 8s, 20s, 45s
-    const delay = 3000 * Math.pow(2.5, attempt - 1);
-    console.warn(`[gemini] ${res.status} — retry ${attempt}/${MAX_ATTEMPTS - 1} dans ${Math.round(delay/1000)}s…`);
-    await sleep(delay);
+    // Identifier la cause "high demand" pour un log plus clair
+    const isHighDemand = res.status === 503 && errText.includes('high demand');
+    const reason = isHighDemand ? 'high demand côté Google' : `HTTP ${res.status}`;
+
+    const backoffSeconds = BACKOFF_SECONDS[attempt - 1] || 120;
+    console.warn(
+      `[gemini] ${reason} — tentative ${attempt}/${MAX_ATTEMPTS} échouée, ` +
+        `nouvelle tentative dans ${backoffSeconds}s…`,
+    );
+    await sleep(backoffSeconds * 1000);
   }
   throw lastErr;
 }
