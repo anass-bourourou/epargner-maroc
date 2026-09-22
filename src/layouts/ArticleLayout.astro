@@ -107,7 +107,9 @@ const toolCta = cat.toolCta;
             />
           </div>
         )}
-
+{article.data.aiGenerated && (
+  <AiDisclosure score={article.data.aiReview?.score} />
+)}
        {article.data.sources.length > 0 && (
   <div class="mt-14">
     <SourceList sources={article.data.sources} />
