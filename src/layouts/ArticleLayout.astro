@@ -84,13 +84,13 @@ const toolCta = cat.toolCta;
           author={author}
         />
 
-        {article.data.aiGenerated && (
-          <AiDisclosure score={article.data.aiReview?.score} />
-        )}
+       {article.data.aiGenerated && (
+  <AiDisclosure score={article.data.aiReview?.score} />
+)}
 
-        <div class="article-prose">
-          <slot />
-        </div>
+<div class="article-prose">
+  <slot />
+</div>
 
         <ShareButtons
           title={article.data.title}
@@ -108,11 +108,11 @@ const toolCta = cat.toolCta;
           </div>
         )}
 
-        {article.data.sources.length > 0 && (
-          <div class="mt-14">
-            <SourceList sources={article.data.sources} />
-          </div>
-        )}
+       {article.data.sources.length > 0 && (
+  <div class="mt-14">
+    <SourceList sources={article.data.sources} />
+  </div>
+)}
 
         {author && (
           <div class="mt-14">
