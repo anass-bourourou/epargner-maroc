@@ -1,7 +1,11 @@
 // Modèle principal + fallbacks — testés du plus performant au plus stable.
-// Si le principal est saturé (503 "high demand"), on bascule automatiquement.
-// Configurable via env var GEMINI_MODELS="modelA,modelB,modelC" (ordre = priorité).
-const MODELS = (process.env.GEMINI_MODELS || 'gemini-3.6-flash,gemini-2.5-flash,gemini-2.0-flash')
+// Si le principal est saturé (503) ou indisponible (404 modèle déprécié),
+// on bascule automatiquement sur le suivant.
+// Configurable via env var GEMINI_MODELS="modelA,modelB,modelC".
+const MODELS = (
+  process.env.GEMINI_MODELS ||
+  'gemini-3.6-flash,gemini-3.6-flash-lite,gemini-3.6-pro,gemini-3.5-flash'
+)
   .split(',')
   .map((m) => m.trim())
   .filter(Boolean);
@@ -9,12 +13,14 @@ const MODELS = (process.env.GEMINI_MODELS || 'gemini-3.6-flash,gemini-2.5-flash,
 const ENDPOINT = (model) =>
   `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
+// Erreurs transitoires (côté serveur, sur ce modèle précis) → retry sur le même modèle
 const TRANSIENT = new Set([429, 500, 502, 503, 504]);
+// Erreurs "modèle indisponible" (spécifiques au modèle) → passe au suivant sans retry
+const MODEL_UNAVAILABLE = new Set([404]);
 
-// Retries par modèle — plus courts que l'ancienne version (qui insistait
-// jusqu'à 4 min sur un seul modèle). Ici on préfère basculer vite.
+// Retries par modèle — courts pour laisser le temps au fallback.
 // 3 tentatives : 5s, 15s, 30s = ~50s par modèle
-// Avec 3 modèles → total max ~2m30 avant abandon complet.
+// Avec 4 modèles → total max ~3m30 avant abandon complet.
 const MAX_ATTEMPTS = 3;
 const BACKOFF_SECONDS = [5, 15, 30];
 
@@ -73,23 +79,44 @@ export async function generateStructured({ systemPrompt, userPrompt, schema, tem
       const errText = await res.text();
       lastErr = new Error(`Gemini ${res.status} (${model}): ${errText.slice(0, 300)}`);
 
-      // Erreur non-transitoire (401, 403, 400…) → on abandonne tout de suite.
-      // Inutile de tester les autres modèles : le problème est côté clé / requête.
+      // 404 = modèle spécifiquement indisponible (déprécié, mauvais nom…)
+      // → on passe direct au fallback suivant sans retry sur ce modèle.
+      if (MODEL_UNAVAILABLE.has(res.status)) {
+        console.warn(`[gemini] ${model} indisponible (HTTP ${res.status}) — modèle probablement déprécié.`);
+        if (m < MODELS.length - 1) {
+          break; // passe au modèle suivant
+        }
+        throw lastErr;
+      }
+
+      // 401, 403, 400 = problème côté clé/requête → aucun modèle ne va aider, on abandonne
       if (!TRANSIENT.has(res.status)) {
         throw lastErr;
       }
 
       const isHighDemand = res.status === 503 && errText.includes('high demand');
-      const reason = isHighDemand ? 'high demand côté Google' : `HTTP ${res.status}`;
+      const isQuotaExceeded = res.status === 429;
+      let reason;
+      if (isHighDemand) reason = 'high demand côté Google';
+      else if (isQuotaExceeded) reason = 'quota dépassé (429)';
+      else reason = `HTTP ${res.status}`;
 
-      // Dernière tentative sur ce modèle → on passe au fallback suivant
-      // (sauf si c'est déjà le dernier modèle de la liste).
+      // Sur quota dépassé, inutile d'insister sur le même modèle : on tente le suivant tout de suite
+      if (isQuotaExceeded) {
+        console.warn(`[gemini] ${model} en quota dépassé — passage direct au fallback.`);
+        if (m < MODELS.length - 1) {
+          break;
+        }
+        throw lastErr;
+      }
+
+      // Dernière tentative sur ce modèle → passe au fallback suivant
       if (attempt === MAX_ATTEMPTS) {
         if (m < MODELS.length - 1) {
           console.warn(
             `[gemini] ${model} indisponible après ${MAX_ATTEMPTS} tentatives (${reason}).`,
           );
-          break; // sort de la boucle attempts → passe au modèle suivant
+          break;
         }
         throw lastErr;
       }
