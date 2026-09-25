@@ -1,13 +1,15 @@
 ---
 // -----------------------------------------------------------------------------
-// Popup newsletter intelligent — apparaît discrètement en bas à droite après
-// 30 secondes de lecture OU 50% de scroll (le premier des deux).
+// Popup newsletter avec lead magnet — apparaît en bas à droite après 15 secondes
+// de lecture OU 40% de scroll. Propose le budget Excel gratuit + newsletter.
 // Se souvient de la fermeture via localStorage (30 jours de silence).
 // Utilise le même backend Cloudflare Worker que le formulaire principal.
 // -----------------------------------------------------------------------------
 
 const WORKER_URL =
   'https://newsletter-epargner-maroc.anassbr01.workers.dev/';
+const EXCEL_URL =
+  'https://epargner-maroc.com/budget-familial-pro.xlsx';
 ---
 
 <div
@@ -39,14 +41,22 @@ const WORKER_URL =
   </button>
 
   <div id="em-popup-form-view">
-    <p class="em-popup-eyebrow">Newsletter</p>
+    <p class="em-popup-eyebrow">
+      <span class="em-popup-gift">🎁</span> Cadeau — Budget Excel
+    </p>
     <h3 id="em-popup-title" class="em-popup-title">
-      Un e-mail par semaine, rien de plus.
+      Votre budget familial — offert.
     </h3>
     <p id="em-popup-desc" class="em-popup-desc">
-      Une lecture, un outil, un chiffre à retenir. Sans pub, sans affiliation
-      bancaire.
+      Un fichier Excel prêt à l'emploi&nbsp;: revenus, dépenses, épargne,
+      suivi annuel. Adaptable en 5 minutes.
     </p>
+
+    <ul class="em-popup-features">
+      <li>6 onglets · 39 formules automatiques</li>
+      <li>+ 1 e-mail par semaine, sans pub</li>
+      <li>Désinscription en un clic</li>
+    </ul>
 
     <form id="em-popup-form" class="em-popup-form" novalidate>
       <input
@@ -58,7 +68,9 @@ const WORKER_URL =
         class="em-popup-input"
         aria-label="Votre e-mail"
       />
-      <button type="submit" class="em-popup-submit">Je m'inscris</button>
+      <button type="submit" class="em-popup-submit">
+        Recevoir le budget Excel
+      </button>
     </form>
 
     <p id="em-popup-error" class="em-popup-error" hidden></p>
@@ -67,7 +79,18 @@ const WORKER_URL =
   <div id="em-popup-success-view" hidden class="em-popup-success">
     <p class="em-popup-success-title">✅ Merci — inscription confirmée.</p>
     <p class="em-popup-success-text">
-      Vous recevrez notre prochaine lettre vendredi.
+      Cliquez ci-dessous pour télécharger votre budget Excel maintenant&nbsp;:
+    </p>
+    
+      href={EXCEL_URL}
+      download
+      id="em-popup-download"
+      class="em-popup-download"
+    >
+      📥 Télécharger le budget Excel
+    </a>
+    <p class="em-popup-success-note">
+      Vous recevrez également le lien par e-mail.
     </p>
   </div>
 </div>
@@ -78,7 +101,7 @@ const WORKER_URL =
     right: 1.25rem;
     bottom: 1.25rem;
     z-index: 100;
-    max-width: 22rem;
+    max-width: 24rem;
     width: calc(100vw - 2.5rem);
     padding: 1.5rem;
     background: var(--color-forest-900);
@@ -124,25 +147,56 @@ const WORKER_URL =
   }
 
   .em-popup-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
     margin: 0 0 0.5rem 0;
+    padding: 0.25rem 0.5rem;
     font-size: 0.6875rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-sage-300);
+    color: var(--color-ivory-50);
+    background: rgba(193, 207, 196, 0.15);
+    border-radius: 0.25rem;
   }
+  .em-popup-gift {
+    font-size: 0.875rem;
+  }
+
   .em-popup-title {
     margin: 0;
     font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-    font-size: 1.25rem;
-    line-height: 1.25;
+    font-size: 1.375rem;
+    line-height: 1.2;
     color: var(--color-ivory-50);
   }
   .em-popup-desc {
-    margin: 0.5rem 0 1rem 0;
+    margin: 0.5rem 0 0.875rem 0;
     font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-sage-300);
+  }
+
+  .em-popup-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.125rem 0;
+    font-size: 0.8125rem;
     line-height: 1.5;
     color: var(--color-sage-300);
+  }
+  .em-popup-features li {
+    position: relative;
+    padding-left: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .em-popup-features li::before {
+    content: '·';
+    position: absolute;
+    left: 0.375rem;
+    color: var(--color-sage-500);
+    font-weight: 700;
   }
 
   .em-popup-form {
@@ -176,19 +230,22 @@ const WORKER_URL =
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 2.5rem;
+    height: 2.75rem;
     padding: 0 1rem;
     background: var(--color-forest-500);
     color: var(--color-ivory-50);
     border: 1px solid var(--color-forest-500);
     border-radius: 0.375rem;
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 150ms ease;
+    transition: background 150ms ease, transform 100ms ease;
   }
   .em-popup-submit:hover {
     background: var(--color-forest-700, #143128);
+  }
+  .em-popup-submit:active {
+    transform: scale(0.98);
   }
   .em-popup-submit:disabled {
     opacity: 0.6;
@@ -204,13 +261,40 @@ const WORKER_URL =
   .em-popup-success-title {
     margin: 0;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-ivory-50);
   }
   .em-popup-success-text {
-    margin: 0.25rem 0 0 0;
+    margin: 0.5rem 0 1rem 0;
     font-size: 0.875rem;
+    line-height: 1.5;
     color: var(--color-sage-300);
+  }
+  .em-popup-download {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 2.75rem;
+    padding: 0 1rem;
+    background: var(--color-forest-500);
+    color: var(--color-ivory-50);
+    border: 1px solid var(--color-forest-500);
+    border-radius: 0.375rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 150ms ease;
+  }
+  .em-popup-download:hover {
+    background: var(--color-forest-700, #143128);
+  }
+  .em-popup-success-note {
+    margin: 0.75rem 0 0 0;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--color-sage-500);
+    text-align: center;
   }
 
   @media (max-width: 480px) {
@@ -221,15 +305,18 @@ const WORKER_URL =
       width: auto;
       max-width: none;
     }
+    .em-popup-title {
+      font-size: 1.25rem;
+    }
   }
 </style>
 
-<script is:inline define:vars={{ WORKER_URL }}>
+<script is:inline define:vars={{ WORKER_URL, EXCEL_URL }}>
   (function () {
-    var STORAGE_KEY = 'em_newsletter_popup_dismissed_v1';
+    var STORAGE_KEY = 'em_newsletter_popup_dismissed_v2';
     var DISMISS_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 jours
-    var TIME_TRIGGER_MS = 30 * 1000; // 30 secondes
-    var SCROLL_TRIGGER_PCT = 50; // 50% scroll
+    var TIME_TRIGGER_MS = 15 * 1000; // 15 secondes (raccourci)
+    var SCROLL_TRIGGER_PCT = 40; // 40% scroll (raccourci)
 
     var popup = document.getElementById('em-newsletter-popup');
     var closeBtn = document.getElementById('em-popup-close');
@@ -252,7 +339,7 @@ const WORKER_URL =
         }
       }
     } catch (_) {
-      // localStorage indisponible (navigation privée stricte) → on continue quand même
+      // localStorage indisponible → on continue quand même
     }
 
     var shown = false;
@@ -270,10 +357,8 @@ const WORKER_URL =
       } catch (_) {}
     }
 
-    // Trigger temps : 30 sec
     var timeTrigger = window.setTimeout(show, TIME_TRIGGER_MS);
 
-    // Trigger scroll : 50%
     function onScroll() {
       if (shown) {
         window.removeEventListener('scroll', onScroll);
@@ -294,12 +379,10 @@ const WORKER_URL =
 
     closeBtn.addEventListener('click', dismiss);
 
-    // ESC key to close
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !popup.hidden) dismiss();
     });
 
-    // Submit → Worker
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var input = form.querySelector('input[type="email"]');
@@ -327,10 +410,7 @@ const WORKER_URL =
             try {
               window.localStorage.setItem(STORAGE_KEY, String(Date.now()));
             } catch (_) {}
-            // Auto-fermer après 4 sec
-            window.setTimeout(function () {
-              popup.hidden = true;
-            }, 4000);
+            // Ne pas auto-fermer ici — laisser l'utilisateur télécharger d'abord
           } else {
             errorBox.textContent =
               (result.data && result.data.error) ||
