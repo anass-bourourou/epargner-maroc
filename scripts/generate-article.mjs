@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFile, writeFile, access, appendFile } from 'node:fs/promises';
+import { readFile, writeFile, access, appendFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generateStructured } from './lib/gemini.mjs';
@@ -12,6 +12,12 @@ import { sanitizeArticle } from './lib/sanitize.mjs';
 const ROOT = path.resolve(fileURLToPath(import.meta.url), '../..');
 const IDEAS_PATH = path.join(ROOT, 'content-ideas.json');
 const CONTENT_DIR = path.join(ROOT, 'src/content/articles');
+
+// Seuil de similarité pour considérer un sujet comme doublon (0 à 1)
+// 0.5 = 50 % des mots-clés significatifs en commun → rejeté
+const DUPLICATE_THRESHOLD = 0.5;
+// Protection contre queue entièrement dupliquée
+const MAX_DEDUP_ATTEMPTS = 20;
 
 async function fileExists(p) { try { await access(p); return true; } catch { return false; } }
 
@@ -31,10 +37,71 @@ function parseArgs(argv) {
 }
 
 // -----------------------------------------------------------------------------
-// AUTO-REFILL : quand la queue est vide, Gemini propose 10 nouveaux sujets
+// DEDUP SÉMANTIQUE : mots-clés significatifs + similarité de Jaccard
+// -----------------------------------------------------------------------------
+const STOPWORDS = new Set([
+  'a','au','aux','et','en','de','du','des','le','la','les','un','une',
+  'son','sa','ses','mon','ma','mes','ton','ta','tes','notre','votre','leur','leurs',
+  'ce','cet','cette','ces','pour','par','avec','sans','sur','sous','dans','vers',
+  'comment','pourquoi','quand','quoi','qui','quel','quelle','quels','quelles',
+  'est','sont','ont','avoir','etre','faire',
+  '2024','2025','2026','2027',
+  'maroc','marocain','marocaine','marocains','marocaines',
+  'que','qu','ne','pas','plus','moins','ou','ni','si',
+  'tout','toute','tous','toutes','bien','mieux',
+  'the','of','and','an','in','on','to','for',
+]);
+
+function keywordSet(s) {
+  return new Set(
+    (s || '')
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s-]/g, ' ')
+      .split(/[\s-]+/)
+      .filter((w) => w.length >= 3 && !STOPWORDS.has(w)),
+  );
+}
+
+function jaccardSimilarity(a, b) {
+  const setA = keywordSet(a);
+  const setB = keywordSet(b);
+  if (setA.size === 0 || setB.size === 0) return 0;
+  let inter = 0;
+  for (const w of setA) if (setB.has(w)) inter++;
+  const union = new Set([...setA, ...setB]).size;
+  return inter / union;
+}
+
+async function listExistingArticles() {
+  const files = await readdir(CONTENT_DIR);
+  const items = [];
+  for (const f of files) {
+    if (!/\.(md|mdx)$/.test(f)) continue;
+    const content = await readFile(path.join(CONTENT_DIR, f), 'utf8');
+    const titleMatch = content.match(/^title:\s*["']?(.+?)["']?\s*$/m);
+    const slug = f.replace(/\.(md|mdx)$/, '');
+    items.push({ slug, title: titleMatch ? titleMatch[1] : slug });
+  }
+  return items;
+}
+
+async function findDuplicateOf(topic, existing, threshold = DUPLICATE_THRESHOLD) {
+  let best = null;
+  for (const e of existing) {
+    const simSlug = jaccardSimilarity(topic, e.slug);
+    const simTitle = jaccardSimilarity(topic, e.title);
+    const sim = Math.max(simSlug, simTitle);
+    if (sim >= threshold && (!best || sim > best.similarity)) {
+      best = { existing: e, similarity: sim };
+    }
+  }
+  return best;
+}
+
 // -----------------------------------------------------------------------------
 async function refillQueue(ideas) {
-  const publishedFiles = await import('node:fs/promises').then(fs => fs.readdir(CONTENT_DIR));
+  const publishedFiles = await readdir(CONTENT_DIR);
   const publishedTitles = [];
   for (const f of publishedFiles) {
     if (!/\.(md|mdx)$/.test(f)) continue;
@@ -42,7 +109,7 @@ async function refillQueue(ideas) {
     const m = content.match(/^title:\s*["']?(.+?)["']?\s*$/m);
     if (m) publishedTitles.push(m[1]);
   }
-  const existingTopics = ideas.map(i => i.topic);
+  const existingTopics = ideas.map((i) => i.topic);
 
   console.log('[refill] Queue vide — appel Gemini pour 10 nouveaux sujets…');
 
@@ -66,19 +133,72 @@ async function refillQueue(ideas) {
   };
 
   const response = await generateStructured({
-    systemPrompt: `Tu es rédacteur en chef d'Épargner Maroc, publication marocaine de finance personnelle. Propose 10 nouveaux sujets d'articles pertinents pour un lecteur marocain, non-redondants avec ceux déjà publiés ou en file. Répartir entre epargne, banques, assurances, credit, investissement. Angles pratiques, pas conceptuels. Contexte Bank Al-Maghrib, ACAPS, Bourse de Casablanca. Retourner strictement le JSON.`,
-    userPrompt: `Articles déjà publiés :\n${publishedTitles.map(t=>'- '+t).join('\n')||'(aucun)'}\n\nSujets déjà proposés :\n${existingTopics.map(t=>'- '+t).join('\n')||'(aucun)'}\n\nPropose 10 NOUVEAUX sujets.`,
+    systemPrompt: `Tu es rédacteur en chef d'Épargner Maroc, publication marocaine de finance personnelle. Propose 10 nouveaux sujets d'articles pertinents pour un lecteur marocain, RADICALEMENT DIFFÉRENTS de ceux déjà publiés ou en file (thème, angle, mots-clés). Répartir entre epargne, banques, assurances, credit, investissement. Angles pratiques, pas conceptuels. Contexte Bank Al-Maghrib, ACAPS, Bourse de Casablanca. Retourner strictement le JSON.`,
+    userPrompt: `Articles déjà publiés :\n${publishedTitles.map((t) => '- ' + t).join('\n') || '(aucun)'}\n\nSujets déjà proposés :\n${existingTopics.map((t) => '- ' + t).join('\n') || '(aucun)'}\n\nPropose 10 NOUVEAUX sujets radicalement différents des thèmes ci-dessus. Aucun recoupement de mots-clés majeurs.`,
     schema: IDEAS_SCHEMA,
     temperature: 0.9,
   });
 
-  const existingLower = new Set([...existingTopics, ...publishedTitles].map(t => t.toLowerCase().trim()));
-  const fresh = (response.ideas || [])
-    .filter(i => i.topic && !existingLower.has(i.topic.toLowerCase().trim()))
-    .map(i => ({ ...i, used: false }));
+  const existingLower = new Set(
+    [...existingTopics, ...publishedTitles].map((t) => t.toLowerCase().trim()),
+  );
 
-  console.log(`[refill] ✅ ${fresh.length} nouveau(x) sujet(s) ajouté(s).`);
+  const existingArticles = await listExistingArticles();
+  const fresh = [];
+  for (const i of response.ideas || []) {
+    if (!i.topic) continue;
+    if (existingLower.has(i.topic.toLowerCase().trim())) continue;
+    const dupe = await findDuplicateOf(i.topic, existingArticles);
+    if (dupe) {
+      console.warn(
+        `[refill]  ⏭  Sujet proposé rejeté (doublon ${(dupe.similarity * 100).toFixed(0)}% avec "${dupe.existing.slug}") : ${i.topic}`,
+      );
+      continue;
+    }
+    fresh.push({ ...i, used: false });
+  }
+
+  console.log(`[refill] ✅ ${fresh.length} nouveau(x) sujet(s) ajouté(s) (sur ${response.ideas?.length || 0} proposés).`);
   return [...ideas, ...fresh];
+}
+
+// -----------------------------------------------------------------------------
+async function pickNextIdea() {
+  let ideas = JSON.parse(await readFile(IDEAS_PATH, 'utf8'));
+  const existingArticles = await listExistingArticles();
+
+  for (let attempt = 0; attempt < MAX_DEDUP_ATTEMPTS; attempt++) {
+    let pending = ideas.filter((i) => !i.used);
+
+    if (pending.length === 0) {
+      ideas = await refillQueue(ideas);
+      await writeFile(IDEAS_PATH, JSON.stringify(ideas, null, 2) + '\n');
+      pending = ideas.filter((i) => !i.used);
+      if (pending.length === 0) {
+        console.error("[generate] Refill n'a rien produit — abandon.");
+        return null;
+      }
+    }
+
+    const idea = pending[0];
+    const dupe = await findDuplicateOf(idea.topic, existingArticles);
+
+    if (!dupe) return idea;
+
+    console.warn(
+      `[generate] ⏭  Sujet ignoré (doublon ${(dupe.similarity * 100).toFixed(0)}% avec "${dupe.existing.slug}") : ${idea.topic}`,
+    );
+    const idx = ideas.findIndex((i) => i.topic === idea.topic && i.category === idea.category);
+    if (idx >= 0) {
+      ideas[idx].used = true;
+      ideas[idx].skippedReason = `duplicate of ${dupe.existing.slug} (${(dupe.similarity * 100).toFixed(0)}%)`;
+      ideas[idx].skippedAt = new Date().toISOString();
+      await writeFile(IDEAS_PATH, JSON.stringify(ideas, null, 2) + '\n');
+    }
+  }
+
+  console.error(`[generate] Aucun sujet non-doublon trouvé après ${MAX_DEDUP_ATTEMPTS} essais.`);
+  return null;
 }
 
 // -----------------------------------------------------------------------------
@@ -89,22 +209,20 @@ async function main() {
   let idea;
   if (args.topic && args.category) {
     idea = { topic: args.topic, category: args.category, angle: args.angle ?? 'Angle pédagogique.' };
-  } else {
-    let ideas = JSON.parse(await readFile(IDEAS_PATH, 'utf8'));
-    let pending = ideas.filter(i => !i.used);
-
-    // AUTO-REFILL si la queue est vide
-    if (pending.length === 0) {
-      ideas = await refillQueue(ideas);
-      await writeFile(IDEAS_PATH, JSON.stringify(ideas, null, 2) + '\n');
-      pending = ideas.filter(i => !i.used);
-      if (pending.length === 0) {
-        console.error('[generate] Refill n\'a rien produit — abandon.');
-        process.exit(0);
-      }
+    const existingArticles = await listExistingArticles();
+    const dupe = await findDuplicateOf(idea.topic, existingArticles);
+    if (dupe) {
+      console.error(
+        `[generate] ⛔ Sujet manuel trop proche d'un existant (${(dupe.similarity * 100).toFixed(0)}%) : ${dupe.existing.slug}`,
+      );
+      if (!args['force-topic']) process.exit(4);
     }
-
-    idea = pending[args.index ? Number(args.index) : 0] ?? pending[0];
+  } else {
+    idea = await pickNextIdea();
+    if (!idea) {
+      console.error('[generate] Aucun sujet disponible.');
+      process.exit(0);
+    }
   }
 
   console.log(`[generate] Sujet : ${idea.topic}`);
@@ -156,7 +274,11 @@ async function main() {
   const draft = !willAutoPublish;
   const aiReview = {
     score: review.score,
-    notes: [`Verdict : ${review.verdict}`, ...sanitizeNotes.map(n => `Sanitizer : ${n}`), ...review.softs.map(s => `Soft : ${s}`)],
+    notes: [
+      `Verdict : ${review.verdict}`,
+      ...sanitizeNotes.map((n) => `Sanitizer : ${n}`),
+      ...review.softs.map((s) => `Soft : ${s}`),
+    ],
   };
 
   const filePath = await writeMdxArticle({
@@ -167,7 +289,7 @@ async function main() {
 
   if (!args.topic) {
     const ideas = JSON.parse(await readFile(IDEAS_PATH, 'utf8'));
-    const idx = ideas.findIndex(i => i.topic === idea.topic && i.category === idea.category);
+    const idx = ideas.findIndex((i) => i.topic === idea.topic && i.category === idea.category);
     if (idx >= 0) {
       ideas[idx].used = true;
       ideas[idx].generatedAt = new Date().toISOString();
