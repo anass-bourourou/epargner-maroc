@@ -1,8 +1,5 @@
-# Netlify / Cloudflare Pages redirects
-# Trailing-slash canonical (Astro emits directory-format URLs).
-
-# WWW → apex canonical (uncomment when the domain is live)
-# https://www.epargnermaroc.ma/*  https://epargnermaroc.ma/:splat  301!
-
-# Legacy paths (add as content evolves)
-# /old-slug/  /articles/new-slug/  301
+# Redirections doublons "négocier taux immobilier" — cannibalisation SEO
+/articles/comment-negocier-son-taux-immobilier-au-maroc-en-2026/ /articles/negocier-son-taux-de-credit-immobilier-au-maroc/ 301
+/articles/comment-negocier-son-taux-immobilier-au-maroc-en-2026 /articles/negocier-son-taux-de-credit-immobilier-au-maroc/ 301
+/articles/negocier-taux-immobilier/ /articles/negocier-son-taux-de-credit-immobilier-au-maroc/ 301
+/articles/negocier-taux-immobilier /articles/negocier-son-taux-de-credit-immobilier-au-maroc/ 301
