@@ -81,14 +81,7 @@ const EXCEL_URL =
     <p class="em-popup-success-text">
       Cliquez ci-dessous pour télécharger votre budget Excel maintenant&nbsp;:
     </p>
-    
-      href={EXCEL_URL}
-      download
-      id="em-popup-download"
-      class="em-popup-download"
-    >
-      📥 Télécharger le budget Excel
-    </a>
+    <a href={EXCEL_URL} download class="em-popup-download">📥 Télécharger le budget Excel</a>
     <p class="em-popup-success-note">
       Vous recevrez également le lien par e-mail.
     </p>
@@ -315,8 +308,8 @@ const EXCEL_URL =
   (function () {
     var STORAGE_KEY = 'em_newsletter_popup_dismissed_v2';
     var DISMISS_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 jours
-    var TIME_TRIGGER_MS = 15 * 1000; // 15 secondes (raccourci)
-    var SCROLL_TRIGGER_PCT = 40; // 40% scroll (raccourci)
+    var TIME_TRIGGER_MS = 15 * 1000; // 15 secondes
+    var SCROLL_TRIGGER_PCT = 40; // 40% scroll
 
     var popup = document.getElementById('em-newsletter-popup');
     var closeBtn = document.getElementById('em-popup-close');
@@ -329,7 +322,6 @@ const EXCEL_URL =
       return;
     }
 
-    // Cas 1 : déjà fermé récemment → ne rien faire
     try {
       var dismissedAt = window.localStorage.getItem(STORAGE_KEY);
       if (dismissedAt) {
@@ -338,9 +330,7 @@ const EXCEL_URL =
           return;
         }
       }
-    } catch (_) {
-      // localStorage indisponible → on continue quand même
-    }
+    } catch (_) {}
 
     var shown = false;
 
@@ -410,7 +400,6 @@ const EXCEL_URL =
             try {
               window.localStorage.setItem(STORAGE_KEY, String(Date.now()));
             } catch (_) {}
-            // Ne pas auto-fermer ici — laisser l'utilisateur télécharger d'abord
           } else {
             errorBox.textContent =
               (result.data && result.data.error) ||
