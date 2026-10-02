@@ -133,7 +133,9 @@
     "topic": "Gestion des chèques sans provision : recours juridiques et régularisation auprès de Bank Al-Maghrib",
     "category": "banques",
     "angle": "Juridique et préventif",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-10-02T14:24:58.114Z",
+    "slug": "gestion-des-cheques-sans-provision-recours-juridiques-et-regularisation-aupres-d"
   },
   {
     "topic": "Assurance multirisque professionnelle pour auto-entrepreneurs : la protection indispensable",
