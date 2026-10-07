@@ -173,7 +173,9 @@
     "topic": "Gérer un compte joint en cas de séparation : pièges juridiques et blocages bancaires au Maroc",
     "category": "banques",
     "angle": "Juridique et pratique : la procédure exacte pour désolidariser un compte, retirer sa signature et éviter la saisie des avoirs par les créanciers de l'autre titulaire.",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-10-07T15:05:56.561Z",
+    "slug": "gerer-un-compte-joint-en-cas-de-separation-pieges-juridiques-et-blocages-bancair"
   },
   {
     "topic": "Investir dans les bons du Trésor via son banquier : le guide pour les particuliers",
