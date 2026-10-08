@@ -181,7 +181,9 @@
     "topic": "Investir dans les bons du Trésor via son banquier : le guide pour les particuliers",
     "category": "investissement",
     "angle": "Opérationnel : passer des ordres sur le marché obligataire primaire et secondaire depuis son agence bancaire marocaine avec un capital modeste.",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-10-08T15:10:12.354Z",
+    "slug": "investir-dans-les-bons-du-tresor-via-son-banquier-le-guide-pour-les-particuliers"
   },
   {
     "topic": "Le découvert autorisé au Maroc : calcul des agios, taux d'intérêt et seuils de tolérance des agences",
