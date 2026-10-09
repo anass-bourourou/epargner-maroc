@@ -189,7 +189,9 @@
     "topic": "Le découvert autorisé au Maroc : calcul des agios, taux d'intérêt et seuils de tolérance des agences",
     "category": "credit",
     "angle": "Chiffré : combien coûte réellement un dépassement temporaire et comment négocier la suppression des commissions de plus fort découvert.",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-10-09T14:55:35.144Z",
+    "slug": "le-decouvert-autorise-au-maroc-calcul-des-agios-taux-dinteret-et-seuils-de-toler"
   },
   {
     "topic": "La décote automobile : calculer la perte de valeur de son véhicule pour ajuster son assurance",
