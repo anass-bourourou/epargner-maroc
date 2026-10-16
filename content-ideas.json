@@ -240,5 +240,67 @@
     "used": true,
     "generatedAt": "2026-10-15T13:03:22.297Z",
     "slug": "epargner-pour-les-etudes-superieures-de-ses-enfants-comparaison-des-contrats-de-"
+  },
+  {
+    "topic": "Incidents de paiement sur effet de commerce au Maroc : protêt et recours",
+    "category": "credit",
+    "angle": "Pratique pour les commerçants et TPE confrontés aux impayés clients via traites.",
+    "used": true,
+    "generatedAt": "2026-10-16T13:00:07.622Z",
+    "slug": "incidents-de-paiement-sur-effet-de-commerce-au-maroc-protet-et-recours"
+  },
+  {
+    "topic": "Le micro-leasing automobile pour les particuliers au Maroc : fonctionnement et limites",
+    "category": "credit",
+    "angle": "Alternative au crédit auto classique pour acquérir un véhicule sans apport.",
+    "used": false
+  },
+  {
+    "topic": "Assurance voyage et cartes bancaires haut de gamme au Maroc : lire les petites lignes",
+    "category": "assurances",
+    "angle": "Vérifier si les couvertures médicales à l'étranger de sa carte couvrent réellement tous les frais.",
+    "used": false
+  },
+  {
+    "topic": "SCPI et parts de fonds immobiliers au Maroc : fiscalité et liquidité des parts",
+    "category": "investissement",
+    "angle": "Investir dans la pierre papier sans s'encombrer de la gestion locative directe.",
+    "used": false
+  },
+  {
+    "topic": "La co-souscription de crédits immobiliers entre concubins au Maroc : montage juridique",
+    "category": "credit",
+    "angle": "Protéger son investissement immobilier en achetant hors mariage avec des apports inégaux.",
+    "used": false
+  },
+  {
+    "topic": "Compte de non-résident au Maroc : rapatrier ses fonds et gérer ses revenus locatifs",
+    "category": "banques",
+    "angle": "Guide administratif et fiscal pour les Marocains du Monde et étrangers propriétaires.",
+    "used": false
+  },
+  {
+    "topic": "Fonds solidaires et épargne à impact social au Maroc : rendement et labellisation",
+    "category": "epargne",
+    "angle": "Donner du sens à son épargne en finançant des projets associatifs ou de l'économie sociale.",
+    "used": false
+  },
+  {
+    "topic": "Assurance perte d'emploi au Maroc : conditions d'indemnisation et carences réelles",
+    "category": "assurances",
+    "angle": "Décrypter cette garantie souvent souscrite en package pour savoir si elle protège vraiment.",
+    "used": false
+  },
+  {
+    "topic": "Dividendes boursiers à la Bourse de Casablanca : choisir entre réinvestissement et cash",
+    "category": "investissement",
+    "angle": "Stratégie de rendement pour faire croître son portefeuille d'actions sur le long terme.",
+    "used": false
+  },
+  {
+    "topic": "Le coffre-fort en agence bancaire au Maroc : tarifs, contenu assurable et sécurité",
+    "category": "banques",
+    "angle": "Protéger ses bijoux et documents sensibles hors de son domicile en toute légalité.",
+    "used": false
   }
 ]
