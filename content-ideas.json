@@ -261,7 +261,9 @@
     "topic": "Assurance voyage et cartes bancaires haut de gamme au Maroc : lire les petites lignes",
     "category": "assurances",
     "angle": "Vérifier si les couvertures médicales à l'étranger de sa carte couvrent réellement tous les frais.",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-10-18T12:25:07.877Z",
+    "slug": "assurance-voyage-et-cartes-bancaires-haut-de-gamme-au-maroc-lire-les-petites-lig"
   },
   {
     "topic": "SCPI et parts de fonds immobiliers au Maroc : fiscalité et liquidité des parts",
