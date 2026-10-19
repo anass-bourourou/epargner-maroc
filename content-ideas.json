@@ -269,7 +269,9 @@
     "topic": "SCPI et parts de fonds immobiliers au Maroc : fiscalité et liquidité des parts",
     "category": "investissement",
     "angle": "Investir dans la pierre papier sans s'encombrer de la gestion locative directe.",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-10-19T15:14:34.697Z",
+    "slug": "scpi-et-parts-de-fonds-immobiliers-au-maroc-fiscalite-et-liquidite-des-parts"
   },
   {
     "topic": "La co-souscription de crédits immobiliers entre concubins au Maroc : montage juridique",
