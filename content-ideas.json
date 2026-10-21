@@ -285,7 +285,9 @@
     "topic": "Compte de non-résident au Maroc : rapatrier ses fonds et gérer ses revenus locatifs",
     "category": "banques",
     "angle": "Guide administratif et fiscal pour les Marocains du Monde et étrangers propriétaires.",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-10-21T13:23:31.244Z",
+    "slug": "compte-de-non-resident-au-maroc-rapatrier-ses-fonds-et-gerer-ses-revenus-locatif"
   },
   {
     "topic": "Fonds solidaires et épargne à impact social au Maroc : rendement et labellisation",
