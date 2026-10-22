@@ -293,7 +293,9 @@
     "topic": "Fonds solidaires et épargne à impact social au Maroc : rendement et labellisation",
     "category": "epargne",
     "angle": "Donner du sens à son épargne en finançant des projets associatifs ou de l'économie sociale.",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-10-22T13:25:22.143Z",
+    "slug": "fonds-solidaires-et-epargne-a-impact-social-au-maroc-rendement-et-labellisation"
   },
   {
     "topic": "Assurance perte d'emploi au Maroc : conditions d'indemnisation et carences réelles",
