@@ -320,5 +320,67 @@
     "used": true,
     "generatedAt": "2026-10-26T14:49:16.954Z",
     "slug": "le-coffre-fort-en-agence-bancaire-au-maroc-tarifs-contenu-assurable-et-securite"
+  },
+  {
+    "topic": "Caution bancaire pour location immobiliere",
+    "category": "banques",
+    "angle": "Remplacer le depot de garantie par une garantie bancaire bloquee et liberer du cash",
+    "used": true,
+    "generatedAt": "2026-10-27T13:54:01.210Z",
+    "slug": "caution-bancaire-pour-location-immobiliere"
+  },
+  {
+    "topic": "Assurance deces croisee associes PME",
+    "category": "assurances",
+    "angle": "Proteger la transmission des parts sociales entre cofondateurs marocains en cas de deces",
+    "used": false
+  },
+  {
+    "topic": "Compte devise entrepreneur exportateur",
+    "category": "banques",
+    "angle": "Reglementation Bank Al-Maghrib pour conserver et gerer ses recettes en devises au Maroc",
+    "used": false
+  },
+  {
+    "topic": "Financement participatif Crowdfunding",
+    "category": "investissement",
+    "angle": "Investir dans des projets locaux via les plateformesagreees par l'AMMC",
+    "used": false
+  },
+  {
+    "topic": "Credit bail mobilier professionnel",
+    "category": "credit",
+    "angle": "Acquereurs de materiel informatique ou medical en leasing pour preserver sa tresorerie",
+    "used": false
+  },
+  {
+    "topic": "Assurance RC Pro consultants independants",
+    "category": "assurances",
+    "angle": "Identifier les risques d'exploitation non couverts par le statut d'auto-entrepreneur",
+    "used": false
+  },
+  {
+    "topic": "Epargne salariale plan d'epargne action",
+    "category": "epargne",
+    "angle": "Mettre en place un mecanismo de participation aux benefices dans sa societe",
+    "used": false
+  },
+  {
+    "topic": "Fonds de placement collectif en titrisation FPCT",
+    "category": "investissement",
+    "angle": "Decouvrir ce support de creances securise pour diversifier son portefeuille hors marche actions",
+    "used": false
+  },
+  {
+    "topic": "Paiement international par carte marocaine",
+    "category": "banques",
+    "angle": "Optimiser l'usage de la dotation voyages et e-commerce pour les achats professionnels en ligne",
+    "used": false
+  },
+  {
+    "topic": "Credit relais acquisition immobiliere",
+    "category": "credit",
+    "angle": "Acheter un nouveau logement au Maroc avant d'avoir vendu l'ancien sans s'asphyxier",
+    "used": false
   }
 ]
