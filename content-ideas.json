@@ -333,7 +333,9 @@
     "topic": "Assurance deces croisee associes PME",
     "category": "assurances",
     "angle": "Proteger la transmission des parts sociales entre cofondateurs marocains en cas de deces",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-10-28T14:49:39.892Z",
+    "slug": "assurance-deces-croisee-associes-pme"
   },
   {
     "topic": "Compte devise entrepreneur exportateur",
