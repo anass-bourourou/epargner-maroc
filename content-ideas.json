@@ -341,7 +341,9 @@
     "topic": "Compte devise entrepreneur exportateur",
     "category": "banques",
     "angle": "Reglementation Bank Al-Maghrib pour conserver et gerer ses recettes en devises au Maroc",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-10-29T14:56:12.139Z",
+    "slug": "compte-devise-entrepreneur-exportateur"
   },
   {
     "topic": "Financement participatif Crowdfunding",
