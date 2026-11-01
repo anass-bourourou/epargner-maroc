@@ -349,7 +349,9 @@
     "topic": "Financement participatif Crowdfunding",
     "category": "investissement",
     "angle": "Investir dans des projets locaux via les plateformesagreees par l'AMMC",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-01T14:42:16.402Z",
+    "slug": "financement-participatif-crowdfunding"
   },
   {
     "topic": "Credit bail mobilier professionnel",
