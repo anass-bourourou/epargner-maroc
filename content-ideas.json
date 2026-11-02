@@ -357,7 +357,9 @@
     "topic": "Credit bail mobilier professionnel",
     "category": "credit",
     "angle": "Acquereurs de materiel informatique ou medical en leasing pour preserver sa tresorerie",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-02T17:47:29.779Z",
+    "slug": "credit-bail-mobilier-professionnel"
   },
   {
     "topic": "Assurance RC Pro consultants independants",
