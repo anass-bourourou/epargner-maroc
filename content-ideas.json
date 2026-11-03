@@ -365,7 +365,9 @@
     "topic": "Assurance RC Pro consultants independants",
     "category": "assurances",
     "angle": "Identifier les risques d'exploitation non couverts par le statut d'auto-entrepreneur",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-03T15:47:23.970Z",
+    "slug": "assurance-rc-pro-consultants-independants"
   },
   {
     "topic": "Epargne salariale plan d'epargne action",
