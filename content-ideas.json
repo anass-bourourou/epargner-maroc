@@ -373,7 +373,9 @@
     "topic": "Epargne salariale plan d'epargne action",
     "category": "epargne",
     "angle": "Mettre en place un mecanismo de participation aux benefices dans sa societe",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-06T15:38:17.668Z",
+    "slug": "epargne-salariale-plan-depargne-action"
   },
   {
     "topic": "Fonds de placement collectif en titrisation FPCT",
