@@ -381,7 +381,9 @@
     "topic": "Fonds de placement collectif en titrisation FPCT",
     "category": "investissement",
     "angle": "Decouvrir ce support de creances securise pour diversifier son portefeuille hors marche actions",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-07T14:38:49.307Z",
+    "slug": "fonds-de-placement-collectif-en-titrisation-fpct"
   },
   {
     "topic": "Paiement international par carte marocaine",
