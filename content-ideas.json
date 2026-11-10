@@ -389,7 +389,9 @@
     "topic": "Paiement international par carte marocaine",
     "category": "banques",
     "angle": "Optimiser l'usage de la dotation voyages et e-commerce pour les achats professionnels en ligne",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-10T16:07:38.460Z",
+    "slug": "paiement-international-par-carte-marocaine"
   },
   {
     "topic": "Credit relais acquisition immobiliere",
