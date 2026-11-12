@@ -397,6 +397,8 @@
     "topic": "Credit relais acquisition immobiliere",
     "category": "credit",
     "angle": "Acheter un nouveau logement au Maroc avant d'avoir vendu l'ancien sans s'asphyxier",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-12T16:36:59.992Z",
+    "slug": "credit-relais-acquisition-immobiliere"
   }
 ]
