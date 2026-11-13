@@ -400,5 +400,67 @@
     "used": true,
     "generatedAt": "2026-11-12T16:36:59.992Z",
     "slug": "credit-relais-acquisition-immobiliere"
+  },
+  {
+    "topic": "Les plateformes de transfert d'argent mobile au Maroc",
+    "category": "banques",
+    "angle": "Comparatif pratique des frais de cash-in et cash-out pour les utilisateurs non bancarisés",
+    "used": true,
+    "generatedAt": "2026-11-13T15:53:46.029Z",
+    "slug": "les-plateformes-de-transfert-dargent-mobile-au-maroc"
+  },
+  {
+    "topic": "Le micro-entrepreneuriat informel et l'accès au financement",
+    "category": "credit",
+    "angle": "Transformer une activité informelle en structure finançable par les banques partenaires de Tamwilcom",
+    "used": false
+  },
+  {
+    "topic": "La tontine moderne ou dirdama au Maroc",
+    "category": "epargne",
+    "angle": "Sécuriser juridiquement et digitaliser sa tontine entre proches sans risque de défaut",
+    "used": false
+  },
+  {
+    "topic": "L'assurance multirisque chantier pour auto-constructeurs",
+    "category": "assurances",
+    "angle": "Protéger sa maison individuelle en construction contre les accidents et malfaçons",
+    "used": false
+  },
+  {
+    "topic": "Investir dans les parts de coopératives agricoles marocaines",
+    "category": "investissement",
+    "angle": "Le nouveau placement alternatif labellisé ESS pour capter du rendement local",
+    "used": false
+  },
+  {
+    "topic": "Les transferts de salaires des MRE vers les comptes Nadori",
+    "category": "banques",
+    "angle": "Optimiser les frais de change et l'acheminement des fonds depuis l'Europe",
+    "used": false
+  },
+  {
+    "topic": "Le crédit conso affecté aux panneaux solaires domestiques",
+    "category": "credit",
+    "angle": "Calculer le retour sur investissement et la subvention potentielle de l'Aderee",
+    "used": false
+  },
+  {
+    "topic": "L'assurance dépendance pour les parents vieillissants",
+    "category": "assurances",
+    "angle": "Anticiper les coûts de prise en charge médicale à domicile au Maroc",
+    "used": false
+  },
+  {
+    "topic": "La titrisation de créances commerciales pour TPE",
+    "category": "investissement",
+    "angle": "Céder ses factures impayées à un fonds spécialisé pour retrouver du cash immédiatement",
+    "used": false
+  },
+  {
+    "topic": "Le livret d'épargne jeunesse dans les banques participatives",
+    "category": "epargne",
+    "angle": "Comprendre le mécanisme de rémunération adossé aux Moudaraba",
+    "used": false
   }
 ]
