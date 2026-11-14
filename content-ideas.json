@@ -413,7 +413,9 @@
     "topic": "Le micro-entrepreneuriat informel et l'accès au financement",
     "category": "credit",
     "angle": "Transformer une activité informelle en structure finançable par les banques partenaires de Tamwilcom",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-14T14:44:15.440Z",
+    "slug": "le-micro-entrepreneuriat-informel-et-lacces-au-financement"
   },
   {
     "topic": "La tontine moderne ou dirdama au Maroc",
