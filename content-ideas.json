@@ -421,7 +421,9 @@
     "topic": "La tontine moderne ou dirdama au Maroc",
     "category": "epargne",
     "angle": "Sécuriser juridiquement et digitaliser sa tontine entre proches sans risque de défaut",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-15T15:16:31.072Z",
+    "slug": "la-tontine-moderne-ou-dirdama-au-maroc"
   },
   {
     "topic": "L'assurance multirisque chantier pour auto-constructeurs",
