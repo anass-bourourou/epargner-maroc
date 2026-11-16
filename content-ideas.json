@@ -429,7 +429,9 @@
     "topic": "L'assurance multirisque chantier pour auto-constructeurs",
     "category": "assurances",
     "angle": "Protéger sa maison individuelle en construction contre les accidents et malfaçons",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-16T17:56:24.429Z",
+    "slug": "lassurance-multirisque-chantier-pour-auto-constructeurs"
   },
   {
     "topic": "Investir dans les parts de coopératives agricoles marocaines",
