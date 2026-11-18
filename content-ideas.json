@@ -437,7 +437,9 @@
     "topic": "Investir dans les parts de coopératives agricoles marocaines",
     "category": "investissement",
     "angle": "Le nouveau placement alternatif labellisé ESS pour capter du rendement local",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-18T16:55:46.248Z",
+    "slug": "investir-dans-les-parts-de-cooperatives-agricoles-marocaines"
   },
   {
     "topic": "Les transferts de salaires des MRE vers les comptes Nadori",
