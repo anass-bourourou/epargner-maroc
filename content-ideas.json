@@ -445,7 +445,9 @@
     "topic": "Les transferts de salaires des MRE vers les comptes Nadori",
     "category": "banques",
     "angle": "Optimiser les frais de change et l'acheminement des fonds depuis l'Europe",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-19T17:06:56.533Z",
+    "slug": "les-transferts-de-salaires-des-mre-vers-les-comptes-nadori"
   },
   {
     "topic": "Le crédit conso affecté aux panneaux solaires domestiques",
