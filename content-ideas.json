@@ -453,7 +453,9 @@
     "topic": "Le crédit conso affecté aux panneaux solaires domestiques",
     "category": "credit",
     "angle": "Calculer le retour sur investissement et la subvention potentielle de l'Aderee",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-20T16:40:08.333Z",
+    "slug": "le-credit-conso-affecte-aux-panneaux-solaires-domestiques"
   },
   {
     "topic": "L'assurance dépendance pour les parents vieillissants",
