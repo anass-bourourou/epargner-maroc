@@ -461,7 +461,9 @@
     "topic": "L'assurance dépendance pour les parents vieillissants",
     "category": "assurances",
     "angle": "Anticiper les coûts de prise en charge médicale à domicile au Maroc",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-22T15:54:08.843Z",
+    "slug": "lassurance-dependance-pour-les-parents-vieillissants"
   },
   {
     "topic": "La titrisation de créances commerciales pour TPE",
