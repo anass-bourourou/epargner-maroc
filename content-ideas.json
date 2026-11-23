@@ -469,7 +469,9 @@
     "topic": "La titrisation de créances commerciales pour TPE",
     "category": "investissement",
     "angle": "Céder ses factures impayées à un fonds spécialisé pour retrouver du cash immédiatement",
-    "used": false
+    "used": true,
+    "generatedAt": "2026-11-23T19:50:26.250Z",
+    "slug": "la-titrisation-de-creances-commerciales-pour-tpe"
   },
   {
     "topic": "Le livret d'épargne jeunesse dans les banques participatives",
