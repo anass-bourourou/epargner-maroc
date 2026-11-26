@@ -480,5 +480,67 @@
     "used": true,
     "generatedAt": "2026-11-25T18:25:28.466Z",
     "slug": "le-livret-depargne-jeunesse-dans-les-banques-participatives"
+  },
+  {
+    "topic": "La gestion des avoirs en dirhams convertibles",
+    "category": "banques",
+    "angle": "Quelles sont les conditions strictes de l'Office des Changes pour détenir et utiliser ce type de compte spécifique au Maroc ?",
+    "used": true,
+    "generatedAt": "2026-11-26T18:05:32.824Z",
+    "slug": "la-gestion-des-avoirs-en-dirhams-convertibles"
+  },
+  {
+    "topic": "Le cautionnement mutuel pour les professions libérales",
+    "category": "credit",
+    "angle": "Comment obtenir des garanties bancaires avantageuses sans bloquer son patrimoine personnel grâce aux fonds de garantie sectoriels ?",
+    "used": false
+  },
+  {
+    "topic": "L'assurance protection juridique des baux commerciaux",
+    "category": "assurances",
+    "angle": "Comment se couvrir contre les impayés de loyer et les litiges avec les bailleurs professionnels à Casablanca ?",
+    "used": false
+  },
+  {
+    "topic": "Les billets de trésorerie pour diversifier sa trésorerie d'entreprise",
+    "category": "investissement",
+    "angle": "Pourquoi et comment une PME marocaine peut placer ses excédents de trésorerie à court terme sur le marché monétaire ?",
+    "used": false
+  },
+  {
+    "topic": "Le transfert de portefeuille boursier d'un broker à un autre",
+    "category": "epargne",
+    "angle": "Quelle est la procédure exacte et les frais cachés lors du changement d'intermédiaire en instruments financiers au Maroc ?",
+    "used": false
+  },
+  {
+    "topic": "L'assurance transport de marchandises pour les e-commerçants",
+    "category": "assurances",
+    "angle": "Comment protéger sa colissimo ou ses expéditions nationales contre la casse et le vol pendant l'acheminement routier ?",
+    "used": false
+  },
+  {
+    "topic": "Le nantissement de contrat d'assurance-vie",
+    "category": "credit",
+    "angle": "Comment utiliser son épargne capitalisée comme garantie pour décrocher un prêt professionnel sans tout racheter ?",
+    "used": false
+  },
+  {
+    "topic": "Les SICAV monétaires face aux comptes sur carnet",
+    "category": "epargne",
+    "angle": "Comparatif chiffré du rendement net fiscal après prélèvement libératoire pour un investisseur particulier prudent.",
+    "used": false
+  },
+  {
+    "topic": "La domiciliation bancaire des associations et fondations",
+    "category": "banques",
+    "angle": "Quels sont les justificatifs spécifiques exigés par les banques marocaines pour ouvrir et faire fonctionner un compte associatif ?",
+    "used": false
+  },
+  {
+    "topic": "L'emprunt participatif Ijara Mountahia Bitamlik",
+    "category": "credit",
+    "angle": "Décryptage du contrat de location-acquisition islamique pour financer son matériel professionnel sans intérêt riba.",
+    "used": false
   }
 ]
